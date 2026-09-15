@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodly — Compare Prices</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">Foodly</div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="stores.html">Stores</a>
+        <a href="compare.html" class="active">Compare</a>
+        <a href="cart.html">Cart <span id="cart-count">0</span></a>
+    </nav>
+</header>
+
+<main>
+
+    <section class="page-header">
+        <span class="badge">Price comparison</span>
+        <h1>Compare products</h1>
+        <p>Find the cheapest option among stores.</p>
+    </section>
+
+    <div class="search">
+        <input
+                type="text"
+                id="search"
+                placeholder="Search for a product..."
+        >
+    </div>
+
+    <section class="products" id="products">
+
+        <div class="product-card">
+            <div class="product-image">🥛</div>
+
+            <h3>Milk 3.2%</h3>
+            <p>1 liter</p>
+
+            <div class="prices">
+                <div>
+                    <span>Magnum</span>
+                    <strong>520 ₸</strong>
+                </div>
+
+                <div>
+                    <span>SMALL</span>
+                    <strong>550 ₸</strong>
+                </div>
+
+                <div class="best-price">
+                    <span>ANVAR</span>
+                    <strong>499 ₸</strong>
+                </div>
+            </div>
+
+            <button
+                    class="btn add-cart"
+                    data-product="Milk 3.2%"
+                    data-price="499"
+            >
+                Add to cart
+            </button>
+        </div>
+
+
+        <div class="product-card">
+            <div class="product-image">🍞</div>
+
+            <h3>White Bread</h3>
+            <p>400 g</p>
+
+            <div class="prices">
+                <div>
+                    <span>Magnum</span>
+                    <strong>450 ₸</strong>
+                </div>
+
+                <div class="best-price">
+                    <span>SMALL</span>
+                    <strong>390 ₸</strong>
+                </div>
+
+                <div>
+                    <span>ANVAR</span>
+                    <strong>430 ₸</strong>
+                </div>
+            </div>
+
+            <button
+                    class="btn add-cart"
+                    data-product="White Bread"
+                    data-price="390"
+            >
+                Add to cart
+            </button>
+        </div>
+
+
+        <div class="product-card">
+            <div class="product-image">🥚</div>
+
+            <h3>Chicken Eggs</h3>
+            <p>10 pcs</p>
+
+            <div class="prices">
+                <div>
+                    <span>Magnum</span>
+                    <strong>780 ₸</strong>
+                </div>
+
+                <div>
+                    <span>SMALL</span>
+                    <strong>750 ₸</strong>
+                </div>
+
+                <div class="best-price">
+                    <span>ANVAR</span>
+                    <strong>720 ₸</strong>
+                </div>
+            </div>
+
+            <button
+                    class="btn add-cart"
+                    data-product="Chicken Eggs"
+                    data-price="720"
+            >
+                Add to cart
+            </button>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 Foodly — Astana</p>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
