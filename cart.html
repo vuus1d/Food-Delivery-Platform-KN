@@ -1,89 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><!DOCTYPE html>
-        <html lang="en">
-        <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Foodly — Cart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodly — Checkout Form</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<header>
-    <div class="logo">Foodly</div>
-
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="stores.html">Stores</a>
-        <a href="compare.html">Compare</a>
-        <a href="cart.html" class="active">
-            Cart <span id="cart-count">0</span>
-        </a>
-    </nav>
+<header id="main-header">
+    <div class="container header-container">
+        <a href="index.html" class="logo">Foodly</a>
+        <nav class="nav-menu">
+            <a href="index.html">Главная</a>
+            <a href="store.html">Магазины</a>
+            <a href="compare.html">Сравнить цены</a>
+            <a href="cart.html" class="active">Корзина <span id="cart-count">0</span></a>
+        </nav>
+    </div>
 </header>
 
-<main>
-
+<main class="container">
     <section class="page-header">
-        <span class="badge">Checkout</span>
-        <h1>Your cart</h1>
+        <h1>Оформление заказа</h1>
     </section>
 
-    <div class="cart-container">
+    <section class="form-section">
+        <form id="contact-form" action="#" method="post">
 
-        <div id="cart-items">
-            <p>Your cart is empty.</p>
-        </div>
+            <label for="user-name">Имя пользователя:</label>
+            <input type="text" id="user-name" name="name" placeholder="Введите ваше имя" required>
 
-        <div class="checkout">
+            <label for="user-email">Email адрес:</label>
+            <input type="email" id="user-email" name="email" placeholder="example@mail.com" required>
 
-            <h2>Delivery</h2>
+            <label for="payment-method">Способ оплаты:</label>
+            <select id="payment-method" name="payment">
+                <option value="kaspi">Kaspi Pay</option>
+                <option value="freedom">Freedom Bank</option>
+                <option value="cash">Наличными курьеру</option>
+            </select>
 
-            <input type="text" placeholder="Your name">
-            <input type="tel" placeholder="+7 (___) ___-__-__">
-            <input type="text" placeholder="Delivery address">
+            <label for="fav-color">Выберите цвет упаковки:</label>
+            <input type="color" id="fav-color" name="color" value="#2e7d32">
 
-            <h2>Payment</h2>
+            <label for="user-message">Комментарий к доставке:</label>
+            <textarea id="user-message" name="message" rows="4" placeholder="Укажите код подъезда, этаж..."></textarea>
 
-            <div class="payment-options">
-
-                <button class="payment active">
-                    Kaspi
-                </button>
-
-                <button class="payment">
-                    Freedom
-                </button>
-
-            </div>
-
-            <div class="total">
-                <span>Total</span>
-                <strong id="total">0 ₸</strong>
-            </div>
-
-            <button class="btn checkout-btn">
-                Place order
-            </button>
-
-        </div>
-
-    </div>
-
+            <button type="submit" class="btn">Отправить заказ</button>
+        </form>
+    </section>
 </main>
 
 <footer>
-    <p>© 2026 Foodly — Astana</p>
+    <div class="container">
+        <p>© 2026 Foodly | Разработчики: Kakhar Nassyrkhan, Nurasyl Raiskaliev (Group SE-2506)</p>
+    </div>
 </footer>
-
-<script src="js/app.js"></script>
-</body>
-</html></title>
-</head>
-<body>
 
 </body>
 </html>
