@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,50 +12,49 @@
     <div class="container header-container">
         <a href="index.html" class="logo">Foodly</a>
         <nav class="nav-menu">
-            <a href="index.html">Главная</a>
-            <a href="stores.html">Магазины</a>
-            <a href="compare.html">Сравнить цены</a>
-            <a href="cart.html" class="active">Оплата <span id="cart-count">0</span></a>
+            <a href="index.html">Home</a>
+            <a href="stores.html">Stores</a>
+            <a href="compare.html">Compare Prices</a>
+            <a href="cart.html" class="active">Checkout <span id="cart-count">0</span></a>
         </nav>
     </div>
 </header>
 
-
 <main class="container">
     <section class="page-header">
-        <h1>Оформление заказа</h1>
+        <h1>Checkout</h1>
     </section>
 
     <section class="form-section">
         <form id="contact-form" action="#" method="post">
 
-            <label for="user-name">Имя пользователя:</label>
-            <input type="text" id="user-name" name="name" placeholder="Введите ваше имя" required>
+            <label for="user-name">User Name:</label>
+            <input type="text" id="user-name" name="name" placeholder="Enter your name" required>
 
-            <label for="user-email">Email адрес:</label>
+            <label for="user-email">Email Address:</label>
             <input type="email" id="user-email" name="email" placeholder="example@mail.com" required>
 
-            <label for="payment-method">Способ оплаты:</label>
+            <label for="payment-method">Payment Method:</label>
             <select id="payment-method" name="payment">
                 <option value="kaspi">Kaspi Pay</option>
                 <option value="freedom">Freedom Bank</option>
-                <option value="cash">Наличными курьеру</option>
+                <option value="cash">Cash on Delivery</option>
             </select>
 
-            <label for="fav-color">Выберите цвет упаковки:</label>
+            <label for="fav-color">Select Packaging Color:</label>
             <input type="color" id="fav-color" name="color" value="#2e7d32">
 
-            <label for="user-message">Комментарий к доставке:</label>
-            <textarea id="user-message" name="message" rows="4" placeholder="Укажите код подъезда, этаж..."></textarea>
+            <label for="user-message">Delivery Instructions:</label>
+            <textarea id="user-message" name="message" rows="4" placeholder="Specify intercom code, floor, etc."></textarea>
 
-            <button type="submit" class="btn">Отправить заказ</button>
+            <button type="submit" class="btn">Place Order</button>
         </form>
     </section>
 </main>
 
 <footer>
     <div class="container">
-        <p>© 2026 Foodly | Разработчики: Kakhar Nassyrkhan, Nurasyl Raiskaliev (Group SE-2506)</p>
+        <p>© 2026 Foodly | Developers: Kakhar Nassyrkhan, Nurasyl Raiskaliev (Group SE-2506)</p>
     </div>
 </footer>
 
