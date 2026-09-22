@@ -1,100 +1,216 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сравнение цен - Delivery KN Astana</title>
+
+    <title>Price Comparison - Delivery KN Astana</title>
+
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
+
 <div class="page-container">
 
+    <!-- HEADER -->
     <header class="header">
+
         <div class="logo">
             🛒 <span>Delivery KN Astana</span>
         </div>
+
         <nav>
             <ul class="nav-links">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="stores.html">Магазины</a></li>
-                <li><a href="compare.html">Сравнение цен</a></li>
-                <li><a href="cart.html">Корзина</a></li>
+
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+
+                <li>
+                    <a href="stores.html">Stores</a>
+                </li>
+
+                <li>
+                    <a href="compare.html">Price Comparison</a>
+                </li>
+
+                <li>
+                    <a href="cart.html">
+                        Cart
+                        <span id="cart-count" class="cart-count">0</span>
+                    </a>
+                </li>
+
             </ul>
         </nav>
+
     </header>
 
+
+    <!-- SIDEBAR -->
     <aside class="sidebar">
-        <h3>Категории товаров</h3>
+
+        <h3>Product Categories</h3>
+
         <ul class="category-list">
-            <li><a href="#">🥛 Молочка</a></li>
-            <li><a href="#">🍞 Хлеб</a></li>
-            <li><a href="#">🥩 Мясо</a></li>
-            <li><a href="#">🍌 Фрукты</a></li>
+
+            <li>
+                <a href="compare.html">🥛 Dairy Products</a>
+            </li>
+
+            <li>
+                <a href="compare.html">🍞 Bread</a>
+            </li>
+
+            <li>
+                <a href="compare.html">🥩 Meat</a>
+            </li>
+
+            <li>
+                <a href="compare.html">🍌 Fruits</a>
+            </li>
+
         </ul>
+
     </aside>
 
-    <main class="main-content">
-        <section class="comparison-section">
-            <h2>🔍 Где дешевле в Астане?</h2>
-            <p>Автоматический мониторинг актуальных цен в супермаркетах города:</p>
 
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <section class="comparison-section">
+
+            <h2>🔍 Where Is It Cheaper in Astana?</h2>
+
+            <p>
+                Compare product prices across supermarkets in Astana.
+            </p>
+
+
+            <!-- SEARCH -->
+            <div class="search-box">
+
+                <input
+                        type="search"
+                        id="search"
+                        placeholder="Search for a product..."
+                >
+
+                <button
+                        id="search-btn"
+                        class="btn"
+                >
+                    Search
+                </button>
+
+            </div>
+
+
+            <!-- TABLE -->
             <div class="comparison-table-wrapper">
+
                 <table class="comparison-table">
+
                     <thead>
+
                     <tr>
-                        <th>Наименование товара</th>
+                        <th>Product</th>
                         <th>Magnum</th>
                         <th>Small</th>
                         <th>Galmart</th>
-                        <th>Выгодный выбор</th>
+                        <th>Best Price</th>
                     </tr>
+
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>🥛 Молоко A'Sut 3.2% (1л)</td>
+
+                    <tbody id="comparison-body">
+
+                    <tr class="comparison-row">
+                        <td>🥛 A'Sut Milk 3.2% (1L)</td>
                         <td>480 ₸</td>
                         <td>495 ₸</td>
                         <td>540 ₸</td>
-                        <td><span class="price-winner">Magnum (480 ₸)</span></td>
+                        <td>
+                            <span class="price-winner">
+                                Magnum (480 ₸)
+                            </span>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>🍞 Хлеб Формовой (Пшеничный)</td>
+
+                    <tr class="comparison-row">
+                        <td>🍞 Sliced Wheat Bread</td>
                         <td>110 ₸</td>
                         <td>105 ₸</td>
                         <td>150 ₸</td>
-                        <td><span class="price-winner">Small (105 ₸)</span></td>
+                        <td>
+                            <span class="price-winner">
+                                Small (105 ₸)
+                            </span>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>🍌 Бананы (1 кг)</td>
+
+                    <tr class="comparison-row">
+                        <td>🍌 Bananas (1 kg)</td>
                         <td>850 ₸</td>
                         <td>820 ₸</td>
                         <td>990 ₸</td>
-                        <td><span class="price-winner">Small (820 ₸)</span></td>
+                        <td>
+                            <span class="price-winner">
+                                Small (820 ₸)
+                            </span>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>🍳 Яйца C1 (10 шт)</td>
+
+                    <tr class="comparison-row">
+                        <td>🍳 Eggs C1 (10 pcs)</td>
                         <td>620 ₸</td>
                         <td>640 ₸</td>
                         <td>680 ₸</td>
-                        <td><span class="price-winner">Magnum (620 ₸)</span></td>
+                        <td>
+                            <span class="price-winner">
+                                Magnum (620 ₸)
+                            </span>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>🧈 Масло сливочное 82.5% (200г)</td>
-                        <td>1 150 ₸</td>
-                        <td>1 190 ₸</td>
-                        <td>1 300 ₸</td>
-                        <td><span class="price-winner">Magnum (1 150 ₸)</span></td>
+
+                    <tr class="comparison-row">
+                        <td>🧈 Butter 82.5% (200g)</td>
+                        <td>1,150 ₸</td>
+                        <td>1,190 ₸</td>
+                        <td>1,300 ₸</td>
+                        <td>
+                            <span class="price-winner">
+                                Magnum (1,150 ₸)
+                            </span>
+                        </td>
                     </tr>
+
                     </tbody>
+
                 </table>
+
             </div>
+
         </section>
+
     </main>
 
+
+    <!-- FOOTER -->
     <footer class="footer">
-        <p>&copy; 2026 Food Delivery Platform KN (Astana). Все права защищены.</p>
+
+        <p>
+            &copy; 2026 Food Delivery Platform KN (Astana).
+            All rights reserved.
+        </p>
+
     </footer>
 
 </div>
+
+<script src="js/app.js"></script>
+
 </body>
 </html>

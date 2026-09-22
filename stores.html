@@ -1,82 +1,226 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Магазины - Delivery KN Astana</title>
+
+  <title>Stores - Delivery KN Astana</title>
+
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
+
 <div class="page-container">
 
+  <!-- HEADER -->
   <header class="header">
+
     <div class="logo">
       🛒 <span>Delivery KN Astana</span>
     </div>
+
     <nav>
       <ul class="nav-links">
-        <li><a href="index.html">Главная</a></li>
-        <li><a href="stores.html">Магазины</a></li>
-        <li><a href="compare.html">Сравнение цен</a></li>
-        <li><a href="cart.html">Корзина</a></li>
+
+        <li>
+          <a href="index.html">Home</a>
+        </li>
+
+        <li>
+          <a href="stores.html">Stores</a>
+        </li>
+
+        <li>
+          <a href="compare.html">Price Comparison</a>
+        </li>
+
+        <li>
+          <a href="cart.html">
+            Cart
+            <span id="cart-count" class="cart-count">0</span>
+          </a>
+        </li>
+
       </ul>
     </nav>
+
   </header>
 
+
+  <!-- SIDEBAR -->
   <aside class="sidebar">
-    <h3>Фильтр магазинов</h3>
+
+    <h3>Store Filters</h3>
+
     <ul class="category-list">
-      <li><a href="#">Все районы Астаны</a></li>
-      <li><a href="#">Есильский р-н</a></li>
-      <li><a href="#">Алматинский р-н</a></li>
-      <li><a href="#">Сарыаркинский р-н</a></li>
+
+      <li>
+        <a href="stores.html">All Stores</a>
+      </li>
+
+      <li>
+        <a href="stores.html">Esil District</a>
+      </li>
+
+      <li>
+        <a href="stores.html">Almaty District</a>
+      </li>
+
+      <li>
+        <a href="stores.html">Saryarka District</a>
+      </li>
+
     </ul>
+
   </aside>
 
+
+  <!-- MAIN -->
   <main class="main-content">
-    <h2>Супермаркеты и партнеры в Астане</h2>
 
     <section class="cards-section">
+
+      <h2>Supermarkets & Partners</h2>
+
       <div class="cards-container">
 
+        <!-- MAGNUM -->
         <div class="card">
-          <img src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=500&q=80" alt="Magnum">
+
+          <img
+                  src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=500&q=80"
+                  alt="Magnum supermarket"
+          >
+
           <div class="card-body">
-            <h3>Magnum Daily / Express</h3>
-            <p>Крупнейшая сеть с низкими ценами. Более 20 000 товаров с доставкой от 30 минут.</p>
-            <span class="badge best-price">Низкие цены</span>
-            <button class="btn">Каталог товаров</button>
+
+            <h3>Magnum Daily</h3>
+
+            <p>
+              A wide selection of products
+              at affordable prices.
+            </p>
+
+            <span class="badge best-price">
+                            Low Prices
+                        </span>
+
+            <button
+                    class="btn store-btn"
+                    data-store="Magnum"
+            >
+              View Products
+            </button>
+
           </div>
+
         </div>
 
+
+        <!-- SMALL -->
         <div class="card">
-          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&q=80" alt="Small">
+
+          <img
+                  src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&q=80"
+                  alt="Small supermarket"
+          >
+
           <div class="card-body">
+
             <h3>Small & Zetta</h3>
-            <p>Широкий выбор молочной продукции, свежей выпечки и овощей по доступным ценам.</p>
-            <span class="badge discount">Акции каждый день</span>
-            <button class="btn">Каталог товаров</button>
+
+            <p>
+              Fresh products,
+              promotions, and discounts.
+            </p>
+
+            <span class="badge discount">
+                            Daily Promotions
+                        </span>
+
+            <button
+                    class="btn store-btn"
+                    data-store="Small"
+            >
+              View Products
+            </button>
+
           </div>
+
         </div>
 
+
+        <!-- GALMART -->
         <div class="card">
-          <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=500&q=80" alt="Galmart">
+
+          <img
+                  src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=500&q=80"
+                  alt="Galmart supermarket"
+          >
+
           <div class="card-body">
-            <h3>Galmart</h3>
-            <p>Премиум гастрономия, эксклюзивные импортные продукты и собственное производство.</p>
-            <span class="badge premium">Премиум качество</span>
-            <button class="btn">Каталог товаров</button>
+
+            <h3>Galmart Premium</h3>
+
+            <p>
+              Premium products
+              and imported goods.
+            </p>
+
+            <span class="badge premium">
+                            Premium
+                        </span>
+
+            <button
+                    class="btn store-btn"
+                    data-store="Galmart"
+            >
+              View Products
+            </button>
+
           </div>
+
         </div>
 
       </div>
+
     </section>
+
+
+    <!-- PRODUCT CATALOG -->
+    <section
+            id="product-catalog"
+            class="comparison-section"
+            hidden
+    >
+
+      <h2 id="catalog-title">Product Catalog</h2>
+
+      <div
+              id="products"
+              class="cards-container"
+      ></div>
+
+    </section>
+
   </main>
 
+
+  <!-- FOOTER -->
   <footer class="footer">
-    <p>&copy; 2026 Food Delivery Platform KN (Astana). Все права защищены.</p>
+
+    <p>
+      &copy; 2026 Food Delivery Platform KN (Astana).
+      All rights reserved.
+    </p>
+
   </footer>
 
 </div>
+
+<script src="js/app.js"></script>
+
 </body>
 </html>
