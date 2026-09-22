@@ -1,65 +1,185 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foodly — Home</title>
+    <title>Food Delivery Platform KN - Астана</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div class="page-container">
 
-<header id="main-header">
-    <div class="container header-container">
-        <a href="index.html" class="logo">Foodly</a>
-        <nav class="nav-menu">
-            <a href="index.html" class="active">Home</a>
-            <a href="stores.html">Stores</a>
-            <a href="compare.html">Compare Prices</a>
-            <a href="cart.html">Checkout <span id="cart-count">0</span></a>
+    <header class="header">
+        <div class="logo">
+            🛒 <span>Delivery KN Astana</span>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="stores.html">Магазины</a></li>
+                <li><a href="compare.html">Сравнение цен</a></li>
+                <li><a href="cart.html">Корзина</a></li>
+            </ul>
         </nav>
-    </div>
-</header>
+    </header>
 
-<main class="container">
-    <section class="hero">
-        <div class="hero-text">
-            <span class="badge">Astana</span>
-            <h1>Find Groceries.<br><span>Compare Prices.</span></h1>
-            <p>Compare grocery prices across major supermarkets in Astana and choose the best deals.</p>
-            <a href="compare.html" class="btn">Start Shopping</a>
-        </div>
-        <div class="hero-card">
-            <div class="hero-icon-box">🛒</div>
-        </div>
-    </section>
-
-    <section class="section">
-        <h2>Popular Categories</h2>
-        <ul class="categories-list">
-            <li>🥛 Dairy Products</li>
-            <li>🥩 Meat & Poultry</li>
-            <li>🍎 Fruits & Vegetables</li>
-            <li>🍞 Bakery & Bread</li>
+    <aside class="sidebar">
+        <h3>Магазины Астаны</h3>
+        <ul class="category-list">
+            <li><a href="#">🔴 Magnum Express</a></li>
+            <li><a href="#">🔵 Small & Zetta</a></li>
+            <li><a href="#">🟢 Galmart</a></li>
+            <li><a href="#">🟡 Астыкжан</a></li>
+            <li><a href="#">🟠 Arbuz Astana</a></li>
         </ul>
-    </section>
+        <h3 style="margin-top: 1.5rem;">Категории</h3>
+        <ul class="category-list">
+            <li><a href="#">🥛 Молочные продукты</a></li>
+            <li><a href="#">🍞 Хлеб и выпечка</a></li>
+            <li><a href="#">🥩 Мясо и птица</a></li>
+            <li><a href="#">🍎 Овощи и фрукты</a></li>
+            <li><a href="#">🥤 Напитки</a></li>
+        </ul>
+    </aside>
 
-    <section class="section team-section">
-        <h2>About the Team</h2>
-        <div class="team-card">
-            <div class="profile-avatar">👨‍💻</div>
-            <div>
-                <h3>Team SE-2506</h3>
-                <p>Kakhar Nassyrkhan & Nurasyl Raiskaliev — students building a convenient grocery delivery service for Astana residents.</p>
+    <main class="main-content">
+
+        <section id="stores" class="cards-section">
+            <h2>Популярные магазины и супермаркеты</h2>
+            <div class="cards-container">
+
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=500&q=80" alt="Magnum">
+                    <div class="card-body">
+                        <h3>Magnum Daily</h3>
+                        <p>Самая большая сеть супермаркетов в Астане. Низкие цены и огромный выбор товаров.</p>
+                        <span class="badge best-price">Лучшая цена на бакалею</span>
+                        <button class="btn">Перейти к товарам</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&q=80" alt="Small">
+                    <div class="card-body">
+                        <h3>Small & Zetta</h3>
+                        <p>Доступная доставка продуктов у дома. Постоянные скидки и акции на свежие фрукты.</p>
+                        <span class="badge discount">Скидки до -30%</span>
+                        <button class="btn">Перейти к товарам</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=500&q=80" alt="Galmart">
+                    <div class="card-body">
+                        <h3>Galmart Premium</h3>
+                        <p>Премиальные продукты, фермерское мясо, импортные сыры и собственная кулинария.</p>
+                        <span class="badge premium">Премиум качество</span>
+                        <button class="btn">Перейти к товарам</button>
+                    </div>
+                </div>
+
             </div>
-        </div>
-    </section>
-</main>
+        </section>
 
-<footer>
-    <div class="container">
-        <p>© 2026 Foodly | Developers: Kakhar Nassyrkhan, Nurasyl Raiskaliev (Group SE-2506)</p>
-    </div>
-</footer>
+        <section id="compare" class="comparison-section">
+            <h2>📊 Автоматическое сравнение цен (Астана)</h2>
+            <p>Мы сканируем цены во всех магазинах Астаны, чтобы вы не переплачивали:</p>
 
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Magnum</th>
+                        <th>Small</th>
+                        <th>Galmart</th>
+                        <th>Где дешевле?</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>🥛 Молоко A'Sut 3.2% 1л</td>
+                        <td>480 ₸</td>
+                        <td>495 ₸</td>
+                        <td>540 ₸</td>
+                        <td><span class="price-winner">Magnum (480 ₸)</span></td>
+                    </tr>
+                    <tr>
+                        <td>🍞 Хлеб Формовой</td>
+                        <td>110 ₸</td>
+                        <td>105 ₸</td>
+                        <td>150 ₸</td>
+                        <td><span class="price-winner">Small (105 ₸)</span></td>
+                    </tr>
+                    <tr>
+                        <td>🍌 Бананы (1 кг)</td>
+                        <td>850 ₸</td>
+                        <td>820 ₸</td>
+                        <td>990 ₸</td>
+                        <td><span class="price-winner">Small (820 ₸)</span></td>
+                    </tr>
+                    <tr>
+                        <td>🍳 Яйца C1 (10 шт)</td>
+                        <td>620 ₸</td>
+                        <td>640 ₸</td>
+                        <td>680 ₸</td>
+                        <td><span class="price-winner">Magnum (620 ₸)</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="gallery" class="gallery-section">
+            <h2>Галерея товаров и доставки</h2>
+            <div class="gallery-container">
+
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=400&q=80" alt="Свежие фрукты">
+                    <div class="caption">Свежие фрукты</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&q=80" alt="Овощи">
+                    <div class="caption">Органические овощи</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80" alt="Выпечка">
+                    <div class="caption">Свежая выпечка</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=400&q=80" alt="Молочная продукция">
+                    <div class="caption">Молочная продукция</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&q=80" alt="Бакалея">
+                    <div class="caption">Отборный рис и крупы</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400&q=80" alt="Мясо">
+                    <div class="caption">Свежее мясо и птица</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&q=80" alt="Напитки">
+                    <div class="caption">Соки и напитки</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1588964895597-cfccd6e2dbf9?w=400&q=80" alt="Сборка заказа">
+                    <div class="caption">Быстрая сборка заказов</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1526367790999-0150786686a2?w=400&q=80" alt="Курьер">
+                    <div class="caption">Экспресс-доставка по Астане</div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Food Delivery Platform KN (Astana). Все права защищены.</p>
+    </footer>
+
+</div>
 </body>
 </html>

@@ -1,62 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foodly — Checkout Form</title>
+    <title>Корзина - Delivery KN Astana</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div class="page-container">
 
-<header id="main-header">
-    <div class="container header-container">
-        <a href="index.html" class="logo">Foodly</a>
-        <nav class="nav-menu">
-            <a href="index.html">Home</a>
-            <a href="stores.html">Stores</a>
-            <a href="compare.html">Compare Prices</a>
-            <a href="cart.html" class="active">Checkout <span id="cart-count">0</span></a>
+    <header class="header">
+        <div class="logo">
+            🛒 <span>Delivery KN Astana</span>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="stores.html">Магазины</a></li>
+                <li><a href="compare.html">Сравнение цен</a></li>
+                <li><a href="cart.html">Корзина</a></li>
+            </ul>
         </nav>
-    </div>
-</header>
+    </header>
 
-<main class="container">
-    <section class="page-header">
-        <h1>Checkout</h1>
-    </section>
+    <aside class="sidebar">
+        <h3>Информация</h3>
+        <ul class="category-list">
+            <li><a href="#">🚚 Экспресс-доставка</a></li>
+            <li><a href="#">💳 Оплата Kaspi/Картой</a></li>
+            <li><a href="#">🛡️ Гарантия свежести</a></li>
+        </ul>
+    </aside>
 
-    <section class="form-section">
-        <form id="contact-form" action="#" method="post">
+    <main class="main-content">
+        <h2>Ваша корзина</h2>
 
-            <label for="user-name">User Name:</label>
-            <input type="text" id="user-name" name="name" placeholder="Enter your name" required>
+        <section class="cards-section">
+            <div class="cards-container">
 
-            <label for="user-email">Email Address:</label>
-            <input type="email" id="user-email" name="email" placeholder="example@mail.com" required>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=500&q=80" alt="Молоко">
+                    <div class="card-body">
+                        <h3>Молоко A'Sut 3.2%</h3>
+                        <p>Магазин: Magnum<br>Количество: 2 шт.</p>
+                        <span class="badge best-price">960 ₸</span>
+                        <button class="btn" style="background-color: #e74c3c;">Удалить</button>
+                    </div>
+                </div>
 
-            <label for="payment-method">Payment Method:</label>
-            <select id="payment-method" name="payment">
-                <option value="kaspi">Kaspi Pay</option>
-                <option value="freedom">Freedom Bank</option>
-                <option value="cash">Cash on Delivery</option>
-            </select>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=500&q=80" alt="Бананы">
+                    <div class="card-body">
+                        <h3>Бананы Свежие (1кг)</h3>
+                        <p>Магазин: Small<br>Количество: 1 кг.</p>
+                        <span class="badge best-price">820 ₸</span>
+                        <button class="btn" style="background-color: #e74c3c;">Удалить</button>
+                    </div>
+                </div>
 
-            <label for="fav-color">Select Packaging Color:</label>
-            <input type="color" id="fav-color" name="color" value="#2e7d32">
+                <div class="card">
+                    <div class="card-body" style="justify-content: center; text-align: center;">
+                        <h3>Итого к оплате</h3>
+                        <p style="font-size: 1.4rem; font-weight: bold; color: #27ae60;">1 780 ₸</p>
+                        <p>Экономия по Астане: 210 ₸</p>
+                        <button class="btn" style="padding: 12px; font-size: 1rem;">Оформить заказ</button>
+                    </div>
+                </div>
 
-            <label for="user-message">Delivery Instructions:</label>
-            <textarea id="user-message" name="message" rows="4" placeholder="Specify intercom code, floor, etc."></textarea>
+            </div>
+        </section>
+    </main>
 
-            <button type="submit" class="btn">Place Order</button>
-        </form>
-    </section>
-</main>
+    <footer class="footer">
+        <p>&copy; 2026 Food Delivery Platform KN (Astana). Все права защищены.</p>
+    </footer>
 
-<footer>
-    <div class="container">
-        <p>© 2026 Foodly | Developers: Kakhar Nassyrkhan, Nurasyl Raiskaliev (Group SE-2506)</p>
-    </div>
-</footer>
-
+</div>
 </body>
 </html>
