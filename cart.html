@@ -1,145 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Cart - Delivery KN Astana</title>
-
+    <meta name="description" content="Review your Foodly grocery cart and enter delivery details for checkout.">
+    <title>Cart | Foodly</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 
 <div class="page-container">
 
-    <!-- HEADER -->
-    <header class="header">
-
-        <div class="logo">
-            🛒 <span>Delivery KN Astana</span>
-        </div>
-
-        <nav>
+    <header class="header" id="main-header">
+        <a class="logo" href="index.html" aria-label="Foodly home">🥬 <span>Foodly</span></a>
+        <nav aria-label="Main navigation">
             <ul class="nav-links">
-
+                <li><a href="index.html">Home</a></li>
+                <li><a href="stores.html">Stores</a></li>
+                <li><a href="compare.html">Compare</a></li>
                 <li>
-                    <a href="index.html">Home</a>
-                </li>
-
-                <li>
-                    <a href="stores.html">Stores</a>
-                </li>
-
-                <li>
-                    <a href="compare.html">Price Comparison</a>
-                </li>
-
-                <li>
-                    <a href="cart.html">
+                    <a href="cart.html" aria-current="page">
                         Cart
-                        <span id="cart-count" class="cart-count">0</span>
+                        <span id="cart-count" class="cart-count" aria-live="polite" aria-label="Items in cart">0</span>
                     </a>
                 </li>
-
             </ul>
         </nav>
-
     </header>
 
-
-    <!-- SIDEBAR -->
     <aside class="sidebar">
-
-        <h3>Information</h3>
-
+        <h2>Your shopping guide</h2>
         <ul class="category-list">
-
-            <li>
-                <a href="stores.html">
-                    🚚 Express Delivery
-                </a>
-            </li>
-
-            <li>
-                <a href="cart.html">
-                    💳 Kaspi / Card Payment
-                </a>
-            </li>
-
-            <li>
-                <a href="index.html">
-                    🛡️ Freshness Guarantee
-                </a>
-            </li>
-
+            <li><a href="stores.html">Continue shopping</a></li>
+            <li><a href="compare.html">Compare grocery prices</a></li>
+            <li><a href="index.html#feedback">Send feedback</a></li>
         </ul>
-
+        <div class="sidebar-note"><h3>Delivery, made simple</h3><p>800 ₸ per basket. Free delivery from 5,000 ₸.</p><p>Try Kaspi Pay, bank card, or cash in our demo checkout.</p></div>
     </aside>
 
-
-    <!-- MAIN -->
-    <main class="main-content">
-
+    <main class="main-content" id="main-content" tabindex="-1">
         <section class="comparison-section">
-
             <div class="section-heading">
-
-                <h2>Your Cart</h2>
-
-                <button
-                        id="clear-cart"
-                        class="btn danger-btn"
-                >
-                    Clear Cart
-                </button>
-
+                <div><p class="eyebrow">Your basket</p><h1>Your Cart</h1></div>
+                <button id="clear-cart" class="btn danger-btn" type="button" disabled>Clear Cart</button>
             </div>
 
+            <div id="cart-items" class="cart-list"></div>
 
-            <!-- CART ITEMS -->
-            <div
-                    id="cart-items"
-                    class="cart-list"
-            ></div>
-
-
-            <!-- CART SUMMARY -->
             <div class="cart-summary">
-
-                <h3>
-                    Total:
-                    <span id="cart-total">0 ₸</span>
-                </h3>
-
-                <button
-                        id="checkout-btn"
-                        class="btn checkout-btn"
-                >
-                    Checkout
-                </button>
-
+                <div class="summary-lines">
+                    <p>Subtotal <strong id="cart-subtotal">0 ₸</strong></p>
+                    <p>Delivery <strong id="delivery-fee">0 ₸</strong></p>
+                    <h3>Total <span id="cart-total">0 ₸</span></h3>
+                    <small>Delivery is free for orders of 5,000 ₸ or more.</small>
+                </div>
+                <button id="checkout-btn" class="btn checkout-btn" type="button" disabled>Checkout</button>
             </div>
-
+            <p id="order-status" class="order-status" aria-live="polite" hidden></p>
         </section>
-
     </main>
 
-
-    <!-- FOOTER -->
     <footer class="footer">
-
-        <p>
-            &copy; 2026 Food Delivery Platform KN (Astana).
-            All rights reserved.
-        </p>
-
+        <p>Foodly &copy; 2026 · Created by Kakhar Nassyrkhan &amp; Nurasyl Raiskaliev</p>
+        <nav class="footer-nav" aria-label="Footer navigation">
+            <a href="index.html">Home</a><a href="stores.html">Stores</a><a href="compare.html">Compare</a><a href="cart.html">Cart</a>
+        </nav>
     </footer>
 
 </div>
 
-<script src="js/app.js"></script>
+<dialog id="checkout-dialog" class="checkout-dialog" aria-labelledby="checkout-title" aria-describedby="checkout-note">
+    <form id="checkout-form" class="checkout-form">
+        <div class="dialog-heading">
+            <div>
+                <p class="eyebrow">Demo checkout</p>
+                <h2 id="checkout-title">Delivery details</h2>
+            </div>
+            <button type="button" id="close-checkout" class="icon-btn" aria-label="Close checkout">×</button>
+        </div>
 
+        <p id="checkout-note">Practice placing an order. No payment is collected and no delivery is booked.</p>
+        <div class="form-grid">
+            <label class="field-group" for="customer-name">
+                <span>Full name</span>
+                <input id="customer-name" name="name" type="text" autocomplete="name" minlength="2" required>
+            </label>
+            <label class="field-group" for="customer-phone">
+                <span>Phone number</span>
+                <input id="customer-phone" name="phone" type="tel" autocomplete="tel" placeholder="+7 700 000 00 00" pattern="[+0-9 \(\)\-]{10,18}" title="Enter 10–18 characters using digits, spaces, +, parentheses, or hyphens." required>
+            </label>
+            <label class="field-group field-wide" for="customer-address">
+                <span>Delivery address</span>
+                <input id="customer-address" name="address" type="text" autocomplete="street-address" minlength="5" required>
+            </label>
+            <label class="field-group" for="payment-method">
+                <span>Payment method</span>
+                <select id="payment-method" name="payment" required>
+                    <option value="">Choose a method</option>
+                    <option value="kaspi">Kaspi Pay</option>
+                    <option value="card">Bank card</option>
+                    <option value="cash">Cash on delivery</option>
+                </select>
+            </label>
+            <label class="field-group" for="delivery-time">
+                <span>Delivery time</span>
+                <select id="delivery-time" name="deliveryTime" required>
+                    <option value="asap">As soon as possible</option>
+                    <option value="evening">Today, 18:00–21:00</option>
+                    <option value="tomorrow">Tomorrow, 10:00–13:00</option>
+                </select>
+            </label>
+            <label class="field-group field-wide" for="order-note">
+                <span>Courier note (optional)</span>
+                <textarea id="order-note" name="note" rows="3" maxlength="200" placeholder="Entrance, floor, door code..."></textarea>
+            </label>
+        </div>
+
+        <div class="checkout-total">
+            <span>Amount due</span>
+            <strong id="checkout-total">0 ₸</strong>
+        </div>
+        <button type="submit" class="btn checkout-btn">Place demo order</button>
+    </form>
+</dialog>
+
+<script src="js/app.js" defer></script>
 </body>
 </html>
