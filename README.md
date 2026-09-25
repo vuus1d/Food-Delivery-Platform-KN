@@ -1,102 +1,106 @@
-# Foodly — Astana Supermarket Price Aggregator
+# Foodly – Food Delivery Platform
 
-# Foodly — Astana Supermarket Price Aggregator
+## Authors
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)![WebStorm](https://img.shields.io/badge/WebStorm-000000?style=flat-square&logo=webstorm&logoColor=white)![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?style=flat-square&logo=githubpages&logoColor=white)
+- Kakhar Nassyrkhan
+- Nurasyl Raiskaliev
 
-Foodly is a front-end web application for comparing grocery prices across supermarkets in Astana.
+## Project Description
 
-The platform provides a single interface where users can explore supermarkets, compare product prices, and prepare a delivery order.
+Foodly is a university Web Technologies project for browsing grocery stores in Astana, comparing sample prices, and building a delivery basket. The existing four-page website uses vanilla HTML, CSS, and JavaScript, with no UI frameworks, build step, or backend.
 
-Foodly is a front-end web application for comparing grocery prices across supermarkets in Astana.
+Prices, promotions, delivery options, and store districts are demonstration data. Store photographs are illustrative. Checkout does not charge money or book deliveries, and feedback is not sent or saved.
 
-The platform provides a single interface where users can explore supermarkets, compare product prices, and prepare a delivery order.
+## Pages
 
-## Preview
+- **Home** (`index.html`): introduction, shopping steps, featured stores, sample comparison, food gallery, team, and feedback.
+- **Stores** (`stores.html`): district filters and store catalogs with search, sorting, and add-to-cart buttons.
+- **Compare** (`compare.html`): price comparison with product search and category filters.
+- **Cart** (`cart.html`): quantities, removal, subtotal, delivery fee, total, and demo checkout.
 
-![Foodly Home Page](images/home.png)
+## Features
 
-![Foodly Stores Page](images/stores.png)
-
-![Foodly Price Comparison](images/compare.png)
-
-![Foodly Checkout](images/cart.png)
+- Store browsing and product cards with local photos
+- Price comparison with search and category filters
+- Shopping cart with quantity controls and total calculation
+- LocalStorage persistence using the existing `cart` key
+- Cart updates across tabs and a visible message when saving is blocked
+- Catalog search and sorting, including restoring the recommended order
+- Demo payment choices: Kaspi Pay, bank card, and cash on delivery
+- Responsive Flexbox navigation, store cards, and product cards
+- CSS Grid page layout with named areas
+- Nine-image food and delivery gallery
+- Team section for both authors
+- Labeled contact/feedback and delivery forms
+- Keyboard focus styles, skip links, live status messages, and reduced-motion support
 
 ## Technologies
 
 - HTML5
 - CSS3
-- JavaScript
-- WebStorm
-- Git
-- GitHub Pages
+- Vanilla JavaScript
+- Flexbox
+- CSS Grid
 
-## Code Layout
+## Assignment Requirements Implemented
 
-    index.html : Main landing page.
-    store.html : Supermarket directory.
-    compare.html : Product price comparison.
-    cart.html : Checkout page.
-    css/style.css : Main stylesheet.
-    js/app.js : JavaScript functionality.
+| Requirement | Where to demonstrate it |
+| --- | --- |
+| Flexbox header and navigation | Every page; `#main-header` and `.nav-links` use `display: flex`, alignment, justification, and gaps. |
+| Flexbox cards | Home and Stores; `.cards-container` wraps cards, with three equal-height cards per row on desktop. |
+| Grid page layout | Every page; `.page-container` uses columns, rows, and `grid-template-areas` for header, sidebar, main, and footer. |
+| Useful sidebar | Store district filters, comparison category filters, and shopping navigation. |
+| Grid image gallery | Home → Food Gallery (`#gallery`); nine local images, captions, hover effects, and responsive columns. |
+| Team cards | Home → Meet the Team (`#team`); both authors, roles, descriptions, and their real photos in matching circular frames. |
+| Headings, paragraphs, images, links | Integrated throughout all pages. |
+| Unordered and ordered lists | Navigation/category lists and the Home “How Foodly works” steps. |
+| Table | Compare and Home; five columns, caption, `thead`, `tbody`, scoped headings, row hover, and `:nth-child(even)`. The table region scrolls horizontally and is keyboard focusable. |
+| Form | Home (`#contact-form`): name, email, topic dropdown, message, submit button, validation, and confirmation. Cart also has a delivery form. |
+| Four CSS selector types | Element: `body`, `h1`, `p`; class: `.card`; ID: `#main-header`, `#contact-form`; descendant: `.nav-links a`, `.team-card img`. |
+| Responsive design | Media queries at 1050px, 760px, and 540px adapt sidebars, navigation, cards, gallery, forms, and tables. Mobile layouts use CSS. |
+| Shared footer | Every page credits Kakhar Nassyrkhan and Nurasyl Raiskaliev and links to all four pages. |
 
-## HTML
+## Project Structure
 
-The project uses semantic HTML5 elements, including:
+```text
+index.html       Home, gallery, team, and feedback
+stores.html      Store directory and product catalog
+compare.html     Searchable price comparison
+cart.html        Shopping cart and demo checkout
+css/style.css    Shared styles, organized by section
+js/app.js        Demo data, cart, catalog, filters, and forms
+images/          Local food/store photos, both author portraits, and source notes
+```
 
-    <header>
-    <nav>
-    <main>
-    <section>
-    <footer>
-    <table>
-    <form>
+## Author Photos
 
-## CSS
+Both real author photos are included in the Meet the Team section with the confirmed mapping:
 
-CSS is used for:
+1. **Image #1 → Nurasyl Raiskaliev → `images/nurasyl.jpg`** (glasses, hackalem.ai event).
+2. **Image #2 → Kakhar Nassyrkhan → `images/kakhar.jpg`** (white shirt, black vest, and tie).
 
-- Layout
-- Typography
-- Navigation
-- Product cards
-- Forms
-- Tables
-- Responsive design
+The original JPEGs are preserved and load directly from HTML, including when JavaScript is disabled. CSS frames each face in a matching 128 × 128 pixel circle with `border-radius: 50%`, `object-fit: cover`, and individual zoom/position settings. No placeholder files or missing-photo requests remain.
 
-The project uses Flexbox and CSS Grid.
+See [image sources and portrait mapping](images/README.md). All images are included; no manual downloads are needed.
 
-## JavaScript
+## Run Locally
 
-JavaScript functionality is located in:
+From the repository folder:
 
-    js/app.js
+```sh
+python3 -m http.server 8000
+```
 
-## Quick Start
+Open `http://localhost:8000/index.html`. A local server gives the four pages a consistent origin for LocalStorage. No package installation or build is required. JavaScript must be enabled for shopping and filtering.
 
-Clone the repository:
+## GitHub Pages
 
-    git clone https://github.com/vuus1d/Food-Delivery-Platform-KN.git
+After reviewing and committing the changes, publish the repository root through GitHub Pages (branch: `main`, folder: `/`). All internal page, image, stylesheet, and script links are relative, so they also work under the repository's project URL. No deployment or push is performed as part of these edits.
 
-Navigate to the project:
+## Checks
 
-    cd Food-Delivery-Platform-KN
+Completed locally in Chrome: all four pages at 1440, 1024, 768, 390, and 320 pixels; no horizontal page overflow or JavaScript runtime errors. Verified home-to-catalog navigation, three desktop store cards, nine gallery images, image decoding, district/category filters, search and empty states, sorting reset, cart totals and reload persistence, cross-tab updates, invalid/blocked storage, feedback, and demo checkout. Desktop and mobile Home screenshots were also visually reviewed. Static checks passed for HTML nesting, unique IDs, labels, internal links/fragments, CSS/JS paths, and displayed image paths.
 
-Open `index.html` in WebStorm or another IDE.
+Review all four pages at desktop, tablet, and mobile widths. Open each store catalog, search and sort products, add products from different stores, change quantities, reload the cart, and try the demo checkout. Delivery costs 800 ₸ below 5,000 ₸ and is free from 5,000 ₸; an empty basket has no delivery charge. Also try category filters, searches with no results, and the feedback form.
 
-## Live Demo
-
-https://vuus1d.github.io/Food-Delivery-Platform-KN/
-
-## Team
-
-Kakhar Nassyrkhan  
-Nurasyl Raiskaliev
-
-Group: SE-2506
-
-Astana IT University
-
-## License
-
-This project was created for educational purposes as part of the WEB Technologies 1 (Front End) course.
+Before submitting the assignment, review the site on your published GitHub Pages URL.
