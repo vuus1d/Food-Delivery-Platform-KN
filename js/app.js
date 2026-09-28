@@ -1,4 +1,5 @@
-/* Foodly demo data: sample grocery prices in Kazakhstani tenge. */
+/* Foodly demo data: sample grocery prices in Kazakhstani tenge.
+ * Assignment 3: Bootstrap markup, modal, toast and form validation. */
 const products = {
     Magnum: [
         { name: "Milk 1L", price: 480 },
@@ -21,6 +22,8 @@ const products = {
 };
 
 const DELIVERY_FEE = 800;
+// Product photos live in the shared images/ folder.
+const IMAGE_PATH = "images/";
 const productDetails = {
     "Milk 1L": { image: "milk", description: "A fresh staple for breakfast, coffee, and cooking." },
     "Bread": { image: "bakery", description: "An everyday loaf for toast and sandwiches." },
@@ -64,13 +67,18 @@ function updateCartCount() {
 }
 
 function showToast(message) {
-    document.querySelector(".toast")?.remove();
+    document.querySelector(".toast-stack")?.remove();
+    const stack = document.createElement("div");
+    stack.className = "toast-stack toast-container position-fixed bottom-0 end-0 p-3";
     const toast = document.createElement("div");
-    toast.className = "toast";
+    toast.className = "toast show align-items-center text-bg-dark border-0";
     toast.setAttribute("role", "status");
-    toast.textContent = message;
-    document.body.append(toast);
-    window.setTimeout(() => toast.remove(), 2600);
+    toast.innerHTML = '<div class="d-flex"><div class="toast-body"></div><button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close notification"></button></div>';
+    toast.querySelector(".toast-body").textContent = message;
+    toast.querySelector(".btn-close").addEventListener("click", () => stack.remove());
+    stack.append(toast);
+    document.body.append(stack);
+    window.setTimeout(() => stack.remove(), 2600);
 }
 
 function addToCart(name, price, store) {
@@ -113,14 +121,18 @@ function showProducts(store) {
 
     title.textContent = `${store} Product Catalog`;
     container.innerHTML = products[store].map((product, index) => `
-        <article class="product-card" data-order="${index}">
-            <img src="images/${productDetails[product.name].image}.jpg" alt="${escapeHTML(product.name)}" width="400" height="300" loading="lazy">
-            <h3>${escapeHTML(product.name)}</h3>
-            <p class="product-description">${productDetails[product.name].description}</p>
-            <p>Store: ${escapeHTML(store)}</p>
-            <strong class="product-price">${formatPrice(product.price)}</strong>
-            <button class="btn add-product" type="button" aria-label="Add ${escapeHTML(product.name)} from ${escapeHTML(store)} to cart" data-name="${escapeHTML(product.name)}" data-price="${product.price}" data-store="${escapeHTML(store)}">Add to Cart</button>
-        </article>`).join("");
+        <div class="col" data-order="${index}">
+            <article class="card h-100 border-0 rounded-4 overflow-hidden shadow-foodly card-lift">
+                <img src="${IMAGE_PATH}${productDetails[product.name].image}.jpg" class="card-img-top product-img" alt="${escapeHTML(product.name)}" width="400" height="300" loading="lazy">
+                <div class="card-body d-flex flex-column p-3">
+                    <h3 class="card-title h5 mb-1">${escapeHTML(product.name)}</h3>
+                    <p class="card-text small text-body-secondary flex-grow-1 mb-2">${productDetails[product.name].description}</p>
+                    <p class="card-text small mb-1">Store: ${escapeHTML(store)}</p>
+                    <strong class="fs-4 text-success-emphasis mb-3">${formatPrice(product.price)}</strong>
+                    <button class="btn btn-primary w-100 add-product" type="button" aria-label="Add ${escapeHTML(product.name)} from ${escapeHTML(store)} to cart" data-name="${escapeHTML(product.name)}" data-price="${product.price}" data-store="${escapeHTML(store)}">Add to Cart</button>
+                </div>
+            </article>
+        </div>`).join("");
     catalog.hidden = false;
     filterCatalog();
     title.focus({ preventScroll: true });
@@ -159,18 +171,22 @@ function renderCart() {
     if (!container) return;
 
     if (!cart.length) {
-        container.innerHTML = '<div class="empty-cart"><h3>Your cart is empty.</h3><p>Add products from the stores page to get started.</p><a href="stores.html" class="btn">Go to Stores</a></div>';
+        container.innerHTML = '<div class="empty-cart rounded-4 bg-body-tertiary text-center p-4"><h2 class="h5">Your cart is empty.</h2><p class="text-body-secondary">Add products from the stores page to get started.</p><a href="stores.html" class="btn btn-primary">Go to Stores</a></div>';
     } else {
         container.innerHTML = cart.map((item, index) => `
-            <article class="cart-item">
-                <div class="cart-item-info"><h3>${escapeHTML(item.name)}</h3><p>Store: ${escapeHTML(item.store)}</p><p>${formatPrice(item.price)} × ${item.quantity}</p></div>
-                <div class="quantity-controls" aria-label="Quantity controls for ${escapeHTML(item.name)}">
-                    <button class="quantity-btn" type="button" data-action="decrease" data-index="${index}" aria-label="Decrease ${escapeHTML(item.name)} quantity">−</button>
-                    <strong aria-live="polite">${item.quantity}</strong>
-                    <button class="quantity-btn" type="button" data-action="increase" data-index="${index}" aria-label="Increase ${escapeHTML(item.name)} quantity">+</button>
-                    <button class="remove-btn" type="button" data-action="remove" data-index="${index}" aria-label="Remove ${escapeHTML(item.name)} from ${escapeHTML(item.store)}">Remove</button>
+            <article class="card border rounded-3">
+                <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3 p-3">
+                    <div class="flex-grow-1"><h2 class="card-title h6 mb-1">${escapeHTML(item.name)}</h2><p class="card-text small text-body-secondary mb-0">Store: ${escapeHTML(item.store)} · ${formatPrice(item.price)} × ${item.quantity}</p></div>
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Quantity controls for ${escapeHTML(item.name)}">
+                            <button class="btn btn-outline-secondary" type="button" data-action="decrease" data-index="${index}" aria-label="Decrease ${escapeHTML(item.name)} quantity">−</button>
+                            <span class="btn btn-outline-secondary disabled text-body fw-bold" aria-live="polite">${item.quantity}</span>
+                            <button class="btn btn-outline-secondary" type="button" data-action="increase" data-index="${index}" aria-label="Increase ${escapeHTML(item.name)} quantity">+</button>
+                        </div>
+                        <button class="btn btn-outline-danger btn-sm" type="button" data-action="remove" data-index="${index}" aria-label="Remove ${escapeHTML(item.name)} from ${escapeHTML(item.store)}">Remove</button>
+                    </div>
+                    <strong class="text-end">${formatPrice(item.price * item.quantity)}</strong>
                 </div>
-                <strong>${formatPrice(item.price * item.quantity)}</strong>
             </article>`).join("");
     }
 
@@ -196,7 +212,7 @@ function compareProducts() {
     const rows = [...document.querySelectorAll(".comparison-row")];
     if (!search || !rows.length) return;
     const query = search.value.trim().toLowerCase();
-    const selectedCategory = document.querySelector(".category-filter.is-active")?.dataset.category || "all";
+    const selectedCategory = document.querySelector(".category-filter.active")?.dataset.category || "all";
     let visible = 0;
     rows.forEach(row => {
         const matchesQuery = row.textContent.toLowerCase().includes(query);
@@ -214,7 +230,7 @@ function init() {
     // A persistent live region reports storage errors without interrupting shopping.
     const storageStatus = document.createElement("p");
     storageStatus.id = "storage-status";
-    storageStatus.className = "order-status";
+    storageStatus.className = "alert alert-warning";
     storageStatus.setAttribute("role", "status");
     storageStatus.hidden = true;
     document.querySelector("main").prepend(storageStatus);
@@ -244,15 +260,16 @@ function init() {
     const checkoutButton = document.getElementById("checkout-btn");
     const checkoutDialog = document.getElementById("checkout-dialog");
     const checkoutForm = document.getElementById("checkout-form");
+    const checkoutModal = checkoutDialog && window.bootstrap ? bootstrap.Modal.getOrCreateInstance(checkoutDialog) : null;
     checkoutButton?.addEventListener("click", () => {
         if (!cart.length) return;
         renderCart();
-        if (checkoutDialog?.showModal) checkoutDialog.showModal();
+        checkoutModal?.show();
     });
-    document.getElementById("close-checkout")?.addEventListener("click", () => checkoutDialog?.close());
     checkoutForm?.addEventListener("submit", event => {
         event.preventDefault();
-        if (!checkoutForm.reportValidity() || !cart.length) return;
+        checkoutForm.classList.add("was-validated");
+        if (!checkoutForm.checkValidity() || !cart.length) return;
         const name = checkoutForm.elements.name.value.trim();
         const orderStatus = document.getElementById("order-status");
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -265,7 +282,8 @@ function init() {
         saveCart();
         renderCart();
         checkoutForm.reset();
-        checkoutDialog?.close();
+        checkoutForm.classList.remove("was-validated");
+        checkoutModal?.hide();
     });
 
     document.getElementById("search")?.addEventListener("input", compareProducts);
@@ -278,7 +296,7 @@ function init() {
     document.querySelectorAll(".category-filter").forEach(button => button.addEventListener("click", () => {
         document.querySelectorAll(".category-filter").forEach(filter => {
             const active = filter === button;
-            filter.classList.toggle("is-active", active);
+            filter.classList.toggle("active", active);
             filter.setAttribute("aria-pressed", String(active));
         });
         compareProducts();
@@ -295,7 +313,7 @@ function init() {
     document.querySelectorAll(".store-filter").forEach(button => button.addEventListener("click", () => {
         document.querySelectorAll(".store-filter").forEach(filter => {
             const active = filter === button;
-            filter.classList.toggle("is-active", active);
+            filter.classList.toggle("active", active);
             filter.setAttribute("aria-pressed", String(active));
         });
         document.querySelectorAll(".store-card").forEach(card => {
@@ -308,15 +326,18 @@ function init() {
     const requestedStore = params.get("store");
     if (requestedStore && Object.hasOwn(products, requestedStore)) showProducts(requestedStore);
 
-    document.getElementById("contact-form")?.addEventListener("submit", event => {
+    const contactForm = document.getElementById("contact-form");
+    contactForm?.addEventListener("reset", () => contactForm.classList.remove("was-validated"));
+    contactForm?.addEventListener("submit", event => {
         event.preventDefault();
-        if (!event.currentTarget.reportValidity()) return;
+        contactForm.classList.add("was-validated");
+        if (!contactForm.checkValidity()) return;
         const status = document.getElementById("feedback-status");
         if (status) {
             status.textContent = "Thanks for your feedback. This demo form does not send data to a server.";
             status.hidden = false;
         }
-        event.currentTarget.reset();
+        contactForm.reset();
     });
 
     compareProducts();
@@ -329,6 +350,7 @@ window.addEventListener("storage", event => {
         cart = loadCart();
         updateCartCount();
         renderCart();
-        if (!cart.length) document.getElementById("checkout-dialog")?.close();
+        const dialog = document.getElementById("checkout-dialog");
+        if (!cart.length && dialog && window.bootstrap) bootstrap.Modal.getInstance(dialog)?.hide();
     }
 });

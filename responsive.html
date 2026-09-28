@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Foodly responsive typography and store cards built with CSS media queries only.">
+    <title>Responsive | Foodly</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🥬%3C/text%3E%3C/svg%3E">
+    <!-- Part 1: pure CSS media queries, Bootstrap is intentionally NOT loaded on this page -->
+    <link rel="stylesheet" href="css/media-queries.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<header class="site-header">
+    <a class="logo" href="index.html"><span aria-hidden="true">🥬</span> Foodly</a>
+    <nav class="site-nav" aria-label="Main navigation">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="stores.html">Stores</a></li>
+            <li><a href="compare.html">Compare</a></li>
+            <li><a href="responsive.html" aria-current="page">Responsive</a></li>
+            <li><a href="cart.html">Cart</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="page" id="main-content" tabindex="-1">
+
+    <!-- Task 1: Responsive Typography -->
+    <section class="type-scale" aria-labelledby="type-heading">
+        <span class="breakpoint-label" aria-hidden="true"></span>
+        <p class="eyebrow">Task 1 · Responsive typography</p>
+        <h1 id="type-heading">Fresh groceries across Astana</h1>
+        <p class="lead">Foodly helps you compare everyday prices at Magnum, Small &amp; Zetta, and Galmart, then brings your basket together in one simple order.</p>
+        <h2>Why shoppers choose Foodly</h2>
+        <p>Headings and paragraphs on this page start small on phones, grow on tablets from 768px, and become large on desktops from 992px. Resize the window to watch the type scale change.</p>
+        <h3>Delivery in about an hour</h3>
+        <p>Couriers pick up your order from the nearest partner store. Delivery costs 800 ₸ and is free for baskets from 5,000 ₸.</p>
+    </section>
+
+    <!-- Task 2: Card group with media queries -->
+    <section aria-labelledby="cards-heading">
+        <h2 id="cards-heading">Task 2 · Partner stores</h2>
+        <p>One card per row on phones, two on tablets, three on desktops — built with CSS Grid and media queries only.</p>
+        <div class="card-group">
+            <article class="store-card">
+                <img src="images/magnum.jpg" alt="Grocery aisles illustrating the Magnum store selection" width="800" height="600" loading="lazy">
+                <div class="store-card-body">
+                    <h3>Magnum Daily</h3>
+                    <p>A wide selection of products, affordable prices, and fast delivery.</p>
+                    <span class="tag">Best Price</span>
+                    <a class="card-link" href="stores.html?store=Magnum">View products</a>
+                </div>
+            </article>
+            <article class="store-card">
+                <img src="images/small.jpg" alt="Fresh produce illustrating the Small store selection" width="800" height="600" loading="lazy">
+                <div class="store-card-body">
+                    <h3>Small &amp; Zetta</h3>
+                    <p>Fresh products, regular promotions, and discounts.</p>
+                    <span class="tag tag-sale">Up to 30% Off</span>
+                    <a class="card-link" href="stores.html?store=Small">View products</a>
+                </div>
+            </article>
+            <article class="store-card">
+                <img src="images/galmart.jpg" alt="Supermarket shelves illustrating the Galmart store selection" width="800" height="600" loading="lazy">
+                <div class="store-card-body">
+                    <h3>Galmart Premium</h3>
+                    <p>Premium products, imported goods, and farm products.</p>
+                    <span class="tag tag-premium">Premium</span>
+                    <a class="card-link" href="stores.html?store=Galmart">View products</a>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>Foodly &copy; 2026 · Team KN · Created by <strong>Kakhar Nassyrkhan</strong> &amp; <strong>Nurasyl Raiskaliev</strong></p>
+    <p><a href="index.html">Home</a> · <a href="stores.html">Stores</a> · <a href="compare.html">Compare</a> · <a href="responsive.html">Responsive</a> · <a href="cart.html">Cart</a></p>
+</footer>
+</body>
+</html>
