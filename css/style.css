@@ -108,8 +108,8 @@ a:focus-visible, button:focus-visible, .btn:focus-visible, [tabindex]:focus-visi
 /* Team portraits: the originals stay intact, CSS zooms each face into the circle. */
 .team-portrait { width: 128px; height: 128px; border: 4px solid var(--foodly-green-pale); }
 .team-portrait img { width: 100%; height: 100%; object-fit: cover; }
-.portrait-kakhar { transform: scale(1.8); transform-origin: 48% 26%; }
-.portrait-nurasyl { transform: scale(2.8); transform-origin: 50% 50%; }
+.portrait-kakhar { transform: scale(3.2); transform-origin: 48.5% 47%; }  /* nurasyl.jpg: hackalem.ai photo */
+.portrait-nurasyl { transform: scale(2.2); transform-origin: 41% 24%; }  /* kakhar.jpg: vest photo */
 
 /* Tables keep their columns readable and scroll inside .table-responsive on phones. */
 .table-min { min-width: 620px; }

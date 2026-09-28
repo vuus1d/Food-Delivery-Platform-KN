@@ -20,7 +20,7 @@ Food and store photos are bundled locally for reliable static hosting. Store ima
 
 The author-supplied photos are included, with the mapping confirmed by the authors:
 
-- `nurasyl.jpg`: supplied Image #1 — Nurasyl Raiskaliev, wearing glasses at the hackalem.ai event.
-- `kakhar.jpg`: supplied Image #2 — Kakhar Nassyrkhan, wearing a white shirt, black vest, and tie.
+- `nurasyl.jpg`: Kakhar Nassyrkhan, wearing glasses at the hackalem.ai event (the file name is reversed on purpose).
+- `kakhar.jpg`: Nurasyl Raiskaliev, wearing a white shirt, black vest, and tie (the file name is reversed on purpose).
 
 The original JPEGs are preserved. CSS frames the faces in matching 128 × 128 pixel circles using `object-fit: cover`, `border-radius: 50%`, and individual zoom/position settings. The photos load directly in HTML without JavaScript or placeholders.
