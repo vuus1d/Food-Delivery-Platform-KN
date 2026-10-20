@@ -117,7 +117,98 @@ a:focus-visible, button:focus-visible, .btn:focus-visible, [tabindex]:focus-visi
 /* Toast stack sits above page content. */
 .toast-stack { z-index: 1090; }
 
+/* ---------- Assignment 4 ---------- */
+
+/* Task 4: the background change from js/theme.js fades in softly. */
+body { transition: background-color 300ms ease; }
+
+/* Task 1: error text under each form field (filled in by JavaScript). */
+.field-error { min-height: 1.25rem; margin-top: 0.25rem; color: #b02a37; font-size: 0.875rem; }
+
+/* Task 2: FAQ accordion. Answers are closed (max-height: 0) until JS adds .open. */
+.faq-item { border-bottom: 1px solid var(--bs-border-color); }
+.faq-item:last-child { border-bottom: 0; }
+.faq-question {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-weight: 650;
+    text-align: left;
+}
+.faq-question:hover { color: var(--foodly-green-dark); }
+.faq-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--foodly-green-pale);
+    color: var(--foodly-green-deep);
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: background-color 200ms ease, color 200ms ease;
+}
+.faq-item.open .faq-icon { background: var(--foodly-green); color: #ffffff; }
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    visibility: hidden; /* hidden answers are skipped by screen readers and the Tab key */
+    transition: max-height 350ms ease, visibility 350ms;
+}
+.faq-item.open .faq-answer { max-height: 20rem; visibility: visible; }
+
+/* Task 3: custom popup. The overlay covers the whole screen; the window sits in the centre. */
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(11, 30, 20, 0.6);
+}
+.popup-overlay[hidden] { display: none; } /* display: flex above would otherwise beat the hidden attribute */
+.popup-window {
+    position: relative;
+    width: 100%;
+    max-width: 28rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    border-radius: 1rem;
+    background: #ffffff;
+    box-shadow: var(--foodly-shadow-hover);
+    animation: popup-in 200ms ease-out;
+}
+@keyframes popup-in {
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    to { opacity: 1; transform: none; }
+}
+.popup-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #4f6257;
+    font-size: 1.75rem;
+    line-height: 1;
+}
+.popup-close:hover { background: var(--foodly-green-pale); color: var(--foodly-green-deep); }
+body.popup-open { overflow: hidden; }
+
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
     .carousel-item { transition: none; }
+    .popup-window { animation: none; }
 }

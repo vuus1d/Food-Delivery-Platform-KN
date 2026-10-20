@@ -43,6 +43,7 @@ https://github.com/vuus1d/Food-Delivery-Platform-KN
 | `compare.html` | Price comparison table for Magnum, Small, and Galmart with category filters and search |
 | `cart.html` | Cart items with quantity controls, subtotal, delivery fee, total, and a checkout form in a modal window |
 | `responsive.html` | Responsive typography and store cards built with plain CSS media queries (no Bootstrap) |
+| `login.html` | Sign-up form (Name, Email, Password, Confirm Password) with JavaScript validation |
 
 ---
 
@@ -59,6 +60,14 @@ https://github.com/vuus1d/Food-Delivery-Platform-KN
 - Responsive layout for phones, tablets, and desktops, with a collapsible navigation menu
 - Accessibility: skip link, labelled controls, image alt text, visible focus styles, and reduced-motion support
 
+### Assignment 4 — JavaScript interactivity (plain JS, no jQuery, no Bootstrap JS)
+
+- **Form validation** (`login.html`, `js/validation.js`) — checks required fields, email format (regex), password length (8+), and matching passwords; errors appear under each field, success message clears the form
+- **FAQ accordion** (`index.html`, `js/accordion.js`) — 5 delivery questions; a click toggles the `open` class and the answer slides open with a CSS `max-height` transition, icon switches between + and −
+- **Subscribe popup** (`index.html`, `js/popup.js`) — custom modal with a name + email form; closes with ×, a click on the dark background, or Escape
+- **Change background** (all Bootstrap pages, `js/theme.js`) — cycles `document.body.style.backgroundColor` through soft brand-friendly colours
+- **Live date and time** (all Bootstrap pages, `js/datetime.js`) — shows e.g. "October 21, 2026, 12:54 AM" using `toLocaleString('en-US', …)`, updated every second with `setInterval`
+
 ---
 
 ## 📁 Project Structure
@@ -71,13 +80,19 @@ Food-Delivery-Platform-KN/
 ├── compare.html
 ├── cart.html
 ├── responsive.html
+├── login.html
 │
 ├── css/
 │   ├── style.css            # brand styles on top of Bootstrap
 │   └── media-queries.css    # styles for responsive.html
 │
 ├── js/
-│   └── app.js
+│   ├── app.js           # cart, filters, checkout
+│   ├── validation.js    # A4: sign-up form validation
+│   ├── accordion.js     # A4: FAQ accordion
+│   ├── popup.js         # A4: subscribe popup
+│   ├── theme.js         # A4: background colour button
+│   └── datetime.js      # A4: live date and time
 │
 ├── images/
 │   ├── bakery.jpg

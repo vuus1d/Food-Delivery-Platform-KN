@@ -25,6 +25,7 @@
                     <li class="nav-item"><a class="nav-link rounded-2 px-3" href="stores.html">Stores</a></li>
                     <li class="nav-item"><a class="nav-link rounded-2 px-3" href="compare.html">Compare</a></li>
                     <li class="nav-item"><a class="nav-link rounded-2 px-3" href="responsive.html">Responsive</a></li>
+                    <li class="nav-item"><a class="nav-link rounded-2 px-3" href="login.html">Sign Up</a></li>
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-2 rounded-2 px-3" href="cart.html">
                             Cart <span id="cart-count" class="badge rounded-pill text-bg-light" aria-live="polite">0</span><span class="visually-hidden">items in cart</span>
@@ -34,6 +35,13 @@
             </div>
         </div>
     </nav>
+    <!-- Assignment 4: live date/time (js/datetime.js) and background colour button (js/theme.js) -->
+    <div class="bg-white border-bottom">
+        <div class="container-fluid px-3 px-lg-4 py-2 d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <p class="small text-body-secondary mb-0"><span aria-hidden="true">🕒</span> <time id="current-datetime"></time></p>
+            <button id="bg-color-btn" class="btn btn-sm btn-outline-primary" type="button"><span aria-hidden="true">🎨</span> Change background</button>
+        </div>
+    </div>
 </header>
 
 <div class="container-fluid flex-grow-1">
@@ -67,6 +75,8 @@
                         <div class="d-flex flex-wrap align-items-center gap-2 gap-sm-3">
                             <a class="btn btn-primary btn-lg" href="stores.html">Explore stores <span aria-hidden="true">→</span></a>
                             <a class="btn btn-outline-primary btn-lg" href="compare.html">Compare prices</a>
+                            <!-- Assignment 4, Task 3: opens the custom popup (js/popup.js) -->
+                            <button class="btn btn-success btn-lg" type="button" data-open-popup><span aria-hidden="true">📬</span> Subscribe</button>
                         </div>
                         <p class="small text-body-secondary mt-4 mb-0">Local favorites. Everyday essentials. One simple basket.</p>
                     </div>
@@ -80,7 +90,7 @@
                                 <li class="list-group-item px-0 py-3"><strong>Compare your options.</strong> Check sample prices before adding items to your cart.</li>
                                 <li class="list-group-item px-0 py-3"><strong>Try checkout.</strong> Review your total and explore the demo delivery and payment options.</li>
                             </ol>
-                            <a class="btn btn-success mt-3" href="cart.html">Open my cart</a>
+                            <a class="btn btn-success mt-3 " href="cart.html">Open my cart</a>
                         </div>
                     </div>
                 </div>
@@ -292,6 +302,59 @@
                 </div>
             </section>
 
+            <!-- Assignment 4, Task 2: FAQ accordion written in plain JavaScript (js/accordion.js) -->
+            <section id="faq" class="mb-5" aria-labelledby="faq-heading">
+                <h2 id="faq-heading" class="h3 mb-2">Frequently Asked Questions</h2>
+                <p class="text-body-secondary mb-4">Quick answers about delivery, payment, and orders. Click a question to see the answer.</p>
+                <div class="card border-0 rounded-4 shadow-foodly px-3 px-sm-4">
+                    <div class="faq-item">
+                        <button class="faq-question py-3" type="button" aria-expanded="false" aria-controls="faq-answer-1">
+                            <span>How long does delivery take?</span>
+                            <span class="faq-icon" aria-hidden="true">+</span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-1">
+                            <p class="text-body-secondary pb-3 mb-0">Most orders across Astana arrive in about an hour. You can also choose an evening slot today or a morning slot tomorrow at checkout.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question py-3" type="button" aria-expanded="false" aria-controls="faq-answer-2">
+                            <span>How can I pay for my order?</span>
+                            <span class="faq-icon" aria-hidden="true">+</span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-2">
+                            <p class="text-body-secondary pb-3 mb-0">You can pay with Kaspi Pay, a bank card, or cash on delivery. In this demo no real payment is taken.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question py-3" type="button" aria-expanded="false" aria-controls="faq-answer-3">
+                            <span>Is there a minimum order or delivery fee?</span>
+                            <span class="faq-icon" aria-hidden="true">+</span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-3">
+                            <p class="text-body-secondary pb-3 mb-0">There is no minimum order. Delivery costs 800 ₸ and is free for baskets of 5,000 ₸ or more.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question py-3" type="button" aria-expanded="false" aria-controls="faq-answer-4">
+                            <span>Can I cancel or change my order?</span>
+                            <span class="faq-icon" aria-hidden="true">+</span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-4">
+                            <p class="text-body-secondary pb-3 mb-0">Yes, until the store starts packing it. After that, contact us through the feedback form below and we will help.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question py-3" type="button" aria-expanded="false" aria-controls="faq-answer-5">
+                            <span>Which stores deliver with Foodly?</span>
+                            <span class="faq-icon" aria-hidden="true">+</span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-5">
+                            <p class="text-body-secondary pb-3 mb-0">Magnum, Small &amp; Zetta, and Galmart. Compare their prices on the <a href="compare.html">Compare</a> page before you order.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Task 9: Bootstrap form with grid layout -->
             <section id="feedback" aria-labelledby="feedback-heading">
                 <h2 id="feedback-heading" class="h3 mb-2">Send us feedback</h2>
@@ -368,12 +431,41 @@
                 <li class="nav-item"><a class="nav-link link-light px-2 py-1" href="compare.html">Compare</a></li>
                 <li class="nav-item"><a class="nav-link link-light px-2 py-1" href="cart.html">Cart</a></li>
                 <li class="nav-item"><a class="nav-link link-light px-2 py-1" href="responsive.html">Responsive</a></li>
+                <li class="nav-item"><a class="nav-link link-light px-2 py-1" href="login.html">Sign Up</a></li>
             </ul>
         </nav>
     </div>
 </footer>
 
+<!-- Assignment 4, Task 3: custom popup (not a Bootstrap modal), controlled by js/popup.js -->
+<div class="popup-overlay" id="subscribe-popup" hidden>
+    <div class="popup-window p-4 p-sm-5" role="dialog" aria-modal="true" aria-labelledby="subscribe-title">
+        <button class="popup-close" type="button" aria-label="Close subscription form">&times;</button>
+        <p class="eyebrow text-uppercase fw-bold small text-success-emphasis mb-1">Weekly deals</p>
+        <h2 id="subscribe-title" class="h4 fw-bold mb-2">Subscribe to Foodly</h2>
+        <p class="text-body-secondary small mb-4">Get the best grocery prices in Astana once a week. Demo form: nothing is sent.</p>
+        <form id="subscribe-form" novalidate>
+            <div class="mb-2">
+                <label class="form-label fw-semibold" for="subscribe-name">Name</label>
+                <input class="form-control" id="subscribe-name" name="name" type="text" autocomplete="name" aria-describedby="subscribe-name-error">
+                <div class="field-error" id="subscribe-name-error"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold" for="subscribe-email">Email</label>
+                <input class="form-control" id="subscribe-email" name="email" type="email" autocomplete="email" aria-describedby="subscribe-email-error">
+                <div class="field-error" id="subscribe-email-error"></div>
+            </div>
+            <button class="btn btn-primary w-100" type="submit">Subscribe</button>
+            <p id="subscribe-success" class="alert alert-success small mt-3 mb-0" role="status" hidden></p>
+        </form>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="js/app.js" defer></script>
+<script src="js/theme.js" defer></script>
+<script src="js/datetime.js" defer></script>
+<script src="js/accordion.js" defer></script>
+<script src="js/popup.js" defer></script>
 </body>
 </html>
