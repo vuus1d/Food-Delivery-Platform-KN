@@ -1,0 +1,15 @@
+{
+  "name": "foodly-assignment-5",
+  "version": "5.0.0",
+  "private": true,
+  "description": "Foodly by Team KN, SE-2506. Static HTML/CSS/JavaScript coursework.",
+  "scripts": {
+    "test": "node tests/browser.cjs",
+    "validate:html": "html-validate '*.html'"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.11.0",
+    "html-validate": "10.0.0",
+    "playwright": "1.56.1"
+  }
+}

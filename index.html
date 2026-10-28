@@ -6,7 +6,7 @@
     <meta name="description" content="Explore Astana grocery stores, compare everyday prices, and build a delivery cart with Foodly (Bootstrap 5 version).">
     <title>Foodly | Home</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🥬%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="vendor/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="d-flex flex-column min-vh-100 bg-body-tertiary">
@@ -35,11 +35,16 @@
             </div>
         </div>
     </nav>
-    <!-- Assignment 4: live date/time (js/datetime.js) and background colour button (js/theme.js) -->
+    <!-- Shared live clock, day/night theme and optional sound controls. -->
     <div class="bg-white border-bottom">
         <div class="container-fluid px-3 px-lg-4 py-2 d-flex flex-wrap align-items-center justify-content-between gap-2">
             <p class="small text-body-secondary mb-0"><span aria-hidden="true">🕒</span> <time id="current-datetime"></time></p>
-            <button id="bg-color-btn" class="btn btn-sm btn-outline-primary" type="button"><span aria-hidden="true">🎨</span> Change background</button>
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <button id="bg-color-btn" class="btn btn-sm btn-outline-primary" type="button" aria-pressed="false">Night theme</button>
+                <button id="sound-toggle" class="btn btn-sm btn-outline-secondary" type="button" aria-pressed="false">Sound: off</button>
+                <button id="sound-test" class="btn btn-sm btn-outline-secondary" type="button" disabled>Test sound</button>
+                <span id="sound-status" class="visually-hidden" role="status"></span>
+            </div>
         </div>
     </div>
 </header>
@@ -181,7 +186,7 @@
                 <p class="text-body-secondary mb-4">A few of the fresh picks and everyday favorites you can find through our partner stores.</p>
                 <div class="row justify-content-center">
                     <div class="col-12 col-xl-10">
-                        <div id="foodCarousel" class="carousel slide rounded-4 overflow-hidden shadow-foodly" aria-roledescription="carousel" aria-label="Food gallery, 9 slides">
+                        <div id="foodCarousel" class="carousel slide rounded-4 overflow-hidden shadow-foodly" role="region" aria-roledescription="carousel" aria-label="Food gallery, 9 slides">
                             <div class="carousel-indicators">
                                 <button type="button" data-bs-target="#foodCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1: Fresh Fruits"></button>
                                 <button type="button" data-bs-target="#foodCarousel" data-bs-slide-to="1" aria-label="Slide 2: Organic Vegetables"></button>
@@ -340,7 +345,7 @@
                             <span class="faq-icon" aria-hidden="true">+</span>
                         </button>
                         <div class="faq-answer" id="faq-answer-4">
-                            <p class="text-body-secondary pb-3 mb-0">Yes, until the store starts packing it. After that, contact us through the feedback form below and we will help.</p>
+                            <p class="text-body-secondary pb-3 mb-0">This is a demo: no store receives the order. You can change or clear your basket before completing the demo checkout.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -355,6 +360,26 @@
                 </div>
             </section>
 
+            <section id="experience-card" class="card border-0 rounded-4 shadow-foodly p-3 p-sm-4 mb-5" aria-labelledby="experience-title">
+                <p class="eyebrow text-uppercase text-success-emphasis small fw-bold">Shop a little smarter</p>
+                <h2 id="experience-title" class="h3 fw-bold">Your Foodly experience</h2>
+                <p>Compare a basket before you buy. Small savings on everyday groceries can add up.</p>
+                <div><button id="read-more" class="btn btn-outline-primary" type="button" aria-expanded="false" aria-controls="shopping-details">Read more</button></div>
+                <div id="shopping-details" class="mt-3" hidden>
+                    <p class="mb-0">Compare the same product and pack size across stores. Delivery costs 800 ₸ below a 5,000 ₸ basket, so include the delivery fee in your comparison. All Foodly prices and orders are demonstration data.</p>
+                </div>
+                <hr>
+                <h3 class="h5" id="rating-label">How easy is Foodly to use?</h3>
+                <div class="rating-stars" role="group" aria-labelledby="rating-label">
+                    <button class="rating-star" type="button" data-rating="1" aria-label="Rate 1 out of 5" aria-pressed="false"><span aria-hidden="true">★</span></button>
+                    <button class="rating-star" type="button" data-rating="2" aria-label="Rate 2 out of 5" aria-pressed="false"><span aria-hidden="true">★</span></button>
+                    <button class="rating-star" type="button" data-rating="3" aria-label="Rate 3 out of 5" aria-pressed="false"><span aria-hidden="true">★</span></button>
+                    <button class="rating-star" type="button" data-rating="4" aria-label="Rate 4 out of 5" aria-pressed="false"><span aria-hidden="true">★</span></button>
+                    <button class="rating-star" type="button" data-rating="5" aria-label="Rate 5 out of 5" aria-pressed="false"><span aria-hidden="true">★</span></button>
+                </div>
+                <p id="rating-status" class="text-body-secondary mb-0" role="status">Choose a star to rate this demo.</p>
+            </section>
+
             <!-- Task 9: Bootstrap form with grid layout -->
             <section id="feedback" aria-labelledby="feedback-heading">
                 <h2 id="feedback-heading" class="h3 mb-2">Send us feedback</h2>
@@ -363,25 +388,22 @@
                     <div class="row g-3">
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-semibold" for="feedback-name">Name</label>
-                            <input class="form-control" id="feedback-name" name="name" type="text" autocomplete="name" required>
-                            <div class="invalid-feedback">Please enter your name.</div>
+                            <input class="form-control" id="feedback-name" name="name" type="text" autocomplete="name" required data-validate="name" maxlength="80">
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-semibold" for="feedback-email">Email</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text" aria-hidden="true">@</span>
-                                <input class="form-control" id="feedback-email" name="email" type="email" autocomplete="email" required>
-                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                                <input class="form-control" id="feedback-email" name="email" type="email" autocomplete="email" required data-validate="email" maxlength="254">
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-semibold" for="feedback-phone">Phone <span class="fw-normal text-body-secondary">(optional)</span></label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text">+7</span>
-                                <input class="form-control" id="feedback-phone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="700 000 00 00" pattern="[0-9 \-]{10,13}" aria-describedby="feedback-phone-help">
-                                <div class="invalid-feedback">Use 10 digits, e.g. 700 000 00 00.</div>
+                                <input class="form-control" id="feedback-phone" name="phone" type="text" autocomplete="tel-national" inputmode="tel" placeholder="700 000 00 00" aria-describedby="feedback-phone-help" data-validate="phone" maxlength="24">
                             </div>
-                            <div id="feedback-phone-help" class="form-text">We only call if we need details about your message.</div>
+                            <div id="feedback-phone-help" class="form-text">Optional. Enter 10 digits after +7. This demo does not call or save your number.</div>
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-semibold" for="feedback-topic">What is this about?</label>
@@ -392,18 +414,15 @@
                                 <option>Product request</option>
                                 <option>Other</option>
                             </select>
-                            <div class="invalid-feedback">Please choose a topic.</div>
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold" for="feedback-message">Message</label>
-                            <textarea class="form-control" id="feedback-message" name="message" rows="4" required></textarea>
-                            <div class="invalid-feedback">Please write a short message.</div>
+                            <textarea class="form-control" id="feedback-message" name="message" rows="4" required data-validate="message" maxlength="2000"></textarea>
                         </div>
                         <div class="col-12">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="feedback-consent" name="consent" required>
-                                <label class="form-check-label" for="feedback-consent">I agree that Foodly may contact me about this message.</label>
-                                <div class="invalid-feedback">Please confirm to send feedback.</div>
+                                <label class="form-check-label" for="feedback-consent">I understand this is a demo and my message will not be sent.</label>
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-wrap gap-2">
@@ -447,12 +466,12 @@
         <form id="subscribe-form" novalidate>
             <div class="mb-2">
                 <label class="form-label fw-semibold" for="subscribe-name">Name</label>
-                <input class="form-control" id="subscribe-name" name="name" type="text" autocomplete="name" aria-describedby="subscribe-name-error">
+                <input class="form-control" id="subscribe-name" name="name" type="text" autocomplete="name" aria-describedby="subscribe-name-error" data-validate="name" maxlength="80" required>
                 <div class="field-error" id="subscribe-name-error"></div>
             </div>
             <div class="mb-3">
                 <label class="form-label fw-semibold" for="subscribe-email">Email</label>
-                <input class="form-control" id="subscribe-email" name="email" type="email" autocomplete="email" aria-describedby="subscribe-email-error">
+                <input class="form-control" id="subscribe-email" name="email" type="email" autocomplete="email" aria-describedby="subscribe-email-error" data-validate="email" maxlength="254" required>
                 <div class="field-error" id="subscribe-email-error"></div>
             </div>
             <button class="btn btn-primary w-100" type="submit">Subscribe</button>
@@ -461,11 +480,13 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="vendor/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="js/validation.js" defer></script>
 <script src="js/app.js" defer></script>
 <script src="js/theme.js" defer></script>
 <script src="js/datetime.js" defer></script>
 <script src="js/accordion.js" defer></script>
 <script src="js/popup.js" defer></script>
+<script src="js/interactions.js" defer></script>
 </body>
 </html>

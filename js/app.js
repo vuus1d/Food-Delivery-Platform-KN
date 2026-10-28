@@ -1,5 +1,5 @@
 /* Foodly demo data: sample grocery prices in Kazakhstani tenge.
- * Assignment 3: Bootstrap markup, modal, toast and form validation. */
+ * Shared catalog and cart behavior; forms use validation.js and checkout.js. */
 const products = {
     Magnum: [
         { name: "Milk 1L", price: 480 },
@@ -39,9 +39,16 @@ function loadCart() {
     try {
         const saved = JSON.parse(localStorage.getItem("cart") || "[]");
         if (!Array.isArray(saved)) return [];
-        return saved.filter(item => item && typeof item.name === "string" && typeof item.store === "string" &&
-            Number.isFinite(Number(item.price)) && Number(item.price) >= 0 && Number.isSafeInteger(Number(item.quantity)) && Number(item.quantity) > 0)
-            .map(item => ({ name: item.name, store: item.store, price: Number(item.price), quantity: Math.floor(Number(item.quantity)) }));
+        const clean = [];
+        for (const item of saved) {
+            const product = item && Object.hasOwn(products, item.store || "")
+                ? products[item.store].find(product => product.name === item.name) : null;
+            if (!product || !Number.isSafeInteger(item.quantity) || item.quantity < 1 || item.quantity > 99) continue;
+            const existing = clean.find(row => row.store === item.store && row.name === item.name);
+            if (existing) existing.quantity = Math.min(99, existing.quantity + item.quantity);
+            else clean.push({ name: product.name, store: item.store, price: product.price, quantity: item.quantity });
+        }
+        return clean;
     } catch (error) {
         return [];
     }
@@ -83,16 +90,25 @@ function showToast(message) {
 
 function addToCart(name, price, store) {
     const existing = cart.find(item => item.name === name && item.store === store);
+    if (existing?.quantity >= 99) {
+        showToast("You can add up to 99 of one product.");
+        return;
+    }
     if (existing) existing.quantity += 1;
     else cart.push({ name, price, store, quantity: 1 });
     saveCart();
     renderCart();
     showToast(`${name} added to your cart.`);
+    document.dispatchEvent(new CustomEvent("foodly:cart-added"));
 }
 
 function changeQuantity(index, change) {
     const item = cart[index];
     if (!item) return;
+    if (item.quantity + change > 99) {
+        showToast("You can add up to 99 of one product.");
+        return;
+    }
     item.quantity += change;
     if (item.quantity <= 0) cart.splice(index, 1);
     saveCart();
@@ -149,10 +165,14 @@ function filterCatalog() {
     const query = input.value.trim().toLowerCase();
     const cards = [...container.children];
     cards.sort((first, second) => {
-        if (sort.value === "price-asc") return Number(first.querySelector(".add-product").dataset.price) - Number(second.querySelector(".add-product").dataset.price);
-        if (sort.value === "price-desc") return Number(second.querySelector(".add-product").dataset.price) - Number(first.querySelector(".add-product").dataset.price);
-        if (sort.value === "name") return first.querySelector("h3").textContent.localeCompare(second.querySelector("h3").textContent);
-        return Number(first.dataset.order) - Number(second.dataset.order);
+        const firstPrice = Number(first.querySelector(".add-product").dataset.price);
+        const secondPrice = Number(second.querySelector(".add-product").dataset.price);
+        switch (sort.value) {
+            case "price-asc": return firstPrice - secondPrice;
+            case "price-desc": return secondPrice - firstPrice;
+            case "name": return first.querySelector("h3").textContent.localeCompare(second.querySelector("h3").textContent);
+            default: return Number(first.dataset.order) - Number(second.dataset.order);
+        }
     });
 
     let visible = 0;
@@ -257,35 +277,6 @@ function init() {
     });
 
     document.getElementById("clear-cart")?.addEventListener("click", clearCart);
-    const checkoutButton = document.getElementById("checkout-btn");
-    const checkoutDialog = document.getElementById("checkout-dialog");
-    const checkoutForm = document.getElementById("checkout-form");
-    const checkoutModal = checkoutDialog && window.bootstrap ? bootstrap.Modal.getOrCreateInstance(checkoutDialog) : null;
-    checkoutButton?.addEventListener("click", () => {
-        if (!cart.length) return;
-        renderCart();
-        checkoutModal?.show();
-    });
-    checkoutForm?.addEventListener("submit", event => {
-        event.preventDefault();
-        checkoutForm.classList.add("was-validated");
-        if (!checkoutForm.checkValidity() || !cart.length) return;
-        const name = checkoutForm.elements.name.value.trim();
-        const orderStatus = document.getElementById("order-status");
-        const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        const amountDue = total + (total > 0 && total < 5000 ? DELIVERY_FEE : 0);
-        if (orderStatus) {
-            orderStatus.textContent = `Thanks, ${name}! Your demo order totals ${formatPrice(amountDue)}. No payment was taken and no delivery was booked.`;
-            orderStatus.hidden = false;
-        }
-        cart = [];
-        saveCart();
-        renderCart();
-        checkoutForm.reset();
-        checkoutForm.classList.remove("was-validated");
-        checkoutModal?.hide();
-    });
-
     document.getElementById("search")?.addEventListener("input", compareProducts);
     document.getElementById("search-btn")?.addEventListener("click", compareProducts);
     document.getElementById("clear-search")?.addEventListener("click", () => {
@@ -325,20 +316,6 @@ function init() {
 
     const requestedStore = params.get("store");
     if (requestedStore && Object.hasOwn(products, requestedStore)) showProducts(requestedStore);
-
-    const contactForm = document.getElementById("contact-form");
-    contactForm?.addEventListener("reset", () => contactForm.classList.remove("was-validated"));
-    contactForm?.addEventListener("submit", event => {
-        event.preventDefault();
-        contactForm.classList.add("was-validated");
-        if (!contactForm.checkValidity()) return;
-        const status = document.getElementById("feedback-status");
-        if (status) {
-            status.textContent = "Thanks for your feedback. This demo form does not send data to a server.";
-            status.hidden = false;
-        }
-        contactForm.reset();
-    });
 
     compareProducts();
 }

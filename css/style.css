@@ -212,3 +212,32 @@ body.popup-open { overflow: hidden; }
     .carousel-item { transition: none; }
     .popup-window { animation: none; }
 }
+
+/* Assignment 5: shared states, accessible themes and event-triggered feedback. */
+[hidden] { display: none !important; }
+.field-error:empty { display: none; }
+.input-group > .field-error { flex-basis: 100%; order: 5; }
+.rating-stars { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.7rem; }
+.rating-star { font-size: 2rem; line-height: 1; padding: 0.5rem; border: 1px solid #8a9490; border-radius: 0.6rem; color: #646e68; background: transparent; transition: transform 180ms ease, color 180ms ease; }
+.rating-star:hover { transform: translateY(-3px); }
+.rating-star.selected { color: #936100; border-color: #936100; background: #fff5cd; }
+.celebrate { animation: rating-pulse 360ms ease; }
+@keyframes rating-pulse { 50% { transform: translateY(-4px); box-shadow: 0 12px 30px #16834b33; } }
+.toast.show { animation: popup-in 180ms ease-out; }
+.checkout-progress { display: flex; gap: 0.5rem; padding: 0; list-style: none; flex-wrap: wrap; }
+.checkout-progress li { padding: 0.5rem 0.7rem; border-radius: 0.5rem; background: var(--bs-tertiary-bg); }
+.checkout-progress [aria-current="step"] { background: var(--foodly-green-dark); color: white; font-weight: 700; }
+.review-details { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 0.5rem 1rem; overflow-wrap: anywhere; }
+.review-details dd { margin: 0; }
+[data-bs-theme="dark"] { --foodly-green-pale: #193d2b; --foodly-green-deep: #a4e1ba; --bs-primary-text-emphasis: #a4e1ba; --bs-success-text-emphasis: #a4e1ba; --bs-link-color: #a4e1ba; }
+[data-bs-theme="dark"] .bg-white, [data-bs-theme="dark"] .popup-window { background-color: #212529 !important; }
+[data-bs-theme="dark"] .hero-foodly { background: linear-gradient(90deg, #173526f5, #173526da), url("../images/fruits.jpg") center / cover; }
+[data-bs-theme="dark"] .field-error { color: #ffb3bd; }
+[data-bs-theme="dark"] .btn-outline-primary, [data-bs-theme="dark"] .btn-outline-success { --bs-btn-color: #a4e1ba; --bs-btn-border-color: #71bb8c; }
+[data-bs-theme="dark"] .rating-star { color: #b4bfb9; }
+[data-bs-theme="dark"] .rating-star.selected { color: #ffe395; background: #493811; border-color: #ffe395; }
+[data-bs-theme="dark"] .popup-close { color: #c5d4cc; }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+[data-bs-theme="dark"] .btn-outline-secondary { --bs-btn-color: #c4cbd1; --bs-btn-border-color: #929ca6; }

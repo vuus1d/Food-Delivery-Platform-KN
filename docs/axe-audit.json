@@ -1,0 +1,26 @@
+[
+  {
+    "file": "index.html",
+    "violations": []
+  },
+  {
+    "file": "stores.html",
+    "violations": []
+  },
+  {
+    "file": "compare.html",
+    "violations": []
+  },
+  {
+    "file": "cart.html",
+    "violations": []
+  },
+  {
+    "file": "login.html",
+    "violations": []
+  },
+  {
+    "file": "responsive.html",
+    "violations": []
+  }
+]
