@@ -1,6 +1,8 @@
 {
-  "commit": "df5c53d7dfdbb415e4f88307681fdbc601529f21",
-  "status": "Built successfully; live URL checked on 28 October 2026.",
-  "verification": "All 16 HTML/CSS/JS files match the tested local source; live Read More and rating checks pass.",
-  "workflow_url": "https://github.com/vuus1d/Food-Delivery-Platform-KN/actions/runs/40615536747"
+  "assignment": "Assignment 6 (jQuery)",
+  "commit": "2b84633",
+  "status": "GitHub Pages build succeeded; live URL checked on 4 November 2026.",
+  "url": "https://vuus1d.github.io/Food-Delivery-Platform-KN/",
+  "verification": "The 14 key HTML/CSS/JS/vendor files served live match the local source (SHA-256). tests/browser.cjs run against the live URL: 172 checks passed, 0 console/runtime/network errors, 0 axe violations (Chrome 156.0.8078.80).",
+  "workflow_url": "https://github.com/vuus1d/Food-Delivery-Platform-KN/actions/runs/41715362689"
 }

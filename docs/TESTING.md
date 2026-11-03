@@ -13,6 +13,10 @@
 - Automated accessibility: axe-core WCAG 2 A/AA and WCAG 2.1 AA report **0 violations** on all 6 pages, plus three Assignment 6 states: night theme with FAQ highlights, the open autocomplete list, and the copy tooltip with a toast.
 - Page-level horizontal overflow: **0** at 375, 390, 768 and 1440 px on all 6 pages.
 
+## Live deployment check
+
+After commit `2b84633` was pushed, the GitHub Pages build succeeded. The same `tests/browser.cjs` was then run with `BASE_URL=https://vuus1d.github.io/Food-Delivery-Platform-KN`: **172 passed, 0 errors, 0 axe violations**. The 14 key HTML/CSS/JS/vendor files served live are byte-identical (SHA-256) to the local source. See `deployment.json`.
+
 ## Assignment 6 coverage (Part A of the test file)
 
 | Task | What is asserted |

@@ -251,7 +251,7 @@ CSS `style.css` 304–332. Номер заказа генерирует `checkou
 
 **package.json / package-lock.json:** `foodly-assignment-6`, `6.0.0`, новое описание.
 
-**Статус деплоя:** см. раздел «Live URL и статус деплоя» в конце (заполнено после push).
+**Статус деплоя:** задеплоено и проверено (коммит `2b84633`, GitHub Pages, сборка успешна), см. последний раздел.
 
 ---
 
@@ -297,4 +297,10 @@ CSS `style.css` 304–332. Номер заказа генерирует `checkou
 
 ## Live URL и статус деплоя
 
-https://vuus1d.github.io/Food-Delivery-Platform-KN/ — статус проверки после push записан ниже.
+**URL:** https://vuus1d.github.io/Food-Delivery-Platform-KN/
+
+- Коммит `2b84633` запушен в `main` репозитория vuus1d/Food-Delivery-Platform-KN.
+- GitHub Pages: сборка **успешна**: https://github.com/vuus1d/Food-Delivery-Platform-KN/actions/runs/41715362689
+- Проверено 4 ноября 2026: 14 ключевых файлов (6 HTML, 4 JS, 2 CSS, 2 vendor), отдаваемых с live-сайта, побайтно совпадают с локальными (SHA-256).
+- Тот же `tests/browser.cjs` прогнан против live URL: **172/172 проверок, 0 ошибок консоли/сети, 0 нарушений axe**.
+- Подробности: `docs/deployment.json`.
