@@ -33,7 +33,7 @@ Open http://localhost:8000/. On Windows, `python -m http.server 8000` is also su
 | `compare.html` | Category filters, search and a sample price comparison table |
 | `cart.html` | Basket quantities and totals, then Delivery / Options / Review checkout |
 | `login.html` | Demo registration with name, email, password and confirmation validation |
-| `responsive.html` | Previous pure-CSS responsive demonstration; intentionally no Bootstrap or theme toolbar |
+| `responsive.html` | Previous pure-CSS responsive demonstration (no Bootstrap); has its own Day/Night theme button |
 
 ## Assignment 6 requirement map (jQuery)
 
@@ -53,7 +53,7 @@ Every page loads jQuery 4.0.0 from the CDN in `<head>`, followed by `js/script.j
 | Task 9. Image lazy loading | `js/script.js`: `checkLazyImages()`, `loadLazyImage()`, `initLazyImages()` (`.offset()`, `scrollTop()`, `.attr('src')`, throttled scroll/resize, Bootstrap `slide.bs.carousel`) | DevTools Network → Img, then scroll Home; click carousel Next |
 | Part 4. Deploy | GitHub Pages from `main` / root | Open the live URL above |
 
-Accessibility and safety: user text is inserted with `.text()` (never `.html()`), the search regex is escaped, the autocomplete uses `aria-expanded` and `aria-activedescendant`, toasts use `role="status"` and pause on hover/focus, and `$.fx.off` follows `prefers-reduced-motion`. `responsive.html` stays the light-only pure-CSS demo, but because it also loads our scripts it gets jQuery and the progress bar, styled in `media-queries.css` (at 375 px that page scrolls through three stacked store cards). Its images keep native `loading="lazy"`, because that page deliberately stays the unchanged Assignment 3 demonstration.
+Accessibility and safety: user text is inserted with `.text()` (never `.html()`), the search regex is escaped, the autocomplete uses `aria-expanded` and `aria-activedescendant`, toasts use `role="status"` and pause on hover/focus, and `$.fx.off` follows `prefers-reduced-motion`. `responsive.html` stays the pure-CSS demo without Bootstrap, but it now has the same Day/Night button (`js/theme.js`, shared saved preference) with dark colours in `media-queries.css`. Because it also loads our scripts it gets jQuery and the progress bar, styled in `media-queries.css` (at 375 px that page scrolls through three stacked store cards). Its images keep native `loading="lazy"`, because that page deliberately stays the unchanged Assignment 3 demonstration.
 
 ## Assignment 5 requirement map
 
@@ -99,7 +99,7 @@ The cart uses the existing `cart` localStorage key. Saved rows are checked again
 
 Only the cart and day/night preference are stored. Rating lasts for the current page visit. Sound is off initially and must be enabled separately on each page. No audio file or network call is required. A short two-tone Web Audio notification follows Test sound or Add to Cart when enabled; the busy guard blocks overlap and ended oscillators are disconnected.
 
-The subscription popup traps focus, makes background content inert, closes with Escape/backdrop/close button and restores focus. Checkout uses Bootstrap's modal focus management and restores focus to checkout or the empty-cart link. Existing skip links, labels and focus outlines are retained. Main-navigation arrows work on all six pages. The responsive demonstration intentionally preserves its original light-only CSS layout.
+The subscription popup traps focus, makes background content inert, closes with Escape/backdrop/close button and restores focus. Checkout uses Bootstrap's modal focus management and restores focus to checkout or the empty-cart link. Existing skip links, labels and focus outlines are retained. Main-navigation arrows work on all six pages. The responsive demonstration keeps its original pure-CSS layout and supports the same day/night theme.
 
 ## Files
 

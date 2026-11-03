@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-03T20:44:08.742Z",
-  "checks": 172,
+  "date": "2026-11-03T20:54:34.267Z",
+  "checks": 175,
   "passed": [
     "index.html: jQuery 4.0.0 is loaded",
     "index.html: CDN jQuery then js/script.js in <head>",
@@ -54,7 +54,7 @@
     "Task 4: bottom of the page fills the bar",
     "Task 4: responsive.html has its own styled bar",
     "Task 5: counters wait at zero until visible",
-    "Task 5: counter is mid-animation (3108)",
+    "Task 5: counter is mid-animation (3138)",
     "Task 5: counters finish on the real values",
     "Task 5: counting runs only once",
     "Task 9: native loading=\"lazy\" removed, <noscript> fallbacks present",
@@ -92,6 +92,9 @@
     "Editing hides stale success",
     "Day/night theme toggles",
     "Theme persists after reload",
+    "responsive.html: saved night theme and toggle button",
+    "responsive.html: dark colours applied",
+    "responsive.html: button switches back to day",
     "Task 4: night theme uses the brighter bar gradient",
     "ArrowRight moves navigation focus",
     "ArrowLeft wraps navigation focus",
@@ -116,7 +119,7 @@
     "Search filters catalog",
     "Empty search state is shown",
     "Adding product updates cart count",
-    "Task 7: toast fades and slides in with jQuery .animate() (opacity 0.42)",
+    "Task 7: toast fades and slides in with jQuery .animate() (opacity 0.31)",
     "Reduced motion: jQuery animations jump to the end ($.fx.off)",
     "Cart persists and total includes delivery",
     "Wizard blocks empty delivery step",
@@ -178,6 +181,10 @@
   "errors": [],
   "accessibilityViolations": 0,
   "axeStates": [
+    {
+      "state": "responsive.html night theme",
+      "violations": 0
+    },
     {
       "state": "index.html night theme, FAQ highlighted",
       "violations": 0

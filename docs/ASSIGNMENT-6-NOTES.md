@@ -115,7 +115,7 @@
 4. `$(window).on("scroll resize", updateProgress)` + первый вызов при загрузке.
 5. Стиль: `position: fixed`, градиент Foodly (тёмно-зелёный → зелёный → жёлтый → оранжевый), `background-size: 100vw`, чтобы тёплые цвета открывались по мере прокрутки. Плюс свечение `box-shadow` и скруглённый конец. В тёмной теме градиент светлее и свечение ярче.
 
-**Решение по responsive.html:** полоса там есть. Страница тоже подключает наши скрипты, а на телефоне (375 px) она прокручивается через три карточки магазинов один под другим, так что индикатор полезен. Стили лежат в `media-queries.css`, потому что эта страница специально работает без Bootstrap и `style.css`. Тёмной темы на ней нет (так было задумано ещё в Assignment 3).
+**Решение по responsive.html:** полоса там есть. Страница тоже подключает наши скрипты, а на телефоне (375 px) она прокручивается через три карточки магазинов один под другим, так что индикатор полезен. Стили лежат в `media-queries.css`, потому что эта страница специально работает без Bootstrap и `style.css`. На странице есть кнопка Day/Night: тот же `js/theme.js` и сохранённый выбор, что на остальных страницах. Тёмные цвета заданы в `media-queries.css` через `[data-bs-theme="dark"]`, включая ночной вариант полосы.
 
 **jQuery:** `$(window).scrollTop()`, `$(document).height()`, `$(window).height()`, `.css()`, `.toggleClass()`, `.prependTo()`, `.children()`, `.on("scroll resize")`.
 
@@ -274,11 +274,11 @@ CSS `style.css` 304–332. Номер заказа генерирует `checkou
 
 Полный отчёт: `docs/TESTING.md`, все утверждения: `docs/test-results.json`.
 
-- `tests/browser.cjs` (Playwright 1.56.1, Chrome 156.0.8078.80 headless, Windows 11): **172 проверки пройдено, 0 провалено**.
+- `tests/browser.cjs` (Playwright 1.56.1, Chrome 156.0.8078.80 headless, Windows 11): **175 проверок пройдено, 0 провалено**.
 - Ошибок консоли, runtime-ошибок и ответов ≥ 400 на всех страницах и контекстах: **0**.
 - html-validate: **6/6** страниц без ошибок.
 - `node --check`: **9/9** скриптов + тест.
-- axe-core WCAG 2.1 AA: **0 нарушений** на 6 страницах и в трёх новых состояниях (тёмная тема + подсветка FAQ, открытый autocomplete, тултип копирования + тост).
+- axe-core WCAG 2.1 AA: **0 нарушений** на 6 страницах и в четырёх доп. состояниях (responsive.html в ночной теме, тёмная тема + подсветка FAQ, открытый autocomplete, тултип копирования + тост).
 - Горизонтальный overflow: **0** на 375/390/768/1440 px на всех 6 страницах.
 - Скриншоты новых состояний: `docs/screenshots/a6-*.png` (autocomplete, compare-filter, faq-highlight, progress-bar, counters, copy, toasts, spinner, checkout-spinner, mobile-faq-night, mobile-stores-night).
 
@@ -302,5 +302,5 @@ CSS `style.css` 304–332. Номер заказа генерирует `checkou
 - Коммит `2b84633` запушен в `main` репозитория vuus1d/Food-Delivery-Platform-KN.
 - GitHub Pages: сборка **успешна**: https://github.com/vuus1d/Food-Delivery-Platform-KN/actions/runs/41715362689
 - Проверено 4 ноября 2026: 14 ключевых файлов (6 HTML, 4 JS, 2 CSS, 2 vendor), отдаваемых с live-сайта, побайтно совпадают с локальными (SHA-256).
-- Тот же `tests/browser.cjs` прогнан против live URL: **172/172 проверок, 0 ошибок консоли/сети, 0 нарушений axe**.
+- Тот же `tests/browser.cjs` прогнан против live URL: **175/175 проверок, 0 ошибок консоли/сети, 0 нарушений axe**.
 - Подробности: `docs/deployment.json`.

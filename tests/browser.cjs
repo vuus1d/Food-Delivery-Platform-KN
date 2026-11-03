@@ -295,6 +295,15 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     await page.reload({ waitUntil: 'networkidle' });
     check(await page.locator('html').getAttribute('data-bs-theme') === 'dark', 'Theme persists after reload');
     await shot('home-night');
+    await go('responsive.html');
+    check(await page.locator('html').getAttribute('data-bs-theme') === 'dark' && await page.textContent('#bg-color-btn') === 'Day theme', 'responsive.html: saved night theme and toggle button');
+    check(await page.evaluate(() => getComputedStyle(document.body).backgroundColor) === 'rgb(18, 26, 21)', 'responsive.html: dark colours applied');
+    await audit('responsive.html night theme');
+    await shot('responsive-night');
+    await page.click('#bg-color-btn');
+    check(await page.locator('html').getAttribute('data-bs-theme') === 'light', 'responsive.html: button switches back to day');
+    await page.click('#bg-color-btn');
+    await go('index.html');
     check(await page.locator('.scroll-progress-bar').evaluate(bar => getComputedStyle(bar).backgroundImage.includes('rgb(123, 227, 166)')), 'Task 4: night theme uses the brighter bar gradient');
     await page.fill('#faq-search', 'pay');
     await audit('index.html night theme, FAQ highlighted');

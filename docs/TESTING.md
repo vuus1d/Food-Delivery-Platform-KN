@@ -6,16 +6,16 @@
 - Test runner: Node.js 24.22.2, Playwright 1.56.1, @axe-core/playwright 4.11.0, html-validate 10.0.0 (versions from `package-lock.json`).
 - Test origin: http://127.0.0.1:8765, served with `python -m http.server` from the submitted source.
 - Time zone: Asia/Almaty. Synthetic names, email addresses and order details only.
-- Browser assertions in `tests/browser.cjs`: **172 passed, 0 failed** (`test-results.json` lists every one).
+- Browser assertions in `tests/browser.cjs`: **175 passed, 0 failed** (`test-results.json` lists every one).
 - JavaScript runtime errors, console errors and failed resource responses (HTTP ≥ 400), recorded on every page of every browser context: **0**.
 - HTML: all **6 pages** pass the configured html-validate recommended rules.
 - JavaScript: all **9 application scripts** (including the new `js/script.js`) and the test file pass `node --check`.
-- Automated accessibility: axe-core WCAG 2 A/AA and WCAG 2.1 AA report **0 violations** on all 6 pages, plus three Assignment 6 states: night theme with FAQ highlights, the open autocomplete list, and the copy tooltip with a toast.
+- Automated accessibility: axe-core WCAG 2 A/AA and WCAG 2.1 AA report **0 violations** on all 6 pages, plus four extra states: responsive.html in night theme, night theme with FAQ highlights, the open autocomplete list, and the copy tooltip with a toast.
 - Page-level horizontal overflow: **0** at 375, 390, 768 and 1440 px on all 6 pages.
 
 ## Live deployment check
 
-After commit `2b84633` was pushed, the GitHub Pages build succeeded. The same `tests/browser.cjs` was then run with `BASE_URL=https://vuus1d.github.io/Food-Delivery-Platform-KN`: **172 passed, 0 errors, 0 axe violations**. The 14 key HTML/CSS/JS/vendor files served live are byte-identical (SHA-256) to the local source. See `deployment.json`.
+After commit `2b84633` was pushed, the GitHub Pages build succeeded. The same `tests/browser.cjs` was then run with `BASE_URL=https://vuus1d.github.io/Food-Delivery-Platform-KN`: **175 passed, 0 errors, 0 axe violations**. The 14 key HTML/CSS/JS/vendor files served live are byte-identical (SHA-256) to the local source. See `deployment.json`.
 
 ## Assignment 6 coverage (Part A of the test file)
 
@@ -34,7 +34,7 @@ After commit `2b84633` was pushed, the GitHub Pages build succeeded. The same `t
 
 ## Regression coverage (Part B)
 
-Required and whitespace-only fields; Unicode names; malformed email; blank and mismatched passwords; confirmation revalidation; clearing passwords after success; stale-success removal; phone digit counting; reset; subscription focus trap and Escape; day/night persistence; arrow-key wraparound; Read More; rating feedback; muted-by-default audio; non-overlapping playback; product search and sorting; empty states; cart persistence and totals; reduced-motion behavior (`$.fx.off`); multi-step validation; Back/Next preservation; payment labels; safe text rendering; final consent; clearing the order; canonical stored prices; free-delivery threshold; cross-tab synchronization; corrupt JSON; blocked storage; all images load; mobile navigation and checkout at 375 px (including night theme).
+Required and whitespace-only fields; Unicode names; malformed email; blank and mismatched passwords; confirmation revalidation; clearing passwords after success; stale-success removal; phone digit counting; reset; subscription focus trap and Escape; day/night persistence (including the Day/Night button on responsive.html); arrow-key wraparound; Read More; rating feedback; muted-by-default audio; non-overlapping playback; product search and sorting; empty states; cart persistence and totals; reduced-motion behavior (`$.fx.off`); multi-step validation; Back/Next preservation; payment labels; safe text rendering; final consent; clearing the order; canonical stored prices; free-delivery threshold; cross-tab synchronization; corrupt JSON; blocked storage; all images load; mobile navigation and checkout at 375 px (including night theme).
 
 Screenshots in `screenshots/` come from these real browser states. `a6-*.png` files are the new Assignment 6 states. The older `code-*.png` images are Assignment 5 source excerpts; their line numbers predate the Assignment 6 changes.
 

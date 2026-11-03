@@ -37,7 +37,7 @@ img { max-width: 100%; }
     z-index: 10;
     padding: 10px 16px;
     border-radius: 8px;
-    background: var(--green-deep);
+    background: #0b4a2a;
     color: #fff;
 }
 .skip-link:focus { top: 10px; }
@@ -74,6 +74,20 @@ a:focus-visible, button:focus-visible { outline: 3px solid #d09b13; outline-offs
     text-decoration: none;
 }
 .site-nav a:hover, .site-nav a[aria-current="page"] { background: rgba(0, 0, 0, 0.22); }
+
+/* Day/night button (js/theme.js), styled for the green header */
+.theme-toggle {
+    padding: 6px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: 8px;
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+.theme-toggle:hover { background: rgba(0, 0, 0, 0.22); }
 
 .page { width: 100%; max-width: 1200px; margin: 0 auto; padding: 24px 16px 40px; }
 
@@ -153,6 +167,26 @@ p { margin: 0 0 14px; color: var(--muted); font-size: 0.95rem; }
 .card-link:hover { background: var(--green-dark); }
 
 .site-footer { padding: 20px 16px; background: #1d3025; color: #fff; text-align: center; }
+
+/* Night theme: js/theme.js sets data-bs-theme="dark" on <html>; only the colour tokens change */
+body { transition: background-color 300ms ease, color 300ms ease; }
+[data-bs-theme="dark"] {
+    color-scheme: dark;
+    --green-pale: #193d2b;
+    --green-deep: #a4e1ba;
+    --ink: #e6efe9;
+    --muted: #b7c6bd;
+    --line: #2e3d34;
+    --surface: #1d2721;
+    --page: #121a15;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+[data-bs-theme="dark"] .site-header { background: #11683c; }
+[data-bs-theme="dark"] .site-footer { background: #0b120e; }
+[data-bs-theme="dark"] .tag-sale { background: #4a1f1a; color: #ffb4a9; }
+[data-bs-theme="dark"] .tag-premium { background: #493811; color: #ffe395; }
+[data-bs-theme="dark"] .card-link { background: #16834b; }
+[data-bs-theme="dark"] .card-link:hover { background: #1e9a5a; }
 .site-footer p { margin: 0 0 6px; color: #e4eee7; font-size: 0.9rem; }
 .site-footer a { color: #c8e5d1; }
 
@@ -194,7 +228,7 @@ p { margin: 0 0 14px; color: var(--muted); font-size: 0.95rem; }
 }
 
 /* Assignment 6, Task 4: scroll progress bar created by js/script.js.
-   This page does not load style.css, so the bar gets its own light-only copy here. */
+   This page does not load style.css, so the bar gets its own copy here (day and night). */
 .scroll-progress { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 6px; background: rgba(22, 131, 75, 0.12); pointer-events: none; }
 .scroll-progress.is-idle { display: none; }
 .scroll-progress-bar {
@@ -206,6 +240,11 @@ p { margin: 0 0 14px; color: var(--muted); font-size: 0.95rem; }
     box-shadow: 0 0 10px rgba(47, 191, 113, 0.7), 0 0 3px rgba(245, 197, 66, 0.9);
     transition: width 80ms linear;
 }
+[data-bs-theme="dark"] .scroll-progress { background: rgba(255, 255, 255, 0.08); }
+[data-bs-theme="dark"] .scroll-progress-bar {
+    background-image: linear-gradient(90deg, #2fbf71 0%, #7be3a6 35%, #ffd166 70%, #ff8c5a 100%);
+    box-shadow: 0 0 12px rgba(123, 227, 166, 0.85), 0 0 4px rgba(255, 209, 102, 0.9);
+}
 @media (prefers-reduced-motion: reduce) {
-    .scroll-progress-bar { transition: none; }
+    body, .scroll-progress-bar { transition: none; }
 }
