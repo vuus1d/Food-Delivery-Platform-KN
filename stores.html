@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,9 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🥬%3C/text%3E%3C/svg%3E">
     <link rel="stylesheet" href="vendor/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
+    <!-- Assignment 6, Task 0: jQuery 4.0.0 from the official CDN, then our jQuery code (js/script.js) -->
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+    <script src="js/script.js"></script>
 </head>
 <body class="d-flex flex-column min-vh-100 bg-body-tertiary">
 <a class="visually-hidden-focusable position-absolute top-0 start-0 z-3 m-2 px-3 py-2 rounded-3 bg-dark text-white" href="#main-content">Skip to content</a>
@@ -76,7 +79,7 @@
                 <!-- Task 8: Bootstrap card-group (card-deck was removed in Bootstrap 5) -->
                 <div class="card-group shadow-foodly rounded-4 overflow-hidden">
                     <article class="card store-card" data-district="almaty">
-                        <img src="images/magnum.jpg" class="card-img-top card-img-cover" alt="Grocery aisles illustrating the Magnum store selection" width="800" height="600" loading="lazy">
+                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/magnum.jpg" class="card-img-top card-img-cover lazy-img" alt="Grocery aisles illustrating the Magnum store selection" width="800" height="600"><noscript><img src="images/magnum.jpg" class="card-img-top card-img-cover" alt="Grocery aisles illustrating the Magnum store selection" width="800" height="600"></noscript>
                         <div class="card-body d-flex flex-column align-items-start p-4">
                             <h2 class="card-title h5">Magnum Daily</h2>
                             <p class="card-text text-body-secondary flex-grow-1">A wide selection of products at affordable prices.</p>
@@ -86,7 +89,7 @@
                         <div class="card-footer bg-white"><small class="text-body-secondary">Almaty District</small></div>
                     </article>
                     <article class="card store-card" data-district="saryarka">
-                        <img src="images/small.jpg" class="card-img-top card-img-cover" alt="Fresh produce illustrating the Small store selection" width="800" height="600" loading="lazy">
+                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/small.jpg" class="card-img-top card-img-cover lazy-img" alt="Fresh produce illustrating the Small store selection" width="800" height="600"><noscript><img src="images/small.jpg" class="card-img-top card-img-cover" alt="Fresh produce illustrating the Small store selection" width="800" height="600"></noscript>
                         <div class="card-body d-flex flex-column align-items-start p-4">
                             <h2 class="card-title h5">Small &amp; Zetta</h2>
                             <p class="card-text text-body-secondary flex-grow-1">Fresh products, promotions, and discounts.</p>
@@ -96,7 +99,7 @@
                         <div class="card-footer bg-white"><small class="text-body-secondary">Saryarka District</small></div>
                     </article>
                     <article class="card store-card" data-district="esil">
-                        <img src="images/galmart.jpg" class="card-img-top card-img-cover" alt="Supermarket shelves illustrating the Galmart store selection" width="800" height="600" loading="lazy">
+                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/galmart.jpg" class="card-img-top card-img-cover lazy-img" alt="Supermarket shelves illustrating the Galmart store selection" width="800" height="600"><noscript><img src="images/galmart.jpg" class="card-img-top card-img-cover" alt="Supermarket shelves illustrating the Galmart store selection" width="800" height="600"></noscript>
                         <div class="card-body d-flex flex-column align-items-start p-4">
                             <h2 class="card-title h5">Galmart Premium</h2>
                             <p class="card-text text-body-secondary flex-grow-1">Premium products and imported goods.</p>
@@ -113,10 +116,16 @@
                 <div class="row g-3 mb-3">
                     <div class="col-12 col-md-8">
                         <label class="form-label fw-semibold" for="catalog-search">Search products</label>
-                        <div class="input-group">
-                            <span class="input-group-text" aria-hidden="true">🔍</span>
-                            <input class="form-control" type="search" id="catalog-search" placeholder="Milk, bread, rice...">
+                        <!-- Assignment 6, Tasks 1-2: live filter + autocomplete (js/script.js) -->
+                        <div class="autocomplete">
+                            <div class="input-group">
+                                <span class="input-group-text" aria-hidden="true">🔍</span>
+                                <input class="form-control" type="search" id="catalog-search" placeholder="Milk, bread, rice..." autocomplete="off"
+                                       role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="catalog-suggestions">
+                            </div>
+                            <ul id="catalog-suggestions" class="autocomplete-list" role="listbox" aria-label="Product suggestions" hidden></ul>
                         </div>
+                        <p id="catalog-suggestions-status" class="visually-hidden" aria-live="polite"></p>
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label fw-semibold" for="catalog-sort">Sort by</label>

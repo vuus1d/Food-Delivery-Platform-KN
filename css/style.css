@@ -223,7 +223,6 @@ body.popup-open { overflow: hidden; }
 .rating-star.selected { color: #936100; border-color: #936100; background: #fff5cd; }
 .celebrate { animation: rating-pulse 360ms ease; }
 @keyframes rating-pulse { 50% { transform: translateY(-4px); box-shadow: 0 12px 30px #16834b33; } }
-.toast.show { animation: popup-in 180ms ease-out; }
 .checkout-progress { display: flex; gap: 0.5rem; padding: 0; list-style: none; flex-wrap: wrap; }
 .checkout-progress li { padding: 0.5rem 0.7rem; border-radius: 0.5rem; background: var(--bs-tertiary-bg); }
 .checkout-progress [aria-current="step"] { background: var(--foodly-green-dark); color: white; font-weight: 700; }
@@ -241,3 +240,112 @@ body.popup-open { overflow: hidden; }
     *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 [data-bs-theme="dark"] .btn-outline-secondary { --bs-btn-color: #c4cbd1; --bs-btn-border-color: #929ca6; }
+
+/* ---------- Assignment 6: jQuery features (js/script.js) ---------- */
+
+/* Task 9: lazy images. The placeholder box keeps the final size, so nothing jumps when a photo loads. */
+.lazy-img { background-color: var(--bs-secondary-bg); }
+.lazy-img.is-loading { animation: lazy-pulse 1.2s ease-in-out infinite; }
+@keyframes lazy-pulse { 50% { background-color: var(--bs-tertiary-bg); } }
+.no-js .lazy-img { display: none; } /* without JavaScript the <noscript> copy is shown instead */
+
+/* Task 4: scroll progress bar. The gradient spans the whole viewport, so warmer colours appear as you scroll. */
+.scroll-progress { position: fixed; top: 0; left: 0; right: 0; z-index: 1030; height: 6px; background: rgba(22, 131, 75, 0.12); pointer-events: none; }
+.scroll-progress.is-idle { display: none; }
+.scroll-progress-bar {
+    width: 0;
+    height: 100%;
+    border-radius: 0 999px 999px 0;
+    background: linear-gradient(90deg, #0b4a2a 0%, #16834b 25%, #2fbf71 50%, #f5c542 78%, #ff7a3d 100%);
+    background-size: 100vw 100%;
+    box-shadow: 0 0 10px rgba(47, 191, 113, 0.7), 0 0 3px rgba(245, 197, 66, 0.9);
+    transition: width 80ms linear;
+}
+[data-bs-theme="dark"] .scroll-progress { background: rgba(255, 255, 255, 0.08); }
+[data-bs-theme="dark"] .scroll-progress-bar {
+    background-image: linear-gradient(90deg, #2fbf71 0%, #7be3a6 35%, #ffd166 70%, #ff8c5a 100%);
+    box-shadow: 0 0 12px rgba(123, 227, 166, 0.85), 0 0 4px rgba(255, 209, 102, 0.9);
+}
+
+/* Task 2: autocomplete dropdown under the catalog search field. */
+.autocomplete { position: relative; }
+.autocomplete-list {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    max-height: 18rem;
+    margin: 0;
+    padding: 0.35rem;
+    overflow-y: auto;
+    list-style: none;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.75rem;
+    box-shadow: var(--foodly-shadow-hover);
+}
+.autocomplete-option { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.55rem 0.75rem; border-radius: 0.5rem; cursor: pointer; }
+.autocomplete-option:hover, .autocomplete-option.is-active { background: var(--foodly-green-pale); color: var(--foodly-green-deep); }
+.autocomplete-option.is-active { box-shadow: inset 3px 0 0 var(--foodly-green); }
+.suggestion-price { flex-shrink: 0; font-size: 0.875rem; color: var(--bs-secondary-color); }
+
+/* Tasks 2-3: highlighted matches (autocomplete and FAQ). */
+.autocomplete-option mark, .search-hit { padding: 0 0.1em; border-radius: 0.2em; background: #ffe08a; color: #3d2c00; font-weight: 700; }
+[data-bs-theme="dark"] .autocomplete-option mark, [data-bs-theme="dark"] .search-hit { background: #6b5410; color: #fff3c4; }
+
+/* Task 5: statistics cards. */
+.stat-card { padding: 1.5rem 1rem; text-align: center; border-top: 4px solid var(--foodly-green) !important; }
+.stat-icon { font-size: 1.75rem; line-height: 1; }
+.stat-number { margin: 0.5rem 0 0.25rem; font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 800; line-height: 1.1; color: var(--foodly-green-dark); font-variant-numeric: tabular-nums; }
+.stat-label { margin: 0; color: var(--bs-secondary-color); }
+[data-bs-theme="dark"] .stat-number { color: #a4e1ba; }
+
+/* Task 8: code snippets with a Copy button and a "Copied to clipboard!" tooltip. */
+.copy-snippet-code {
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.5rem;
+    background: var(--foodly-green-pale);
+    color: var(--foodly-green-deep);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    overflow-wrap: anywhere;
+}
+.copy-btn { display: inline-flex; align-items: center; gap: 0.35rem; flex-shrink: 0; }
+.copy-icon { display: inline-flex; }
+.copy-btn.is-copied { --bs-btn-color: #ffffff; --bs-btn-bg: var(--foodly-green); --bs-btn-border-color: var(--foodly-green); --bs-btn-hover-color: #ffffff; }
+.copy-tooltip {
+    position: absolute;
+    z-index: 1100;
+    padding: 0.35rem 0.65rem;
+    border-radius: 0.5rem;
+    background: #0b4a2a;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: var(--foodly-shadow-hover);
+    pointer-events: none;
+}
+[data-bs-theme="dark"] .copy-tooltip { background: #a4e1ba; color: #0b2618; }
+[data-bs-theme="dark"] .copy-btn.is-copied { --bs-btn-color: #0b2618; --bs-btn-bg: #a4e1ba; --bs-btn-border-color: #a4e1ba; --bs-btn-hover-color: #0b2618; }
+
+/* Task 7: toast notifications (stacked, bottom-right). */
+.foodly-toast {
+    --toast-accent: var(--foodly-green);
+    position: relative; /* jQuery animates "left" for the slide-in */
+    width: min(360px, calc(100vw - 2rem));
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    border: 0;
+    border-left: 5px solid var(--toast-accent);
+    border-radius: 0.75rem;
+    box-shadow: 0 12px 32px rgba(11, 30, 20, 0.22);
+}
+.toast-info { --toast-accent: #1f6feb; }
+.toast-warning { --toast-accent: #d09b13; }
+.toast-danger { --toast-accent: #b02a37; }
+.toast-icon { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; margin-left: 0.75rem; border-radius: 50%; background: var(--toast-accent); color: #ffffff; font-weight: 800; }
+.toast-warning .toast-icon { color: #2b1f00; }
+[data-bs-theme="dark"] .foodly-toast { background: #1d2721; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55); }

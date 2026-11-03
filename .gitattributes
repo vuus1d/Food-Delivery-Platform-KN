@@ -1,0 +1,7 @@
+# Keep LF line endings on every OS. Bootstrap's files in vendor/ must stay byte-exact:
+# their SRI integrity hashes stop matching (and the browser blocks them) if Git rewrites line endings.
+* text=auto eol=lf
+vendor/** -text
+*.png binary
+*.jpg binary
+*.pdf binary

@@ -8,6 +8,9 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🥬%3C/text%3E%3C/svg%3E">
     <link rel="stylesheet" href="vendor/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
+    <!-- Assignment 6, Task 0: jQuery 4.0.0 from the official CDN, then our jQuery code (js/script.js) -->
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+    <script src="js/script.js"></script>
 </head>
 <body class="d-flex flex-column min-vh-100 bg-body-tertiary">
 <a class="visually-hidden-focusable position-absolute top-0 start-0 z-3 m-2 px-3 py-2 rounded-3 bg-dark text-white" href="#main-content">Skip to content</a>
@@ -93,7 +96,15 @@
                         <button id="checkout-btn" class="btn btn-success btn-lg px-md-5" type="button" disabled>Checkout</button>
                     </div>
                 </div>
-                <p id="order-status" class="alert alert-success mt-4 mb-0" role="status" hidden></p>
+                <div id="order-status" class="alert alert-success mt-4 mb-0" role="status" hidden>
+                    <p id="order-message" class="mb-2"></p>
+                    <!-- Assignment 6, Task 8: copy the demo order number (js/script.js) -->
+                    <div class="copy-snippet d-flex flex-wrap align-items-center gap-2">
+                        <span class="small fw-semibold">Demo order number:</span>
+                        <code id="order-number" class="copy-snippet-code"></code>
+                        <button class="btn btn-outline-primary btn-sm copy-btn" type="button" data-copy-target="#order-number" aria-label="Copy demo order number"><span class="copy-icon" aria-hidden="true"></span><span class="copy-label">Copy</span></button>
+                    </div>
+                </div>
             </section>
         </main>
     </div>

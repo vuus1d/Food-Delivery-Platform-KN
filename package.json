@@ -1,8 +1,8 @@
 {
-  "name": "foodly-assignment-5",
-  "version": "5.0.0",
+  "name": "foodly-assignment-6",
+  "version": "6.0.0",
   "private": true,
-  "description": "Foodly by Team KN, SE-2506. Static HTML/CSS/JavaScript coursework.",
+  "description": "Foodly by Team KN, SE-2506. Static HTML/CSS/JavaScript + jQuery 4.0.0 coursework (Assignment 6: jQuery search, UX elements, toasts, clipboard, lazy images).",
   "scripts": {
     "test": "node tests/browser.cjs",
     "validate:html": "html-validate '*.html'"

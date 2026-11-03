@@ -1,23 +1,36 @@
 /* Foodly demo data: sample grocery prices in Kazakhstani tenge.
- * Shared catalog and cart behavior; forms use validation.js and checkout.js. */
+ * Shared catalog and cart behavior; forms use validation.js and checkout.js.
+ * Assignment 6: toasts, catalog/compare filtering and lazy images now live in js/script.js (jQuery). */
 const products = {
     Magnum: [
         { name: "Milk 1L", price: 480 },
         { name: "Bread", price: 110 },
         { name: "Rice 1kg", price: 690 },
-        { name: "Eggs C1", price: 620 }
+        { name: "Eggs C1", price: 620 },
+        { name: "Butter 200g", price: 1150 },
+        { name: "Chicken Fillet 1kg", price: 2490 },
+        { name: "Bananas 1kg", price: 850 },
+        { name: "Salad Vegetables 1kg", price: 950 }
     ],
     Small: [
         { name: "Milk 1L", price: 495 },
         { name: "Bread", price: 105 },
         { name: "Rice 1kg", price: 720 },
-        { name: "Eggs C1", price: 640 }
+        { name: "Eggs C1", price: 640 },
+        { name: "Butter 200g", price: 1190 },
+        { name: "Chicken Fillet 1kg", price: 2390 },
+        { name: "Bananas 1kg", price: 820 },
+        { name: "Salad Vegetables 1kg", price: 890 }
     ],
     Galmart: [
         { name: "Milk 1L", price: 540 },
         { name: "Bread", price: 150 },
         { name: "Rice 1kg", price: 710 },
-        { name: "Eggs C1", price: 680 }
+        { name: "Eggs C1", price: 680 },
+        { name: "Butter 200g", price: 1300 },
+        { name: "Chicken Fillet 1kg", price: 2750 },
+        { name: "Bananas 1kg", price: 990 },
+        { name: "Salad Vegetables 1kg", price: 1100 }
     ]
 };
 
@@ -28,7 +41,11 @@ const productDetails = {
     "Milk 1L": { image: "milk", description: "A fresh staple for breakfast, coffee, and cooking." },
     "Bread": { image: "bakery", description: "An everyday loaf for toast and sandwiches." },
     "Rice 1kg": { image: "rice", description: "A pantry essential for your favorite family meals." },
-    "Eggs C1": { image: "eggs", description: "A pack of 10 eggs for breakfast and baking." }
+    "Eggs C1": { image: "eggs", description: "A pack of 10 eggs for breakfast and baking." },
+    "Butter 200g": { image: "dairy", description: "Creamy 82.5% butter for toast, pastry, and porridge." },
+    "Chicken Fillet 1kg": { image: "meat", description: "Lean fillet for quick dinners and meal prep." },
+    "Bananas 1kg": { image: "fruits", description: "Sweet fruit for snacks, smoothies, and lunch boxes." },
+    "Salad Vegetables 1kg": { image: "vegetables", description: "Crisp seasonal vegetables for an everyday salad." }
 };
 const formatPrice = amount => `${amount.toLocaleString("en-US")} ₸`;
 const escapeHTML = value => String(value).replace(/[&<>"']/g, character => ({
@@ -73,32 +90,17 @@ function updateCartCount() {
     count.textContent = cart.reduce((total, item) => total + item.quantity, 0);
 }
 
-function showToast(message) {
-    document.querySelector(".toast-stack")?.remove();
-    const stack = document.createElement("div");
-    stack.className = "toast-stack toast-container position-fixed bottom-0 end-0 p-3";
-    const toast = document.createElement("div");
-    toast.className = "toast show align-items-center text-bg-dark border-0";
-    toast.setAttribute("role", "status");
-    toast.innerHTML = '<div class="d-flex"><div class="toast-body"></div><button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close notification"></button></div>';
-    toast.querySelector(".toast-body").textContent = message;
-    toast.querySelector(".btn-close").addEventListener("click", () => stack.remove());
-    stack.append(toast);
-    document.body.append(stack);
-    window.setTimeout(() => stack.remove(), 2600);
-}
-
 function addToCart(name, price, store) {
     const existing = cart.find(item => item.name === name && item.store === store);
     if (existing?.quantity >= 99) {
-        showToast("You can add up to 99 of one product.");
+        showToast("You can add up to 99 of one product.", "warning");
         return;
     }
     if (existing) existing.quantity += 1;
     else cart.push({ name, price, store, quantity: 1 });
     saveCart();
     renderCart();
-    showToast(`${name} added to your cart.`);
+    showToast(`${name} added to your cart.`, "success");
     document.dispatchEvent(new CustomEvent("foodly:cart-added"));
 }
 
@@ -106,7 +108,7 @@ function changeQuantity(index, change) {
     const item = cart[index];
     if (!item) return;
     if (item.quantity + change > 99) {
-        showToast("You can add up to 99 of one product.");
+        showToast("You can add up to 99 of one product.", "warning");
         return;
     }
     item.quantity += change;
@@ -139,10 +141,10 @@ function showProducts(store) {
     container.innerHTML = products[store].map((product, index) => `
         <div class="col" data-order="${index}">
             <article class="card h-100 border-0 rounded-4 overflow-hidden shadow-foodly card-lift">
-                <img src="${IMAGE_PATH}${productDetails[product.name].image}.jpg" class="card-img-top product-img" alt="${escapeHTML(product.name)}" width="400" height="300" loading="lazy">
+                <img src="${LAZY_PLACEHOLDER}" data-src="${IMAGE_PATH}${productDetails[product.name].image}.jpg" class="card-img-top product-img lazy-img" alt="${escapeHTML(product.name)}" width="400" height="300">
                 <div class="card-body d-flex flex-column p-3">
                     <h3 class="card-title h5 mb-1">${escapeHTML(product.name)}</h3>
-                    <p class="card-text small text-body-secondary flex-grow-1 mb-2">${productDetails[product.name].description}</p>
+                    <p class="card-text small text-body-secondary flex-grow-1 mb-2 product-description">${productDetails[product.name].description}</p>
                     <p class="card-text small mb-1">Store: ${escapeHTML(store)}</p>
                     <strong class="fs-4 text-success-emphasis mb-3">${formatPrice(product.price)}</strong>
                     <button class="btn btn-primary w-100 add-product" type="button" aria-label="Add ${escapeHTML(product.name)} from ${escapeHTML(store)} to cart" data-name="${escapeHTML(product.name)}" data-price="${product.price}" data-store="${escapeHTML(store)}">Add to Cart</button>
@@ -150,40 +152,9 @@ function showProducts(store) {
             </article>
         </div>`).join("");
     catalog.hidden = false;
-    filterCatalog();
+    filterCatalog(); // js/script.js: jQuery sort, live filter and lazy images
     title.focus({ preventScroll: true });
     catalog.scrollIntoView({ block: "start" });
-}
-
-function filterCatalog() {
-    const input = document.getElementById("catalog-search");
-    const sort = document.getElementById("catalog-sort");
-    const container = document.getElementById("products");
-    const empty = document.getElementById("catalog-empty");
-    if (!input || !sort || !container) return;
-
-    const query = input.value.trim().toLowerCase();
-    const cards = [...container.children];
-    cards.sort((first, second) => {
-        const firstPrice = Number(first.querySelector(".add-product").dataset.price);
-        const secondPrice = Number(second.querySelector(".add-product").dataset.price);
-        switch (sort.value) {
-            case "price-asc": return firstPrice - secondPrice;
-            case "price-desc": return secondPrice - firstPrice;
-            case "name": return first.querySelector("h3").textContent.localeCompare(second.querySelector("h3").textContent);
-            default: return Number(first.dataset.order) - Number(second.dataset.order);
-        }
-    });
-
-    let visible = 0;
-    cards.forEach(card => {
-        const matches = card.textContent.toLowerCase().includes(query);
-        card.hidden = !matches;
-        if (matches) visible += 1;
-        container.append(card);
-    });
-    if (empty) empty.hidden = visible !== 0;
-    document.getElementById("catalog-status").textContent = `${visible} product${visible === 1 ? "" : "s"} shown`;
 }
 
 function renderCart() {
@@ -227,25 +198,6 @@ function renderCart() {
     if (clearButton) clearButton.disabled = cart.length === 0;
 }
 
-function compareProducts() {
-    const search = document.getElementById("search");
-    const rows = [...document.querySelectorAll(".comparison-row")];
-    if (!search || !rows.length) return;
-    const query = search.value.trim().toLowerCase();
-    const selectedCategory = document.querySelector(".category-filter.active")?.dataset.category || "all";
-    let visible = 0;
-    rows.forEach(row => {
-        const matchesQuery = row.textContent.toLowerCase().includes(query);
-        const matchesCategory = selectedCategory === "all" || row.dataset.category === selectedCategory;
-        row.hidden = !(matchesQuery && matchesCategory);
-        if (!row.hidden) visible += 1;
-    });
-    const empty = document.getElementById("comparison-empty");
-    if (empty) empty.hidden = visible !== 0;
-    const status = document.getElementById("comparison-status");
-    if (status) status.textContent = `${visible} product${visible === 1 ? "" : "s"} shown`;
-}
-
 function init() {
     // A persistent live region reports storage errors without interrupting shopping.
     const storageStatus = document.createElement("p");
@@ -277,29 +229,7 @@ function init() {
     });
 
     document.getElementById("clear-cart")?.addEventListener("click", clearCart);
-    document.getElementById("search")?.addEventListener("input", compareProducts);
-    document.getElementById("search-btn")?.addEventListener("click", compareProducts);
-    document.getElementById("clear-search")?.addEventListener("click", () => {
-        const input = document.getElementById("search");
-        if (input) input.value = "";
-        compareProducts();
-    });
-    document.querySelectorAll(".category-filter").forEach(button => button.addEventListener("click", () => {
-        document.querySelectorAll(".category-filter").forEach(filter => {
-            const active = filter === button;
-            filter.classList.toggle("active", active);
-            filter.setAttribute("aria-pressed", String(active));
-        });
-        compareProducts();
-    }));
-
-    const params = new URLSearchParams(window.location.search);
-    const requestedCategory = params.get("category");
-    if (requestedCategory) {
-        const categoryButton = [...document.querySelectorAll(".category-filter")]
-            .find(button => button.dataset.category === requestedCategory);
-        categoryButton?.click();
-    }
+    // The compare.html search and category filters moved to js/script.js (jQuery, Task 1).
 
     document.querySelectorAll(".store-filter").forEach(button => button.addEventListener("click", () => {
         document.querySelectorAll(".store-filter").forEach(filter => {
@@ -311,13 +241,10 @@ function init() {
             card.hidden = button.dataset.district !== "all" && card.dataset.district !== button.dataset.district;
         });
     }));
-    document.getElementById("catalog-search")?.addEventListener("input", filterCatalog);
-    document.getElementById("catalog-sort")?.addEventListener("change", filterCatalog);
+    // Catalog search and sorting events are bound in js/script.js (jQuery, Tasks 1-2).
 
-    const requestedStore = params.get("store");
+    const requestedStore = new URLSearchParams(window.location.search).get("store");
     if (requestedStore && Object.hasOwn(products, requestedStore)) showProducts(requestedStore);
-
-    compareProducts();
 }
 
 document.addEventListener("DOMContentLoaded", init);

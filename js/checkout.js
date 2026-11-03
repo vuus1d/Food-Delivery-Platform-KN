@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const submit = document.getElementById("checkout-submit");
     const checkout = {
         step: 0,
+        pending: false, // true while the simulated server call runs (Assignment 6)
         totals() {
             const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
             const delivery = subtotal > 0 && subtotal < 5000 ? DELIVERY_FEE : 0;
@@ -100,8 +101,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
         }
+        // Assignment 6, Task 6: spinner on "Place demo order" while a server call is simulated.
+        // The dialog cannot be closed until the simulated response arrives.
+        setPending(true);
+        simulateServerRequest(submit, () => {
+            setPending(false);
+            completeOrder();
+        });
+    });
+
+    function setPending(pending) {
+        checkout.pending = pending;
+        back.disabled = pending;
+        dialog.querySelectorAll('[data-bs-dismiss="modal"]').forEach(button => { button.disabled = pending; });
+    }
+    dialog.addEventListener("hide.bs.modal", event => {
+        if (checkout.pending) event.preventDefault();
+    });
+
+    function completeOrder() {
+        if (!cart.length) { modal.hide(); return; } // the cart was emptied in another tab meanwhile
         const status = document.getElementById("order-status");
-        status.textContent = `Thanks, ${form.elements.name.value.trim()}! Your demo order totals ${formatPrice(checkout.totals().total)}. No payment was taken and no delivery was booked.`;
+        const total = formatPrice(checkout.totals().total);
+        // A short demo order number for the Copy button (Task 8), e.g. FD-K3J9QZ.
+        const orderNumber = `FD-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+        document.getElementById("order-message").textContent = `Thanks, ${form.elements.name.value.trim()}! Your demo order totals ${total}. No payment was taken and no delivery was booked.`;
+        document.getElementById("order-number").textContent = orderNumber;
         status.hidden = false;
         cart = [];
         saveCart();
@@ -109,7 +134,8 @@ document.addEventListener("DOMContentLoaded", () => {
         form.reset();
         checkout.step = 0;
         modal.hide();
-    });
+        showToast(`Demo order ${orderNumber} placed. Nothing was charged.`, "success");
+    }
     window.addEventListener("storage", () => {
         if (checkout.step === 2) renderReview();
     });

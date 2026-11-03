@@ -108,17 +108,23 @@ const FoodlyValidation = (() => {
 
 document.addEventListener("DOMContentLoaded", () => {
     const demos = [
-        ["register-form", "register-success", values => `Welcome, ${values.name.trim()}! Registration validated. This demo does not create or save an account.`],
-        ["subscribe-form", "subscribe-success", values => `Thanks, ${values.name.trim()}! Subscription validated for ${values.email.trim()}. Nothing was sent or saved.`],
-        ["contact-form", "feedback-status", () => "Thanks! Your feedback passed validation. This demo does not send or save your message."]
+        ["register-form", "register-success", values => `Welcome, ${values.name.trim()}! Registration validated. This demo does not create or save an account.`, "Account form submitted successfully (demo)."],
+        ["subscribe-form", "subscribe-success", values => `Thanks, ${values.name.trim()}! Subscription validated for ${values.email.trim()}. Nothing was sent or saved.`, "Subscribed to weekly deals (demo)."],
+        ["contact-form", "feedback-status", () => "Thanks! Your feedback passed validation. This demo does not send or save your message.", "Feedback submitted successfully (demo)."]
     ];
-    for (const [formId, statusId, message] of demos) {
+    for (const [formId, statusId, message, toastText] of demos) {
         const form = document.getElementById(formId);
         if (!form) continue;
         FoodlyValidation.attach(form, values => {
             const status = document.getElementById(statusId);
-            status.textContent = message(values);
-            status.hidden = false;
+            const text = message(values);
+            // Assignment 6, Task 6: validation passed, so the button shows a spinner while a
+            // server call is simulated (js/script.js). The success message and toast come after it.
+            simulateServerRequest(form.querySelector('[type="submit"]'), () => {
+                status.textContent = text;
+                status.hidden = false;
+                showToast(toastText, "success");
+            });
         });
     }
 });

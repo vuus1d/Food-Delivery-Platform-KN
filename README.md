@@ -1,6 +1,6 @@
-# Foodly - Assignment 5: Advanced JavaScript and DOM Manipulation
+# Foodly - Assignment 6: jQuery
 
-Foodly is a static grocery delivery demonstration for comparing Astana stores, browsing products and practicing checkout. It continues the previous Team KN project without replacing its theme or six-page structure.
+Foodly is a static grocery delivery demonstration for comparing Astana stores, browsing products and practicing checkout. It continues the previous Team KN project (Assignments 1-5) without replacing its theme or six-page structure. Assignment 6 adds jQuery search, UX and web-app features on top of the existing site.
 
 **Team:** KN (Foodly)
 
@@ -22,7 +22,7 @@ Extract the ZIP, open a terminal in the project folder and run:
 python3 -m http.server 8000
 ```
 
-Open http://localhost:8000/. On Windows, `python -m http.server 8000` is also suitable. There is no build step or runtime package installation. Bootstrap 5.3.3 and all images are included locally, so the site does not require a CDN or remote API. JavaScript must be enabled. Use an HTTP server for consistent storage behavior rather than relying on `file://` URLs.
+Open http://localhost:8000/. On Windows, `python -m http.server 8000` is also suitable. There is no build step or runtime package installation. Bootstrap 5.3.3 and all images are included locally. **jQuery 4.0.0 is loaded from the official CDN** (`https://code.jquery.com/jquery-4.0.0.min.js`, with a Subresource Integrity hash), exactly as the Assignment 6 PDF asks, so the jQuery features need an internet connection. There is no other CDN or remote API. JavaScript must be enabled. Use an HTTP server for consistent storage behavior rather than relying on `file://` URLs.
 
 ## Pages
 
@@ -34,6 +34,26 @@ Open http://localhost:8000/. On Windows, `python -m http.server 8000` is also su
 | `cart.html` | Basket quantities and totals, then Delivery / Options / Review checkout |
 | `login.html` | Demo registration with name, email, password and confirmation validation |
 | `responsive.html` | Previous pure-CSS responsive demonstration; intentionally no Bootstrap or theme toolbar |
+
+## Assignment 6 requirement map (jQuery)
+
+Every page loads jQuery 4.0.0 from the CDN in `<head>`, followed by `js/script.js`, the single file with all Assignment 6 jQuery code. Only APIs that exist in jQuery 4 are used (no `$.trim`, `$.isArray`, `$.parseJSON` or `.size()`). Older scripts call four shared functions from it: `showToast`, `filterCatalog`, `simulateServerRequest` and `checkLazyImages`. Line-by-line notes for the report and defense are in `docs/ASSIGNMENT-6-NOTES.md`.
+
+| Requirement | File / function | How to demonstrate |
+| --- | --- | --- |
+| Task 0. Setup | `<head>` of all 6 pages; `js/script.js`: `$(document).ready(...)` logs `jQuery is ready!` | Open DevTools Console on any page |
+| Task 1. Real-time search and live filter | `js/script.js`: `filterCatalog()` (`.on('keyup input')`, `.filter()`, `.not()`, `.fadeIn()`), `initCompareSearch()` | Stores → View Products → type `chick`; Compare → type `butter`, change category |
+| Task 2. Autocomplete suggestions | `js/script.js`: `initAutocomplete()`; ARIA combobox + `role="listbox"` in `stores.html` | Stores → View Products → type `ba`, press ↓ then Enter; Escape or click outside closes |
+| Task 3. Search highlighting | `js/script.js`: `initFaqSearch()`, `highlightMatches()` (escaped `RegExp`, `.html()`, `.wrap('<mark>')`) | Home → FAQ → type `deliver`: `Found 5 matches`, answers open; clear to restore |
+| Task 4. Scroll progress bar | `js/script.js`: `initScrollProgress()` (`scrollTop()`, `$(document).height()`, `$(window).height()`); `css/style.css`, `css/media-queries.css` | Scroll any page; switch Night theme for the brighter gradient |
+| Task 5. Animated number counter | `js/script.js`: `initCounters()` (`.animate()` with custom `foodlyEaseOut` easing, starts once via `.offset()`) | Home → scroll to "Foodly in numbers" |
+| Task 6. Loading spinner on submit | `js/script.js`: `simulateServerRequest()`; called from `js/validation.js` (success callback) and `js/checkout.js` | Submit valid feedback, registration, subscription or the final checkout step |
+| Task 7. Notification system | `js/script.js`: `showToast(message, type)`, `dismissToast()` (slide/fade in with `.animate()`, `.fadeOut()`, stack of 4, close button, `role="status"`) | Add products on Stores; submit a form; copy a code; place a demo order |
+| Task 8. Copy to clipboard | `js/script.js`: `initCopyButtons()`, `copyText()`, `copyWithTextarea()`, `showCopied()`, `.on('copy')` | Home → Weekly promo codes → Copy; Cart → after checkout copy the demo order number |
+| Task 9. Image lazy loading | `js/script.js`: `checkLazyImages()`, `loadLazyImage()`, `initLazyImages()` (`.offset()`, `scrollTop()`, `.attr('src')`, throttled scroll/resize, Bootstrap `slide.bs.carousel`) | DevTools Network → Img, then scroll Home; click carousel Next |
+| Part 4. Deploy | GitHub Pages from `main` / root | Open the live URL above |
+
+Accessibility and safety: user text is inserted with `.text()` (never `.html()`), the search regex is escaped, the autocomplete uses `aria-expanded` and `aria-activedescendant`, toasts use `role="status"` and pause on hover/focus, and `$.fx.off` follows `prefers-reduced-motion`. `responsive.html` stays the light-only pure-CSS demo, but because it also loads our scripts it gets jQuery and the progress bar, styled in `media-queries.css` (at 375 px that page scrolls through three stacked store cards). Its images keep native `loading="lazy"`, because that page deliberately stays the unchanged Assignment 3 demonstration.
 
 ## Assignment 5 requirement map
 
@@ -53,7 +73,7 @@ The PDF offers alternative implementations for some requirements. This project c
 | Arrays and explicit loops | Product arrays; `for...of` creates review terms and values; cart restore loops through saved rows | Show products and review line items |
 | Higher-order functions | `map`, `filter`, `reduce`, `forEach` with callback functions | Search products and calculate cart totals |
 | Sound effects without overlap | `js/interactions.js`: Web Audio oscillator, gain envelope, busy guard, cleanup | Sound: on -> Test sound; on Stores, add products |
-| Event-triggered animations | `css/style.css`: star/card pulse, popup entry, toast entry; JS adds classes after a click | Rate Foodly or add a product; reduced-motion preference disables motion |
+| Event-triggered animations | `css/style.css`: star/card pulse, popup entry; toasts now animate with jQuery (Assignment 6) | Rate Foodly or add a product; reduced-motion preference disables motion |
 | Separation and clean functions | Six HTML pages, external CSS, external application scripts; no inline event handlers or inline script blocks | Inspect the files and external script links |
 | Theme and engagement | Grocery advice, rating, sound controls, shopping filters and guided demo checkout | Complete a grocery-shopping demonstration |
 | Deployment | GitHub Pages, `main` branch, repository root | Open the live URL above; compare with report evidence |
@@ -90,7 +110,8 @@ Food-Delivery-Platform-KN/
 │   ├── style.css                 # Bootstrap customization, themes, interactive states
 │   └── media-queries.css         # Plain-CSS responsive page
 ├── js/
-│   ├── app.js                    # Catalog, cart, filters, storage
+│   ├── script.js                 # Assignment 6: all jQuery features (Tasks 0-9)
+│   ├── app.js                    # Catalog data, cart, storage
 │   ├── validation.js             # Shared validation and three demo-form callbacks
 │   ├── checkout.js               # Three-step checkout, review and order completion
 │   ├── interactions.js           # Keyboard, Read More, rating, sound
@@ -100,8 +121,9 @@ Food-Delivery-Platform-KN/
 │   └── datetime.js               # Existing live clock
 ├── images/                       # Existing local photos
 ├── vendor/                       # Bootstrap 5.3.3 CSS/JS and MIT license
-├── tests/browser.cjs             # Browser regression checks and screenshots
+├── tests/browser.cjs             # Assignment 6 checks + regression checks and screenshots
 ├── docs/
+│   ├── ASSIGNMENT-6-NOTES.md      # Task-by-task notes for the Assignment 6 report and defense
 │   ├── Assignment-5-Report.pdf    # Illustrated submission report
 │   ├── DEFENSE-RU.md              # Short explanation and demonstration guide
 │   ├── TESTING.md                 # Results and scope of verification
@@ -109,6 +131,7 @@ Food-Delivery-Platform-KN/
 │   ├── axe-audit.json, axe-dark.json
 │   └── screenshots/              # Real webpage and source-code screenshots
 ├── package.json, package-lock.json  # Optional development checks only
+├── .gitattributes                # Keeps LF line endings so the vendor SRI hashes stay valid
 └── .htmlvalidate.json
 ```
 
@@ -135,6 +158,8 @@ npm test
 
 GitHub Pages is configured for the `main` branch and `/` root. After editing and testing, commit and push the source to that shared repository, then wait for the Pages deployment to finish. Relative URLs keep the project working under `/Food-Delivery-Platform-KN/`.
 
-Submit **both** the project ZIP and the PDF report. Every team member must submit separately in LMS and attend the defense. The LMS deadline was not provided in the project and must be checked in the course. The report and the defense guide map the implementation to the supplied Assignment 5 PDF; they do not claim that an LMS submission or defense has been completed.
+Submit **both** the project ZIP and the PDF report. Every team member must submit separately in LMS and attend the defense. The LMS deadline was not provided in the project and must be checked in the course. `docs/ASSIGNMENT-6-NOTES.md` maps the implementation to the supplied Assignment 6 PDF; it does not claim that an LMS submission or defense has been completed.
+
+Windows note: `.gitattributes` keeps LF line endings. Without it, Git with `core.autocrlf=true` rewrites `vendor/*` with CRLF, the SRI `integrity` hashes stop matching, and the browser blocks Bootstrap. Build the LMS ZIP from an LF checkout.
 
 Bootstrap is distributed under the MIT license included in `vendor/BOOTSTRAP-LICENSE.txt`. Existing image provenance is retained in `images/README.md`.

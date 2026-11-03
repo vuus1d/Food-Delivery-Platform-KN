@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,9 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🥬%3C/text%3E%3C/svg%3E">
     <link rel="stylesheet" href="vendor/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
+    <!-- Assignment 6, Task 0: jQuery 4.0.0 from the official CDN, then our jQuery code (js/script.js) -->
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+    <script src="js/script.js"></script>
 </head>
 <body class="d-flex flex-column min-vh-100 bg-body-tertiary">
 <a class="visually-hidden-focusable position-absolute top-0 start-0 z-3 m-2 px-3 py-2 rounded-3 bg-dark text-white" href="#main-content">Skip to content</a>
@@ -101,13 +104,49 @@
                 </div>
             </section>
 
+            <!-- Assignment 6, Task 5: animated number counters (js/script.js, initCounters) -->
+            <section id="stats" class="mb-5" aria-labelledby="stats-heading">
+                <h2 id="stats-heading" class="h3 mb-2">Foodly in numbers</h2>
+                <p class="text-body-secondary mb-4">Sample figures taken from this demo's own data: partner stores, catalog items, delivery time and the free-delivery threshold.</p>
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 g-md-4">
+                    <div class="col">
+                        <div class="card h-100 border-0 rounded-4 shadow-foodly stat-card">
+                            <span class="stat-icon" aria-hidden="true">🏬</span>
+                            <p class="stat-number"><span class="counter" data-count-to="3" aria-hidden="true">3</span><span class="visually-hidden">3</span></p>
+                            <p class="stat-label">partner stores in Astana</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-0 rounded-4 shadow-foodly stat-card">
+                            <span class="stat-icon" aria-hidden="true">🛒</span>
+                            <p class="stat-number"><span class="counter" data-count-to="24" aria-hidden="true">24</span><span class="visually-hidden">24</span></p>
+                            <p class="stat-label">products in the demo catalog</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-0 rounded-4 shadow-foodly stat-card">
+                            <span class="stat-icon" aria-hidden="true">⏱️</span>
+                            <p class="stat-number"><span class="counter" data-count-to="60" data-suffix=" min" aria-hidden="true">60 min</span><span class="visually-hidden">60 minutes</span></p>
+                            <p class="stat-label">typical delivery time</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-0 rounded-4 shadow-foodly stat-card">
+                            <span class="stat-icon" aria-hidden="true">🚚</span>
+                            <p class="stat-number"><span class="counter" data-count-to="5000" data-suffix=" ₸" aria-hidden="true">5,000 ₸</span><span class="visually-hidden">5,000 ₸</span></p>
+                            <p class="stat-label">basket for free delivery</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Task 3 + Task 8: three-column store cards -->
             <section class="mb-5" aria-labelledby="stores-heading">
                 <h2 id="stores-heading" class="h3 mb-4">Popular Stores &amp; Supermarkets</h2>
                 <div class="row g-4">
                     <div class="col-12 col-sm-6 col-lg-4">
                         <article class="card h-100 border-0 rounded-4 overflow-hidden shadow-foodly card-lift">
-                            <img src="images/magnum.jpg" class="card-img-top card-img-cover" alt="Grocery aisles illustrating the Magnum store selection" width="800" height="600" loading="lazy">
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/magnum.jpg" class="card-img-top card-img-cover lazy-img" alt="Grocery aisles illustrating the Magnum store selection" width="800" height="600"><noscript><img src="images/magnum.jpg" class="card-img-top card-img-cover" alt="Grocery aisles illustrating the Magnum store selection" width="800" height="600"></noscript>
                             <div class="card-body d-flex flex-column align-items-start p-4">
                                 <h3 class="card-title h5">Magnum Daily</h3>
                                 <p class="card-text text-body-secondary flex-grow-1">A wide selection of products, affordable prices, and fast delivery.</p>
@@ -118,7 +157,7 @@
                     </div>
                     <div class="col-12 col-sm-6 col-lg-4">
                         <article class="card h-100 border-0 rounded-4 overflow-hidden shadow-foodly card-lift">
-                            <img src="images/small.jpg" class="card-img-top card-img-cover" alt="Fresh produce illustrating the Small store selection" width="800" height="600" loading="lazy">
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/small.jpg" class="card-img-top card-img-cover lazy-img" alt="Fresh produce illustrating the Small store selection" width="800" height="600"><noscript><img src="images/small.jpg" class="card-img-top card-img-cover" alt="Fresh produce illustrating the Small store selection" width="800" height="600"></noscript>
                             <div class="card-body d-flex flex-column align-items-start p-4">
                                 <h3 class="card-title h5">Small &amp; Zetta</h3>
                                 <p class="card-text text-body-secondary flex-grow-1">Fresh products, regular promotions, and discounts.</p>
@@ -129,7 +168,7 @@
                     </div>
                     <div class="col-12 col-sm-6 col-lg-4">
                         <article class="card h-100 border-0 rounded-4 overflow-hidden shadow-foodly card-lift">
-                            <img src="images/galmart.jpg" class="card-img-top card-img-cover" alt="Supermarket shelves illustrating the Galmart store selection" width="800" height="600" loading="lazy">
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/galmart.jpg" class="card-img-top card-img-cover lazy-img" alt="Supermarket shelves illustrating the Galmart store selection" width="800" height="600"><noscript><img src="images/galmart.jpg" class="card-img-top card-img-cover" alt="Supermarket shelves illustrating the Galmart store selection" width="800" height="600"></noscript>
                             <div class="card-body d-flex flex-column align-items-start p-4">
                                 <h3 class="card-title h5">Galmart Premium</h3>
                                 <p class="card-text text-body-secondary flex-grow-1">Premium products, imported goods, and farm products.</p>
@@ -180,6 +219,41 @@
                 </div>
             </section>
 
+            <!-- Assignment 6, Task 8: copy-to-clipboard snippets (js/script.js, initCopyButtons) -->
+            <section id="promo-codes" class="mb-5" aria-labelledby="promo-heading">
+                <h2 id="promo-heading" class="h3 mb-2">Weekly promo codes</h2>
+                <p class="text-body-secondary mb-4">Demo codes for practising the Copy button. They are not real offers, and the demo checkout does not apply discounts.</p>
+                <div class="row row-cols-1 row-cols-md-3 g-3">
+                    <div class="col">
+                        <div class="card h-100 border-0 rounded-4 shadow-foodly p-3 copy-snippet">
+                            <p class="small text-body-secondary mb-2">10% off a first basket <span class="badge rounded-pill text-bg-secondary">demo</span></p>
+                            <div class="d-flex align-items-center justify-content-between gap-2">
+                                <code id="promo-foodly10" class="copy-snippet-code">FOODLY10</code>
+                                <button class="btn btn-outline-primary btn-sm copy-btn" type="button" data-copy-target="#promo-foodly10" aria-label="Copy promo code FOODLY10"><span class="copy-icon" aria-hidden="true"></span><span class="copy-label">Copy</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-0 rounded-4 shadow-foodly p-3 copy-snippet">
+                            <p class="small text-body-secondary mb-2">Free delivery on any basket <span class="badge rounded-pill text-bg-secondary">demo</span></p>
+                            <div class="d-flex align-items-center justify-content-between gap-2">
+                                <code id="promo-freedelivery" class="copy-snippet-code">FREEDELIVERY</code>
+                                <button class="btn btn-outline-primary btn-sm copy-btn" type="button" data-copy-target="#promo-freedelivery" aria-label="Copy promo code FREEDELIVERY"><span class="copy-icon" aria-hidden="true"></span><span class="copy-label">Copy</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-0 rounded-4 shadow-foodly p-3 copy-snippet">
+                            <p class="small text-body-secondary mb-2">500 ₸ off from 5,000 ₸ <span class="badge rounded-pill text-bg-secondary">demo</span></p>
+                            <div class="d-flex align-items-center justify-content-between gap-2">
+                                <code id="promo-astana500" class="copy-snippet-code">ASTANA500</code>
+                                <button class="btn btn-outline-primary btn-sm copy-btn" type="button" data-copy-target="#promo-astana500" aria-label="Copy promo code ASTANA500"><span class="copy-icon" aria-hidden="true"></span><span class="copy-label">Copy</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Task 7: Bootstrap carousel inside the grid -->
             <section id="gallery" class="mb-5" aria-labelledby="gallery-heading">
                 <h2 id="gallery-heading" class="h3 mb-2">Food Gallery</h2>
@@ -207,56 +281,56 @@
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <img src="images/vegetables.jpg" class="d-block w-100 carousel-img" alt="A colorful bowl of fresh salad vegetables" width="800" height="600" loading="lazy">
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/vegetables.jpg" class="d-block w-100 carousel-img lazy-img" alt="A colorful bowl of fresh salad vegetables" width="800" height="600"><noscript><img src="images/vegetables.jpg" class="d-block w-100 carousel-img" alt="A colorful bowl of fresh salad vegetables" width="800" height="600"></noscript>
                                     <div class="carousel-caption bg-dark bg-opacity-75 rounded-3 px-3 py-2 mb-4">
                                         <h3 class="h5 mb-1">Organic Vegetables</h3>
                                         <p class="small mb-0 d-none d-sm-block">Crisp greens for everyday salads.</p>
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <img src="images/bakery.jpg" class="d-block w-100 carousel-img" alt="Freshly baked bread loaves" width="800" height="600" loading="lazy">
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/bakery.jpg" class="d-block w-100 carousel-img lazy-img" alt="Freshly baked bread loaves" width="800" height="600"><noscript><img src="images/bakery.jpg" class="d-block w-100 carousel-img" alt="Freshly baked bread loaves" width="800" height="600"></noscript>
                                     <div class="carousel-caption bg-dark bg-opacity-75 rounded-3 px-3 py-2 mb-4">
                                         <h3 class="h5 mb-1">Fresh Bakery</h3>
                                         <p class="small mb-0 d-none d-sm-block">Bread baked every morning.</p>
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <img src="images/dairy.jpg" class="d-block w-100 carousel-img" alt="Cheese, milk, eggs, and bread arranged on a table" width="800" height="600" loading="lazy">
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/dairy.jpg" class="d-block w-100 carousel-img lazy-img" alt="Cheese, milk, eggs, and bread arranged on a table" width="800" height="600"><noscript><img src="images/dairy.jpg" class="d-block w-100 carousel-img" alt="Cheese, milk, eggs, and bread arranged on a table" width="800" height="600"></noscript>
                                     <div class="carousel-caption bg-dark bg-opacity-75 rounded-3 px-3 py-2 mb-4">
                                         <h3 class="h5 mb-1">Dairy Products</h3>
                                         <p class="small mb-0 d-none d-sm-block">Milk, cheese, and eggs for breakfast.</p>
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <img src="images/rice.jpg" class="d-block w-100 carousel-img" alt="Uncooked rice in a bowl" width="800" height="600" loading="lazy">
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/rice.jpg" class="d-block w-100 carousel-img lazy-img" alt="Uncooked rice in a bowl" width="800" height="600"><noscript><img src="images/rice.jpg" class="d-block w-100 carousel-img" alt="Uncooked rice in a bowl" width="800" height="600"></noscript>
                                     <div class="carousel-caption bg-dark bg-opacity-75 rounded-3 px-3 py-2 mb-4">
                                         <h3 class="h5 mb-1">Grocery Products</h3>
                                         <p class="small mb-0 d-none d-sm-block">Pantry staples for family meals.</p>
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <img src="images/meat.jpg" class="d-block w-100 carousel-img" alt="Raw cuts of meat on a board" width="800" height="600" loading="lazy">
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/meat.jpg" class="d-block w-100 carousel-img lazy-img" alt="Raw cuts of meat on a board" width="800" height="600"><noscript><img src="images/meat.jpg" class="d-block w-100 carousel-img" alt="Raw cuts of meat on a board" width="800" height="600"></noscript>
                                     <div class="carousel-caption bg-dark bg-opacity-75 rounded-3 px-3 py-2 mb-4">
                                         <h3 class="h5 mb-1">Meat &amp; Poultry</h3>
                                         <p class="small mb-0 d-none d-sm-block">Fresh cuts from trusted farms.</p>
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <img src="images/milk.jpg" class="d-block w-100 carousel-img" alt="A glass and bottle of fresh milk" width="800" height="600" loading="lazy">
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/milk.jpg" class="d-block w-100 carousel-img lazy-img" alt="A glass and bottle of fresh milk" width="800" height="600"><noscript><img src="images/milk.jpg" class="d-block w-100 carousel-img" alt="A glass and bottle of fresh milk" width="800" height="600"></noscript>
                                     <div class="carousel-caption bg-dark bg-opacity-75 rounded-3 px-3 py-2 mb-4">
                                         <h3 class="h5 mb-1">Fresh Milk</h3>
                                         <p class="small mb-0 d-none d-sm-block">Delivered chilled to your door.</p>
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <img src="images/groceries.jpg" class="d-block w-100 carousel-img" alt="A shopping bag filled with fruit, vegetables, and groceries" width="800" height="600" loading="lazy">
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/groceries.jpg" class="d-block w-100 carousel-img lazy-img" alt="A shopping bag filled with fruit, vegetables, and groceries" width="800" height="600"><noscript><img src="images/groceries.jpg" class="d-block w-100 carousel-img" alt="A shopping bag filled with fruit, vegetables, and groceries" width="800" height="600"></noscript>
                                     <div class="carousel-caption bg-dark bg-opacity-75 rounded-3 px-3 py-2 mb-4">
                                         <h3 class="h5 mb-1">Order Preparation</h3>
                                         <p class="small mb-0 d-none d-sm-block">Your basket packed with care.</p>
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <img src="images/delivery.jpg" class="d-block w-100 carousel-img" alt="A delivery courier on a bicycle" width="800" height="600" loading="lazy">
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/delivery.jpg" class="d-block w-100 carousel-img lazy-img" alt="A delivery courier on a bicycle" width="800" height="600"><noscript><img src="images/delivery.jpg" class="d-block w-100 carousel-img" alt="A delivery courier on a bicycle" width="800" height="600"></noscript>
                                     <div class="carousel-caption bg-dark bg-opacity-75 rounded-3 px-3 py-2 mb-4">
                                         <h3 class="h5 mb-1">Express Delivery</h3>
                                         <p class="small mb-0 d-none d-sm-block">Groceries across Astana in about an hour.</p>
@@ -284,7 +358,7 @@
                         <article class="card h-100 border-0 rounded-4 shadow-foodly card-lift text-center">
                             <div class="card-body p-4">
                                 <div class="team-portrait rounded-circle overflow-hidden mx-auto mb-3">
-                                    <img class="portrait-kakhar" src="images/nurasyl.jpg" alt="Kakhar Nassyrkhan wearing glasses at the hackalem.ai event" width="128" height="128" loading="lazy">
+                                    <img class="portrait-kakhar lazy-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/nurasyl.jpg" alt="Kakhar Nassyrkhan wearing glasses at the hackalem.ai event" width="128" height="128"><noscript><img class="portrait-kakhar" src="images/nurasyl.jpg" alt="Kakhar Nassyrkhan wearing glasses at the hackalem.ai event" width="128" height="128"></noscript>
                                 </div>
                                 <h3 class="card-title h5 mb-1">Kakhar Nassyrkhan</h3>
                                 <p class="small fw-bold text-success-emphasis mb-2">Front-End Developer / Project Author</p>
@@ -296,7 +370,7 @@
                         <article class="card h-100 border-0 rounded-4 shadow-foodly card-lift text-center">
                             <div class="card-body p-4">
                                 <div class="team-portrait rounded-circle overflow-hidden mx-auto mb-3">
-                                    <img class="portrait-nurasyl" src="images/kakhar.jpg" alt="Nurasyl Raiskaliev wearing a white shirt, black vest, and tie" width="128" height="128" loading="lazy">
+                                    <img class="portrait-nurasyl lazy-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="images/kakhar.jpg" alt="Nurasyl Raiskaliev wearing a white shirt, black vest, and tie" width="128" height="128"><noscript><img class="portrait-nurasyl" src="images/kakhar.jpg" alt="Nurasyl Raiskaliev wearing a white shirt, black vest, and tie" width="128" height="128"></noscript>
                                 </div>
                                 <h3 class="card-title h5 mb-1">Nurasyl Raiskaliev</h3>
                                 <p class="small fw-bold text-success-emphasis mb-2">Front-End Developer / Project Author</p>
@@ -311,6 +385,15 @@
             <section id="faq" class="mb-5" aria-labelledby="faq-heading">
                 <h2 id="faq-heading" class="h3 mb-2">Frequently Asked Questions</h2>
                 <p class="text-body-secondary mb-4">Quick answers about delivery, payment, and orders. Click a question to see the answer.</p>
+                <!-- Assignment 6, Task 3: search highlighting (js/script.js, initFaqSearch) -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold" for="faq-search">Search the FAQ</label>
+                    <div class="input-group">
+                        <span class="input-group-text" aria-hidden="true">🔍</span>
+                        <input class="form-control" type="search" id="faq-search" placeholder="Try: delivery, pay, 5,000" autocomplete="off" aria-describedby="faq-search-status">
+                    </div>
+                    <p id="faq-search-status" class="small text-body-secondary mt-2 mb-0" aria-live="polite"></p>
+                </div>
                 <div class="card border-0 rounded-4 shadow-foodly px-3 px-sm-4">
                     <div class="faq-item">
                         <button class="faq-question py-3" type="button" aria-expanded="false" aria-controls="faq-answer-1">
