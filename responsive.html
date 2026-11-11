@@ -31,6 +31,20 @@
     <button id="bg-color-btn" class="theme-toggle" type="button" aria-pressed="false">Night theme</button>
 </header>
 
+<!-- Assignment 2: named CSS Grid areas are defined in media-queries.css. -->
+<aside class="site-sidebar" aria-label="Quick links">
+    <h2>Quick links</h2>
+    <nav aria-label="Store links">
+        <a href="stores.html?store=Magnum">Magnum Express</a>
+        <a href="stores.html?store=Small">Small &amp; Zetta</a>
+        <a href="stores.html?store=Galmart">Galmart</a>
+    </nav>
+    <nav aria-label="Page links">
+        <a href="compare.html">Compare prices</a>
+        <a href="cart.html">Shopping cart</a>
+    </nav>
+</aside>
+
 <main class="page" id="main-content" tabindex="-1">
 
     <!-- Task 1: Responsive Typography -->
@@ -78,6 +92,23 @@
                     <a class="card-link" href="stores.html?store=Galmart">View products</a>
                 </div>
             </article>
+        </div>
+    </section>
+
+    <!-- Assignment 2: nine image gallery items laid out by CSS Grid (no Bootstrap). -->
+    <section class="gallery-section" aria-labelledby="gallery-heading">
+        <h2 id="gallery-heading">Fresh picks gallery</h2>
+        <p>Browse a few everyday favorites from our partner stores.</p>
+        <div class="image-gallery">
+            <figure class="gallery-item" tabindex="0"><img src="images/fruits.jpg" alt="Fresh fruit arranged on a market table" width="800" height="600" loading="lazy"><figcaption>Fresh fruit</figcaption></figure>
+            <figure class="gallery-item" tabindex="0"><img src="images/vegetables.jpg" alt="A colorful selection of fresh vegetables" width="800" height="600" loading="lazy"><figcaption>Vegetables</figcaption></figure>
+            <figure class="gallery-item" tabindex="0"><img src="images/bakery.jpg" alt="Freshly baked bread and pastries" width="800" height="600" loading="lazy"><figcaption>Bakery</figcaption></figure>
+            <figure class="gallery-item" tabindex="0"><img src="images/dairy.jpg" alt="Milk and dairy products" width="800" height="600" loading="lazy"><figcaption>Dairy</figcaption></figure>
+            <figure class="gallery-item" tabindex="0"><img src="images/rice.jpg" alt="Rice ready for a home-cooked meal" width="800" height="600" loading="lazy"><figcaption>Pantry staples</figcaption></figure>
+            <figure class="gallery-item" tabindex="0"><img src="images/meat.jpg" alt="Fresh meat from a partner store" width="800" height="600" loading="lazy"><figcaption>Meat and poultry</figcaption></figure>
+            <figure class="gallery-item" tabindex="0"><img src="images/milk.jpg" alt="A glass of fresh milk" width="800" height="600" loading="lazy"><figcaption>Fresh milk</figcaption></figure>
+            <figure class="gallery-item" tabindex="0"><img src="images/groceries.jpg" alt="A bag of everyday grocery products" width="800" height="600" loading="lazy"><figcaption>Groceries</figcaption></figure>
+            <figure class="gallery-item" tabindex="0"><img src="images/delivery.jpg" alt="A courier delivering groceries" width="800" height="600" loading="lazy"><figcaption>Delivery</figcaption></figure>
         </div>
     </section>
 </main>

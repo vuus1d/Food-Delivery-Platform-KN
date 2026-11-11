@@ -1,5 +1,16 @@
 # Verification results - Assignment 6 (jQuery), 4 November 2026
 
+## Independent audit - 10 November 2026
+
+- Source: clean shallow clone of the public `main` branch at `9ddde3c` (Assignment 6).
+- Before local edits, 19 deployed HTML/CSS/JS/Bootstrap files matched that source byte for byte, and the browser suite passed 187 checks against the live URL.
+- Final local source: Google Chrome 157.0.8103.39 on macOS; local HTTP server at `http://127.0.0.1:8765`.
+- `npm run validate:html`: passed for all 6 pages. `node --check` passed for all 9 application scripts and `tests/browser.cjs`.
+- Final `npm test`: **212 browser assertions passed**, 0 runtime/console/failed-resource errors, and 0 axe violations.
+- Horizontal overflow: none on all 6 pages at 320, 375, 390, 768, 1024, and 1440 px.
+- This run added a nine-image CSS Grid gallery with one/two/three-column breakpoint checks, plus coverage for named CSS Grid areas, district filters, quantity +/- controls, Remove, Clear Cart confirmation/cancellation, empty-cart delivery, and the 99-item limit. Popup close/backdrop/content behavior, rapid accordion clicks, and the live clock were also checked. It fixed the Mac copy-shortcut assertion and two dark-theme contrast defects: the success-subtle sidebar card and the copied button's hover/active colors.
+- Local fixes are uncommitted and were not deployed; the live check above is of the pre-edit source.
+
 ## Recorded environment
 
 - Browser: Google Chrome 156.0.8078.80 (headless), selected with `CHROME_EXECUTABLE`, on Windows 11 Pro.
@@ -11,7 +22,7 @@
 - HTML: all **6 pages** pass the configured html-validate recommended rules.
 - JavaScript: all **9 application scripts** (including the new `js/script.js`) and the test file pass `node --check`.
 - Automated accessibility: axe-core WCAG 2 A/AA and WCAG 2.1 AA report **0 violations** on all 6 pages, plus four extra states: responsive.html in night theme, night theme with FAQ highlights, the open autocomplete list, and the copy tooltip with a toast.
-- Page-level horizontal overflow: **0** at 375, 390, 768 and 1440 px on all 6 pages.
+- Page-level horizontal overflow: **0** at 375, 390, 768 and 1440 px on all 6 pages in the recorded 4 November run. The independent 10 November run additionally covered 320 and 1024 px.
 
 ## Live deployment check
 

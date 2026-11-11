@@ -228,7 +228,17 @@ body.popup-open { overflow: hidden; }
 .checkout-progress [aria-current="step"] { background: var(--foodly-green-dark); color: white; font-weight: 700; }
 .review-details { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 0.5rem 1rem; overflow-wrap: anywhere; }
 .review-details dd { margin: 0; }
-[data-bs-theme="dark"] { --foodly-green-pale: #193d2b; --foodly-green-deep: #a4e1ba; --bs-primary-text-emphasis: #a4e1ba; --bs-success-text-emphasis: #a4e1ba; --bs-link-color: #a4e1ba; }
+[data-bs-theme="dark"] {
+    --foodly-green-pale: #193d2b;
+    --foodly-green-deep: #a4e1ba;
+    --bs-primary-text-emphasis: #a4e1ba;
+    --bs-success-text-emphasis: #a4e1ba;
+    --bs-primary-bg-subtle: #193d2b;
+    --bs-success-bg-subtle: #193d2b;
+    --bs-primary-border-subtle: #427b58;
+    --bs-success-border-subtle: #427b58;
+    --bs-link-color: #a4e1ba;
+}
 [data-bs-theme="dark"] .bg-white, [data-bs-theme="dark"] .popup-window { background-color: #212529 !important; }
 [data-bs-theme="dark"] .hero-foodly { background: linear-gradient(90deg, #173526f5, #173526da), url("../images/fruits.jpg") center / cover; }
 [data-bs-theme="dark"] .field-error { color: #ffb3bd; }
@@ -329,7 +339,17 @@ body.popup-open { overflow: hidden; }
     pointer-events: none;
 }
 [data-bs-theme="dark"] .copy-tooltip { background: #a4e1ba; color: #0b2618; }
-[data-bs-theme="dark"] .copy-btn.is-copied { --bs-btn-color: #0b2618; --bs-btn-bg: #a4e1ba; --bs-btn-border-color: #a4e1ba; --bs-btn-hover-color: #0b2618; }
+[data-bs-theme="dark"] .copy-btn.is-copied {
+    --bs-btn-color: #0b2618;
+    --bs-btn-bg: #a4e1ba;
+    --bs-btn-border-color: #a4e1ba;
+    --bs-btn-hover-color: #0b2618;
+    --bs-btn-hover-bg: #a4e1ba;
+    --bs-btn-hover-border-color: #a4e1ba;
+    --bs-btn-active-color: #0b2618;
+    --bs-btn-active-bg: #a4e1ba;
+    --bs-btn-active-border-color: #a4e1ba;
+}
 
 /* Task 7: toast notifications (stacked, bottom-right). */
 .foodly-toast {

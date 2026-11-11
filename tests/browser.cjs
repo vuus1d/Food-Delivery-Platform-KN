@@ -55,6 +55,9 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
         check(setup.version === '4.0.0', `${file}: jQuery 4.0.0 is loaded`);
         check(setup.scripts[0] === 'https://code.jquery.com/jquery-4.0.0.min.js' && setup.scripts[1] === 'js/script.js', `${file}: CDN jQuery then js/script.js in <head>`);
         check(readyLogs.some(url => url.includes(file)), `${file}: console shows "jQuery is ready!"`);
+        if (file === 'index.html') {
+            check(await page.locator('#current-datetime').evaluate(time => Math.abs(Date.now() - Date.parse(time.dateTime)) < 3000), 'Clock: current time comes from Date and carries a current machine-readable datetime');
+        }
     }
 
     // Task 1: live filter with .on('keyup input') and .filter() on stores.html.
@@ -206,7 +209,7 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     await page.waitForTimeout(2400);
     check(await page.locator('.copy-tooltip').count() === 0 && await copyButton.locator('.copy-label').textContent() === 'Copy', 'Task 8: button and tooltip reset after 2 seconds');
     await page.locator('#promo-astana500').selectText();
-    await page.keyboard.press('Control+C');
+    await page.keyboard.press('ControlOrMeta+C');
     check(await page.locator('.foodly-toast', { hasText: 'Copied to clipboard!' }).count() >= 1 && await page.evaluate(() => navigator.clipboard.readText()) === 'ASTANA500', "Task 8: .on('copy') reacts to manual Ctrl+C");
     const fallbackContext = await browser.newContext();
     await fallbackContext.addInitScript(() => { Object.defineProperty(navigator, 'clipboard', { value: undefined }); });
@@ -368,6 +371,14 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     check(await isFocused(page.locator('.popup-close')), 'Popup traps Tab focus');
     await page.keyboard.press('Escape');
     check(await isFocused(page.locator('[data-open-popup]')), 'Popup Escape restores focus');
+    await page.click('[data-open-popup]');
+    await page.click('.popup-close');
+    check(await page.locator('#subscribe-popup').isHidden() && await isFocused(page.locator('[data-open-popup]')), 'Popup close button closes and restores focus');
+    await page.click('[data-open-popup]');
+    await page.locator('.popup-window').click({ position: { x: 20, y: 20 } });
+    check(await page.locator('#subscribe-popup').isVisible(), 'Popup clicks inside the dialog do not close it');
+    await page.locator('#subscribe-popup').click({ position: { x: 10, y: 10 } });
+    check(await page.locator('#subscribe-popup').isHidden(), 'Popup backdrop click closes the dialog');
     await page.fill('#feedback-name', 'Test Student');
     await page.fill('#feedback-email', 'student@mail.kz');
     await page.fill('#feedback-phone', '----------');
@@ -386,9 +397,20 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     check(await page.locator('#feedback-status').isHidden() && await page.locator('#contact-form .is-invalid').count() === 0, 'Reset clears feedback errors and stale success');
     await page.locator('.faq-question').first().click();
     check(await page.locator('.faq-question').first().getAttribute('aria-expanded') === 'true', 'FAQ opens on click');
+    await page.locator('.faq-question').first().evaluate(button => { for (let index = 0; index < 4; index++) button.click(); });
+    check(await page.locator('.faq-question').first().getAttribute('aria-expanded') === 'true' && await page.locator('.faq-item.open').first().isVisible(), 'FAQ keeps its state through rapid repeated clicks');
+    await page.locator('.faq-question').first().click();
+    check(await page.locator('.faq-question').first().getAttribute('aria-expanded') === 'false', 'FAQ closes on a second click');
     await shot('faq', '#faq');
 
     await go('stores.html?store=Magnum');
+    check(await page.locator('.store-card:visible').count() === 3, 'Stores: All Stores shows every district');
+    await page.locator('.store-filter[data-district="esil"]').click();
+    check(await page.locator('.store-card:visible').count() === 1, 'Stores: Esil district filter shows its store');
+    await page.locator('.store-filter[data-district="all"]').click();
+    await page.locator('.store-filter[data-district="saryarka"]').click();
+    check(await page.locator('.store-card:visible').count() === 1, 'Stores: Saryarka district filter shows its store');
+    await page.locator('.store-filter[data-district="all"]').click();
     await page.selectOption('#catalog-sort', 'price-asc');
     check(await page.locator('#products h3').first().textContent() === 'Bread', 'Switch sorts by ascending price');
     await page.fill('#catalog-search', 'milk');
@@ -415,6 +437,29 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     await page.locator('.add-product[data-name="Bread"]').click();
     await go('cart.html');
     check((await page.textContent('#cart-total')).includes('1,980'), 'Cart persists and total includes delivery');
+    await page.locator('[data-action="increase"]').first().click();
+    check((await page.textContent('#cart-total')).includes('2,460'), 'Cart: plus button updates quantity and total');
+    await page.locator('[data-action="decrease"]').first().click();
+    check((await page.textContent('#cart-total')).includes('1,980'), 'Cart: minus button restores the expected total');
+    await page.locator('[data-action="remove"]').last().click();
+    check(await page.locator('#cart-items article').count() === 1 && (await page.textContent('#cart-total')).includes('1,760'), 'Cart: Remove deletes only the selected product and recalculates totals');
+    await page.locator('[data-action="decrease"]').first().click();
+    await page.locator('[data-action="decrease"]').first().click();
+    check(await page.locator('.empty-cart').isVisible() && (await page.textContent('#delivery-fee')).trim() === '0 ₸', 'Cart: quantity cannot go below zero and empty baskets have no delivery fee');
+    await go('stores.html?store=Magnum');
+    await page.locator('.add-product[data-name="Bread"]').click();
+    await go('cart.html');
+    page.once('dialog', dialog => dialog.dismiss());
+    await page.locator('#clear-cart').click();
+    check(await page.locator('#cart-items article').count() === 1, 'Cart: cancelling Clear Cart preserves the basket');
+    page.once('dialog', dialog => dialog.accept());
+    await page.locator('#clear-cart').click();
+    check(await page.locator('.empty-cart').isVisible() && await page.locator('#checkout-btn').isDisabled(), 'Cart: Clear Cart empties the basket and disables checkout');
+    await go('stores.html?store=Magnum');
+    for (let index = 0; index < 2; index++) await page.locator('.add-product[data-name="Milk 1L"]').click();
+    for (let index = 0; index < 2; index++) await page.locator('.add-product[data-name="Bread"]').click();
+    await go('cart.html');
+    check((await page.textContent('#cart-total')).includes('1,980'), 'Cart: adding items again after Clear Cart works');
     await page.click('#checkout-btn');
     await page.click('#checkout-next');
     check(await page.locator('[data-checkout-step="0"]').isVisible() && await page.locator('#checkout-form .is-invalid').count() === 3, 'Wizard blocks empty delivery step');
@@ -464,6 +509,10 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     await page.waitForFunction(() => document.getElementById('cart-count').textContent === '12');
     check(await page.textContent('#cart-count') === '12', 'Cart synchronizes across browser tabs');
     await other.close();
+    await page.evaluate(() => localStorage.setItem('cart', JSON.stringify([{ name: 'Milk 1L', store: 'Magnum', price: 480, quantity: 99 }])));
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.locator('[data-action="increase"]').click();
+    check((await page.locator('#cart-items article').innerText()).includes('× 99') && (await page.textContent('#cart-subtotal')).includes('47,520'), 'Cart: quantity is capped at 99');
     await page.evaluate(() => localStorage.setItem('cart', '{broken'));
     await page.reload({ waitUntil: 'networkidle' });
     check(await page.locator('.empty-cart').isVisible(), 'Corrupt storage recovers to empty cart');
@@ -477,6 +526,10 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     for (const file of PAGES) {
         await page.setViewportSize({ width: 1440, height: 1000 });
         await go(file);
+        if (file === 'responsive.html') {
+            check(await page.locator('.site-sidebar nav a').count() === 5, 'responsive.html: CSS Grid sidebar exposes five quick links');
+            check(await page.locator('.image-gallery .gallery-item').count() === 9, 'responsive.html: CSS Grid gallery contains nine captioned images');
+        }
         const axe = await new AxeBuilder({ page }).withTags(AXE_TAGS).analyze();
         audits.push({ file, violations: axe.violations });
         // Scroll through the page so lazy images load, then check every image file decoded.
@@ -489,11 +542,27 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
             await Promise.all(images.map(image => image.decode().catch(() => {})));
             return images.every(image => image.complete && image.naturalWidth > 1);
         }), `${file}: all images load`);
-        for (const width of [375, 390, 768, 1440]) {
+        for (const width of [320, 375, 390, 768, 1024, 1440]) {
             await page.setViewportSize({ width, height: 900 });
             check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${file}: no page overflow at ${width}px`);
+            if (file === 'responsive.html' && width === 320) {
+                check((await page.evaluate(() => getComputedStyle(document.body).gridTemplateAreas)).includes('"sidebar"'), 'responsive.html: CSS Grid sidebar stacks on mobile');
+                check(await page.locator('.image-gallery').evaluate(grid => getComputedStyle(grid).gridTemplateColumns.split(' ').length) === 1, 'responsive.html: gallery uses one column on mobile');
+            }
+            if (file === 'responsive.html' && width === 768) {
+                check(await page.locator('.image-gallery').evaluate(grid => getComputedStyle(grid).gridTemplateColumns.split(' ').length) === 2, 'responsive.html: gallery uses two columns on tablet');
+            }
+            if (file === 'responsive.html' && width === 1024) {
+                check((await page.evaluate(() => getComputedStyle(document.body).gridTemplateAreas)).includes('"sidebar main"'), 'responsive.html: CSS Grid sidebar and main use desktop areas');
+                check(await page.locator('.image-gallery').evaluate(grid => getComputedStyle(grid).gridTemplateColumns.split(' ').length) === 3, 'responsive.html: gallery uses three columns on desktop');
+            }
         }
     }
+    await go('stores.html');
+    if (await page.locator('html').getAttribute('data-bs-theme') !== 'dark') await page.click('#bg-color-btn');
+    await page.waitForTimeout(350);
+    check(await page.locator('.bg-success-subtle').evaluate(card => getComputedStyle(card).backgroundColor) === 'rgb(25, 61, 43)', 'Dark theme: sidebar success card uses its dark palette');
+    await audit('stores.html night theme with neighborhood sidebar');
     await page.setViewportSize({ width: 1440, height: 1000 });
     await go('stores.html?store=Magnum');
     await page.locator('#catalog-search').pressSequentially('e');
