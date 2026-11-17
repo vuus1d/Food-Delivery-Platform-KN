@@ -991,6 +991,48 @@ const FoodlyValidation = (() => {
     return { attach };
 })();
 
+/* Demo accounts: an array of users in localStorage ("foodly-demo-users").
+ * The current login lives in sessionStorage ("foodly-demo-session" = {email}). Not real security. */
+const FoodlyAccounts = (() => {
+    const USERS_KEY = "foodly-demo-users";
+    const LEGACY_KEY = "foodly-demo-account";
+    const normalize = user => user && typeof user.email === "string"
+        ? { ...user, email: user.email.trim().toLowerCase() } : null;
+    function read() {
+        try {
+            const users = JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
+            return Array.isArray(users) ? users.map(normalize).filter(Boolean) : [];
+        } catch { return []; }
+    }
+    function save(users) {
+        try { localStorage.setItem(USERS_KEY, JSON.stringify(users)); return true; }
+        catch { return false; }
+    }
+    // Migration: move the old single account into the array once, then remove the old key.
+    function migrate() {
+        let legacy = null;
+        try {
+            const raw = localStorage.getItem(LEGACY_KEY);
+            if (raw === null) return;
+            legacy = normalize(JSON.parse(raw));
+        } catch { legacy = null; }
+        const users = read();
+        if (legacy && !users.some(user => user.email === legacy.email)) {
+            users.push({
+                name: legacy.name || "",
+                email: legacy.email,
+                phone: legacy.phone || "",
+                password: legacy.password || "",
+                createdAt: legacy.createdAt || new Date().toISOString()
+            });
+            if (!save(users)) return;
+        }
+        try { localStorage.removeItem(LEGACY_KEY); } catch { /* storage unavailable */ }
+    }
+    function load() { migrate(); return read(); }
+    return { load, save };
+})();
+
 document.addEventListener("DOMContentLoaded", () => {
     const demos = [
         ["register-form", "register-success", values => `Welcome, ${values.name.trim()}! Your demo account was saved in this browser.`, "Demo account created successfully."],
@@ -1005,10 +1047,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const text = message(values);
             if (form.id === "register-form") {
                 const email = values.email.trim().toLowerCase();
-                let savedAccount = null;
-                try { savedAccount = JSON.parse(localStorage.getItem("foodly-demo-account") || "null"); }
-                catch { savedAccount = null; }
-                if (savedAccount?.email?.trim().toLowerCase() === email) {
+                const users = FoodlyAccounts.load();
+                if (users.some(user => user.email === email)) {
                     const field = document.getElementById("reg-email");
                     const error = document.getElementById("reg-email-error");
                     error.textContent = "An account with this email already exists. Log in instead.";
@@ -1017,15 +1057,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     field.focus();
                     return false;
                 }
-                try {
-                    localStorage.setItem("foodly-demo-account", JSON.stringify({
-                        name: values.name.trim(),
-                        email,
-                        phone: values.phone.trim() ? values.phone.trim().replace(/^\+7\s*/, "").replace(/\D/g, "") : "",
-                        password: values.password,
-                        createdAt: new Date().toISOString()
-                    }));
-                } catch {
+                users.push({
+                    name: values.name.trim(),
+                    email,
+                    phone: values.phone.trim() ? values.phone.trim().replace(/^\+7\s*/, "").replace(/\D/g, "") : "",
+                    password: values.password,
+                    createdAt: new Date().toISOString()
+                });
+                if (!FoodlyAccounts.save(users)) {
                     status.textContent = "Your details passed validation, but this browser could not save the demo account.";
                     status.hidden = false;
                     return false;
@@ -1050,16 +1089,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const signInStatus = document.getElementById("signin-status");
         FoodlyValidation.attach(signInForm, values => {
             const email = values.email.trim().toLowerCase();
-            let account = null;
-            try { account = JSON.parse(localStorage.getItem("foodly-demo-account") || "null"); } catch { account = null; }
-            if (!account || account.email?.trim().toLowerCase() !== email || account.password !== values.password) {
+            const account = FoodlyAccounts.load().find(user => user.email === email && user.password === values.password);
+            if (!account) {
                 signInStatus.textContent = "Email or password is incorrect, or no account exists yet.";
                 signInStatus.hidden = false;
                 document.getElementById("signin-email").focus();
                 return false;
             }
             try {
-                sessionStorage.setItem("foodly-demo-session", JSON.stringify({ email, createdAt: new Date().toISOString() }));
+                sessionStorage.setItem("foodly-demo-session", JSON.stringify({ email: account.email }));
             } catch {
                 signInStatus.textContent = "This browser could not create a demo session. Enable browser storage and try again.";
                 signInStatus.hidden = false;
@@ -1072,13 +1110,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (document.getElementById("profile-card")) {
-        let account = null;
         let session = null;
-        try {
-            account = JSON.parse(localStorage.getItem("foodly-demo-account") || "null");
-            session = JSON.parse(sessionStorage.getItem("foodly-demo-session") || "null");
-        } catch { account = null; session = null; }
-        const authorized = Boolean(account && session && session.email === account.email);
+        try { session = JSON.parse(sessionStorage.getItem("foodly-demo-session") || "null"); } catch { session = null; }
+        const sessionEmail = typeof session?.email === "string" ? session.email.trim().toLowerCase() : "";
+        const account = sessionEmail ? FoodlyAccounts.load().find(user => user.email === sessionEmail) : null;
+        const authorized = Boolean(account);
         document.getElementById("profile-card").hidden = !authorized;
         document.getElementById("profile-unauthorized").hidden = authorized;
         if (authorized) {

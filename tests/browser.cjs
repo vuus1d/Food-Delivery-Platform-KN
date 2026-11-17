@@ -84,6 +84,7 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
             if (!response.ok()) brokenTargets.push(`${target} (${response.status()})`);
         }
         check(brokenTargets.length === 0, `${file}: local HTML links resolve${brokenTargets.length ? `: ${brokenTargets.join(', ')}` : ''}`);
+        check(await page.locator('nav[aria-label="Main navigation"] a[href="responsive.html"]').textContent() === 'Gallery' && await page.locator('a[href="responsive.html"]', { hasText: 'Responsive' }).count() === 0, `${file}: menu links to responsive.html as "Gallery"`);
         if (file === 'index.html') {
             check(await page.locator('#current-datetime').evaluate(time => Math.abs(Date.now() - Date.parse(time.dateTime)) < 3000), 'Clock: current time comes from Date and carries a current machine-readable datetime');
             await page.waitForFunction(() => /Current conditions loaded for Astana|Current weather is temporarily unavailable/.test(document.querySelector('#weather-status')?.textContent || ''), null, { timeout: 20000 });
@@ -299,11 +300,11 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     /* ===================== Part B: regression (Assignments 4-5) ===================== */
 
     await go('login.html');
-    await page.evaluate(() => { localStorage.removeItem('foodly-demo-account'); sessionStorage.removeItem('foodly-demo-session'); });
+    await page.evaluate(() => { localStorage.removeItem('foodly-demo-account'); localStorage.removeItem('foodly-demo-users'); sessionStorage.removeItem('foodly-demo-session'); });
     await page.click('#register-form button[type=submit]');
     check(await page.locator('#register-form .is-invalid').count() === 4, 'Registration: four required-field errors');
     check(await isFocused(page.locator('#reg-name')), 'Registration focuses first error');
-    check(await page.evaluate(() => localStorage.getItem('foodly-demo-account') === null && sessionStorage.getItem('foodly-demo-session') === null), 'Registration: invalid submit creates no account or session');
+    check(await page.evaluate(() => localStorage.getItem('foodly-demo-users') === null && sessionStorage.getItem('foodly-demo-session') === null), 'Registration: invalid submit creates no account or session');
     check(await page.locator('#reg-email').getAttribute('type') === 'text' && await page.locator('#register-form [required], #register-form [type=email], #register-form [pattern], #register-form [minlength], #register-form [maxlength], #register-form [min], #register-form [max]').count() === 0, 'Registration uses JavaScript validation without native validation attributes');
     const invalidEmails = ['/ @mail.dfdf', '/@mail.dfdf', '?@mail.sdad', '@gmail.com', 'test@', 'testgmail.com', 'test@@gmail.com', 'test..name@gmail.com', '.test@gmail.com', 'test.@gmail.com', 'test@gmail', 'test@gmail..com', 'test@-gmail.com', 'test@gmail-.com', 'test name@gmail.com', 'test!@gmail.com', '        '];
     for (const email of invalidEmails) {
@@ -340,7 +341,7 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     await page.fill('#reg-confirm', 'different');
     await page.click('#register-form button[type=submit]');
     check(await page.locator('#register-form .is-invalid').count() === 3, 'Malformed email, blank password and mismatch rejected');
-    check(await page.evaluate(() => localStorage.getItem('foodly-demo-account') === null && sessionStorage.getItem('foodly-demo-session') === null), 'Malformed registration cannot persist an account or session');
+    check(await page.evaluate(() => localStorage.getItem('foodly-demo-users') === null && sessionStorage.getItem('foodly-demo-session') === null), 'Malformed registration cannot persist an account or session');
     for (const password of ['        ', 'password', 'Password', 'Password1', 'PASSWORD1!', 'password1!']) {
         await page.fill('#reg-password', password);
         check(await page.locator('#reg-password').getAttribute('aria-invalid') === 'true', `Registration rejects weak password: ${password.trim() || '[spaces]'}`);
@@ -360,19 +361,20 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     check(await page.locator('#register-success').isVisible(), 'Valid registration shows demo success');
     check(await page.inputValue('#reg-password') === '', 'Successful registration clears password');
     check(await page.evaluate(() => {
-        const account = JSON.parse(localStorage.getItem('foodly-demo-account'));
+        const users = JSON.parse(localStorage.getItem('foodly-demo-users'));
+        const account = users?.[0];
         const session = JSON.parse(sessionStorage.getItem('foodly-demo-session'));
-        return account?.name === 'Айдана Омар' && account?.email === 'student+demo@mail.kz' && account?.password === 'Foodly456!' && !session;
-    }), 'Valid Enter submit saves normalized demo account credentials locally without creating a login session');
+        return Array.isArray(users) && users.length === 1 && account?.name === 'Айдана Омар' && account?.email === 'student+demo@mail.kz' && account?.password === 'Foodly456!' && account?.createdAt && !session;
+    }), 'Valid Enter submit saves normalized demo account into the users array without creating a login session');
     await shot('validation-success', '#register-form');
-    const accountBeforeDuplicate = await page.evaluate(() => localStorage.getItem('foodly-demo-account'));
+    const accountBeforeDuplicate = await page.evaluate(() => localStorage.getItem('foodly-demo-users'));
     await page.fill('#reg-name', 'Another Person');
     await page.fill('#reg-email', ' STUDENT+DEMO@MAIL.KZ ');
     await page.fill('#reg-password', 'Foodly456!');
     await page.fill('#reg-confirm', 'Foodly456!');
     await page.locator('#register-form button[type=submit]').click();
     check(await page.locator('#reg-email').getAttribute('aria-invalid') === 'true' && (await page.textContent('#reg-email-error')).includes('already exists'), 'Registration rejects duplicate email case-insensitively');
-    check(await page.evaluate(() => localStorage.getItem('foodly-demo-account')) === accountBeforeDuplicate, 'Duplicate registration leaves the saved account unchanged');
+    check(await page.evaluate(() => localStorage.getItem('foodly-demo-users')) === accountBeforeDuplicate, 'Duplicate registration leaves the saved users unchanged');
     await page.fill('#reg-name', 'New Name');
     check(await page.locator('#register-success').isHidden(), 'Editing hides stale success');
 
@@ -405,6 +407,64 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     await page.locator('#signin-form button[type=submit]').click();
     await page.waitForURL('**/profile.html');
     check(await page.locator('#profile-card').isVisible(), 'User can log in again after logout');
+
+    // Multi-account demo: two different users can register, log in and see their own profile.
+    const registerUser = async (name, email, password) => {
+        await go('login.html');
+        await page.fill('#reg-name', name);
+        await page.fill('#reg-email', email);
+        await page.fill('#reg-password', password);
+        await page.fill('#reg-confirm', password);
+        await page.locator('#register-form button[type=submit]').click();
+    };
+    const signIn = async (email, password) => {
+        await go('signin.html');
+        await page.fill('#signin-email', email);
+        await page.fill('#signin-password', password);
+        await page.locator('#signin-form button[type=submit]').click();
+        await page.waitForURL('**/profile.html');
+        await page.locator('#profile-card').waitFor({ state: 'visible' });
+    };
+    await page.evaluate(() => { localStorage.removeItem('foodly-demo-users'); localStorage.removeItem('foodly-demo-account'); sessionStorage.removeItem('foodly-demo-session'); });
+    await registerUser('Aliya Sarsen', 'aliya@mail.kz', 'AliyaPass1!');
+    await page.locator('#register-success').waitFor({ state: 'visible', timeout: 4000 });
+    await registerUser('Daniyar Bek', 'daniyar@mail.kz', 'DaniyarPass2!');
+    await page.locator('#register-success').waitFor({ state: 'visible', timeout: 4000 });
+    check(await page.evaluate(() => JSON.parse(localStorage.getItem('foodly-demo-users')).map(user => user.email).join('|')) === 'aliya@mail.kz|daniyar@mail.kz', 'Multi-account: a second registration is added to the users array instead of replacing the first');
+    await signIn('aliya@mail.kz', 'AliyaPass1!');
+    check(await page.textContent('#profile-name') === 'Aliya Sarsen' && await page.textContent('#profile-email') === 'aliya@mail.kz' && await page.evaluate(() => sessionStorage.getItem('foodly-demo-session')) === JSON.stringify({ email: 'aliya@mail.kz' }), 'Multi-account: first user logs in and sees their own profile');
+    await page.click('#logout-button');
+    check(await page.evaluate(() => !sessionStorage.getItem('foodly-demo-session') && JSON.parse(localStorage.getItem('foodly-demo-users')).length === 2), 'Multi-account: logout removes only the session and keeps all users');
+    await signIn('DANIYAR@mail.kz', 'DaniyarPass2!');
+    check(await page.textContent('#profile-name') === 'Daniyar Bek' && await page.textContent('#profile-email') === 'daniyar@mail.kz', 'Multi-account: second user logs in and sees their own profile');
+    await go('signin.html');
+    await page.fill('#signin-email', 'aliya@mail.kz');
+    await page.fill('#signin-password', 'DaniyarPass2!');
+    await page.locator('#signin-form button[type=submit]').click();
+    check(await page.locator('#signin-status').isVisible() && await page.evaluate(() => JSON.parse(sessionStorage.getItem('foodly-demo-session')).email) === 'daniyar@mail.kz', "Multi-account: another user's password does not log in");
+    await registerUser('Aliya Copy', 'ALIYA@Mail.KZ', 'AliyaPass9!');
+    check(await page.locator('#reg-email').getAttribute('aria-invalid') === 'true' && (await page.textContent('#reg-email-error')) === 'An account with this email already exists. Log in instead.' && await page.locator('#register-success').isHidden(), 'Multi-account: re-registering the same email in different case is rejected inline');
+    check(await page.evaluate(() => JSON.parse(localStorage.getItem('foodly-demo-users')).length) === 2, 'Multi-account: rejected duplicate does not add a user');
+
+    // Migration: the old single-account key is moved into the users array and removed.
+    await page.evaluate(() => {
+        sessionStorage.removeItem('foodly-demo-session');
+        localStorage.setItem('foodly-demo-users', JSON.stringify([{ name: 'Aliya Sarsen', email: 'aliya@mail.kz', phone: '', password: 'AliyaPass1!', createdAt: '2026-11-01T00:00:00.000Z' }]));
+        localStorage.setItem('foodly-demo-account', JSON.stringify({ name: 'Legacy User', email: 'Legacy@Mail.kz', phone: '7000000000', password: 'LegacyPass1!', createdAt: '2026-10-01T00:00:00.000Z' }));
+    });
+    await signIn('legacy@mail.kz', 'LegacyPass1!');
+    check(await page.textContent('#profile-name') === 'Legacy User' && await page.textContent('#profile-phone') === '+7 7000000000', 'Migration: legacy account can log in after moving into the users array');
+    check(await page.evaluate(() => {
+        const users = JSON.parse(localStorage.getItem('foodly-demo-users'));
+        return localStorage.getItem('foodly-demo-account') === null && users.length === 2 && users[0].email === 'aliya@mail.kz' && users[1].email === 'legacy@mail.kz' && users[1].createdAt === '2026-10-01T00:00:00.000Z';
+    }), 'Migration: legacy key is appended to the array and then removed');
+    await page.evaluate(() => localStorage.setItem('foodly-demo-account', JSON.stringify({ name: 'Duplicate Legacy', email: 'ALIYA@mail.kz', password: 'Other1!x' })));
+    await page.reload({ waitUntil: 'networkidle' });
+    check(await page.evaluate(() => {
+        const users = JSON.parse(localStorage.getItem('foodly-demo-users'));
+        return localStorage.getItem('foodly-demo-account') === null && users.length === 2 && users[0].name === 'Aliya Sarsen';
+    }), 'Migration: legacy account with an existing email is not duplicated and the old key is removed');
+    await page.click('#logout-button');
 
     // Public API behavior is deterministic in E2E; the live endpoint is separately documented.
     let weatherCalls = 0;
