@@ -858,17 +858,33 @@ window.addEventListener("storage", event => {
 });
 
 /* ===== Bundled from validation.js; retained for Assignment 6 traceability. ===== */
-/* Shared client-side rules for all Foodly demo forms. No personal data is stored. */
+/* Shared client-side rules for all Foodly demo forms. */
 const FoodlyValidation = (() => {
+    const emailPattern = /^[A-Za-z0-9_+-]+(?:\.[A-Za-z0-9_+-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}$/;
     const rules = {
-        name: value => /^[\p{L}\p{M}][\p{L}\p{M} .’'-]*$/u.test(value.trim()) && value.trim().length >= 2
-            ? "" : "Enter a name of at least 2 letters (spaces, apostrophes and hyphens are allowed).",
-        email: value => /^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,63}$/.test(value.trim())
-            ? "" : "Enter a valid email, for example name@mail.kz.",
+        name: value => {
+            const name = value.trim();
+            const letters = name.match(/\p{L}/gu) || [];
+            return letters.length >= 2 && /^\p{L}[\p{L}\p{M}]*(?:[ '\u2019-]\p{L}[\p{L}\p{M}]*)*$/u.test(name)
+                ? "" : "Enter your full name using letters, spaces, hyphens or apostrophes. Please use at least 2 letters.";
+        },
+        email: value => {
+            const email = value.trim();
+            if (email.length > 254 || !emailPattern.test(email)) {
+                return /[^A-Za-z0-9._+@-]/.test(email)
+                    ? "Email contains unsupported characters."
+                    : "Please enter a valid email address.";
+            }
+            const [local, domain] = email.split("@");
+            const labels = domain.split(".");
+            return local.length <= 64 && labels.every(label => label.length <= 63)
+                ? "" : "Please enter a valid email address.";
+        },
         phone: value => /^[0-9 ()-]+$/.test(value.trim()) && value.replace(/\D/g, "").length === 10
             ? "" : "Enter exactly 10 digits after +7, for example 700 000 00 00.",
-        password: value => value.trim().length > 0 && value.length >= 8
-            ? "" : "Use at least 8 characters; a password cannot contain only spaces.",
+        password: value => value.trim().length > 0 && value.length >= 8 && /\p{Lu}/u.test(value) &&
+            /\p{Ll}/u.test(value) && /\p{N}/u.test(value) && /[^\p{L}\p{M}\p{N}\s]/u.test(value)
+            ? "" : "Password must be at least 8 characters and contain uppercase, lowercase, number and special character.",
         confirm: (value, field) => value === field.form.querySelector('[data-validate="password"]').value
             ? "" : "Passwords do not match.",
         address: value => value.trim().length >= 5 && /[\p{L}\p{N}]/u.test(value)
@@ -902,10 +918,12 @@ const FoodlyValidation = (() => {
             field.setCustomValidity("");
             const value = field.value;
             let message = "";
-            if (field.required && ((field.type === "checkbox" && !field.checked) ||
+            const required = field.dataset.required === "true";
+            if (required && ((field.type === "checkbox" && !field.checked) ||
+                (field.type === "radio" && !form.querySelector(`input[type="radio"][name="${CSS.escape(field.name)}"]:checked`)) ||
                 (field.type !== "checkbox" && !value.trim()))) {
                 message = field.type === "checkbox" ? "Please confirm this option." : "This field is required.";
-            } else if (value.trim() || field.required) {
+            } else if (value.trim() || required) {
                 message = rules[field.dataset.validate]?.(value, field) || "";
             }
             if (!message && field.maxLength > 0 && value.length > field.maxLength) {
@@ -945,7 +963,7 @@ const FoodlyValidation = (() => {
             const field = event.target;
             if (!fields.includes(field)) return;
             if (status) status.hidden = true;
-            if (touched.has(field)) validateField(field);
+            if (field.dataset.validate || field.dataset.required === "true" || touched.has(field)) validateField(field);
             if (field.dataset.validate === "password") {
                 const confirmation = fields.find(input => input.dataset.validate === "confirm");
                 if (confirmation && touched.has(confirmation)) validateField(confirmation);
@@ -953,6 +971,7 @@ const FoodlyValidation = (() => {
         }
         form.addEventListener("input", recheck);
         form.addEventListener("change", recheck);
+        form.addEventListener("blur", recheck, true);
         form.addEventListener("reset", clear);
         if (onSuccess) form.addEventListener("submit", event => {
             event.preventDefault();
@@ -968,7 +987,7 @@ const FoodlyValidation = (() => {
 
 document.addEventListener("DOMContentLoaded", () => {
     const demos = [
-        ["register-form", "register-success", values => `Welcome, ${values.name.trim()}! Registration validated. This demo does not create or save an account.`, "Account form submitted successfully (demo)."],
+        ["register-form", "register-success", values => `Welcome, ${values.name.trim()}! Your demo account was saved in this browser.`, "Demo account created successfully."],
         ["subscribe-form", "subscribe-success", values => `Thanks, ${values.name.trim()}! Subscription validated for ${values.email.trim()}. Nothing was sent or saved.`, "Subscribed to weekly deals (demo)."],
         ["contact-form", "feedback-status", () => "Thanks! Your feedback passed validation. This demo does not send or save your message.", "Feedback submitted successfully (demo)."]
     ];
@@ -978,6 +997,23 @@ document.addEventListener("DOMContentLoaded", () => {
         FoodlyValidation.attach(form, values => {
             const status = document.getElementById(statusId);
             const text = message(values);
+            if (form.id === "register-form") {
+                try {
+                    localStorage.setItem("foodly-demo-account", JSON.stringify({
+                        name: values.name.trim(),
+                        email: values.email.trim().toLowerCase(),
+                        createdAt: new Date().toISOString()
+                    }));
+                    sessionStorage.setItem("foodly-demo-session", JSON.stringify({
+                        email: values.email.trim().toLowerCase(),
+                        createdAt: new Date().toISOString()
+                    }));
+                } catch {
+                    status.textContent = "Your details passed validation, but this browser could not save the demo account.";
+                    status.hidden = false;
+                    return;
+                }
+            }
             // Assignment 6, Task 6: validation passed, so the button shows a spinner while a
             // server call is simulated (js/script.js). The success message and toast come after it.
             simulateServerRequest(form.querySelector('[type="submit"]'), () => {

@@ -248,6 +248,8 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     await feedbackButton.click();
     check(await page.locator('#contact-form .spinner-border').count() === 0 && await feedbackButton.isEnabled(), 'Task 6: invalid form shows errors, no spinner');
     await page.fill('#feedback-name', 'Test Student');
+    await page.fill('#feedback-email', '/@mail.dfdf');
+    check(await page.locator('#feedback-email').getAttribute('aria-invalid') === 'true', 'Feedback: malformed email is rejected while typing');
     await page.fill('#feedback-email', 'student@mail.kz');
     await page.selectOption('#feedback-topic', { label: 'Other' });
     await page.fill('#feedback-message', 'A spinner test message.');
@@ -264,29 +266,62 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     /* ===================== Part B: regression (Assignments 4-5) ===================== */
 
     await go('login.html');
+    await page.evaluate(() => { localStorage.removeItem('foodly-demo-account'); sessionStorage.removeItem('foodly-demo-session'); });
     await page.click('#register-form button[type=submit]');
     check(await page.locator('#register-form .is-invalid').count() === 4, 'Registration: four required-field errors');
     check(await isFocused(page.locator('#reg-name')), 'Registration focuses first error');
+    check(await page.evaluate(() => localStorage.getItem('foodly-demo-account') === null && sessionStorage.getItem('foodly-demo-session') === null), 'Registration: invalid submit creates no account or session');
+    check(await page.locator('#reg-email').getAttribute('type') === 'text' && await page.locator('#register-form [required], #register-form [type=email], #register-form [pattern], #register-form [minlength]').count() === 0, 'Registration uses JavaScript validation without native email/required constraints');
+    const invalidEmails = ['/ @mail.dfdf', '/@mail.dfdf', '?@mail.sdad', '@gmail.com', 'test@', 'testgmail.com', 'test@@gmail.com', 'test..name@gmail.com', '.test@gmail.com', 'test.@gmail.com', 'test@gmail', 'test@gmail..com', 'test@-gmail.com', 'test@gmail-.com', 'test name@gmail.com', 'test!@gmail.com', '        '];
+    for (const email of invalidEmails) {
+        await page.fill('#reg-email', email);
+        check(await page.locator('#reg-email').getAttribute('aria-invalid') === 'true', `Registration rejects malformed email: ${email.trim() || '[spaces]'}`);
+    }
+    const validEmails = ['test@gmail.com', 'student@mail.kz', 'john.doe@gmail.com', 'user123@gmail.com', 'john-doe@gmail.com', 'john_doe@gmail.com', 'john+work@gmail.com'];
+    for (const email of validEmails) {
+        await page.fill('#reg-email', email);
+        check(await page.locator('#reg-email').getAttribute('aria-invalid') === 'false', `Registration accepts valid email: ${email}`);
+    }
     await page.fill('#reg-name', '   ');
     check(await page.locator('#reg-name').getAttribute('aria-invalid') === 'true', 'Whitespace name remains invalid while typing');
+    for (const name of ['!!!', '???', '123456', '@#$%', 'a', '   ', '😀😀']) {
+        await page.fill('#reg-name', name);
+        check(await page.locator('#reg-name').getAttribute('aria-invalid') === 'true', `Registration rejects invalid name: ${name.trim() || '[spaces]'}`);
+    }
+    for (const name of ['Kakhar', 'Nurasyl Raiskaliev', 'Нұртас Амантай', 'Anna-Marie', "O'Connor"]) {
+        await page.fill('#reg-name', name);
+        check(await page.locator('#reg-name').getAttribute('aria-invalid') === 'false', `Registration accepts valid name: ${name}`);
+    }
     await page.fill('#reg-name', 'Айдана Омар');
     await page.fill('#reg-email', 'name..test@mail.kz');
     await page.fill('#reg-password', '        ');
     await page.fill('#reg-confirm', 'different');
     await page.click('#register-form button[type=submit]');
     check(await page.locator('#register-form .is-invalid').count() === 3, 'Malformed email, blank password and mismatch rejected');
+    check(await page.evaluate(() => localStorage.getItem('foodly-demo-account') === null && sessionStorage.getItem('foodly-demo-session') === null), 'Malformed registration cannot persist an account or session');
+    for (const password of ['        ', 'password', 'Password', 'Password1', 'PASSWORD1!', 'password1!']) {
+        await page.fill('#reg-password', password);
+        check(await page.locator('#reg-password').getAttribute('aria-invalid') === 'true', `Registration rejects weak password: ${password.trim() || '[spaces]'}`);
+    }
+    await page.fill('#reg-password', 'Foodly123!');
+    check(await page.locator('#reg-password').getAttribute('aria-invalid') === 'false', 'Registration accepts a strong password with all required character classes');
     await shot('validation-errors', '#register-form');
     await page.fill('#reg-email', 'student+demo@mail.kz');
-    await page.fill('#reg-password', 'Foodly123');
-    await page.fill('#reg-confirm', 'Foodly123');
-    await page.fill('#reg-password', 'Foodly456');
+    await page.fill('#reg-password', 'Foodly123!');
+    await page.fill('#reg-confirm', 'Foodly123!');
+    await page.fill('#reg-password', 'Foodly456!');
     check(await page.locator('#reg-confirm').getAttribute('aria-invalid') === 'true', 'Changing password rechecks confirmation');
-    await page.fill('#reg-confirm', 'Foodly456');
-    await page.click('#register-form button[type=submit]');
+    await page.fill('#reg-confirm', 'Foodly456!');
+    await page.locator('#reg-confirm').press('Enter');
     check(await page.locator('#register-form button[type=submit] .spinner-border').count() === 1, 'Task 6: registration shows the spinner');
     await page.locator('#register-success').waitFor({ state: 'visible', timeout: 4000 });
     check(await page.locator('#register-success').isVisible(), 'Valid registration shows demo success');
     check(await page.inputValue('#reg-password') === '', 'Successful registration clears password');
+    check(await page.evaluate(() => {
+        const account = JSON.parse(localStorage.getItem('foodly-demo-account'));
+        const session = JSON.parse(sessionStorage.getItem('foodly-demo-session'));
+        return account?.name === 'Айдана Омар' && account?.email === 'student+demo@mail.kz' && session?.email === account.email && !JSON.stringify(account).includes('Foodly456');
+    }), 'Valid Enter submit saves name/email demo account and session, never the password');
     await shot('validation-success', '#register-form');
     await page.fill('#reg-name', 'New Name');
     check(await page.locator('#register-success').isHidden(), 'Editing hides stale success');

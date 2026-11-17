@@ -47,29 +47,29 @@
             <section class="card border-0 rounded-4 shadow-foodly p-3 p-sm-4 p-lg-5" aria-labelledby="register-heading">
                 <p class="eyebrow text-uppercase fw-bold small text-success-emphasis mb-1">Join Foodly</p>
                 <h1 id="register-heading" class="h2 fw-bold mb-2">Create your account</h1>
-                <p class="text-body-secondary mb-4">Save your favourite stores and check out faster. Demo form: nothing is sent or saved.</p>
+                <p class="text-body-secondary mb-4">Create a browser-only demo account. Only your name and email are stored locally; your password is never saved or sent.</p>
 
                 <!-- novalidate turns off the browser's own checks so our JavaScript does the validation -->
                 <form id="register-form" novalidate>
                     <div class="mb-2">
                         <label class="form-label fw-semibold" for="reg-name">Name</label>
-                        <input class="form-control" id="reg-name" name="name" type="text" autocomplete="name" aria-describedby="reg-name-error" data-validate="name" maxlength="80" required>
+                        <input class="form-control" id="reg-name" name="name" type="text" autocomplete="name" aria-describedby="reg-name-error" data-validate="name" maxlength="80" data-required="true">
                         <div class="field-error" id="reg-name-error"></div>
                     </div>
                     <div class="mb-2">
                         <label class="form-label fw-semibold" for="reg-email">Email</label>
-                        <input class="form-control" id="reg-email" name="email" type="email" autocomplete="email" placeholder="name@mail.kz" aria-describedby="reg-email-error" data-validate="email" maxlength="254" required>
+                        <input class="form-control" id="reg-email" name="email" type="text" inputmode="email" autocomplete="email" placeholder="name@mail.kz" aria-describedby="reg-email-error" data-validate="email" maxlength="254" data-required="true">
                         <div class="field-error" id="reg-email-error"></div>
                     </div>
                     <div class="mb-2">
                         <label class="form-label fw-semibold" for="reg-password">Password</label>
-                        <input class="form-control" id="reg-password" name="password" type="password" autocomplete="new-password" aria-describedby="reg-password-help reg-password-error" data-validate="password" maxlength="128" required>
-                        <div id="reg-password-help" class="form-text">At least 8 characters; not only spaces. Passwords are not saved.</div>
+                        <input class="form-control" id="reg-password" name="password" type="password" autocomplete="new-password" aria-describedby="reg-password-help reg-password-error" data-validate="password" maxlength="128" data-required="true">
+                        <div id="reg-password-help" class="form-text">At least 8 characters with uppercase and lowercase letters, a number and a special character. Passwords are never saved.</div>
                         <div class="field-error" id="reg-password-error"></div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold" for="reg-confirm">Confirm Password</label>
-                        <input class="form-control" id="reg-confirm" name="confirmPassword" type="password" autocomplete="new-password" aria-describedby="reg-confirm-error" data-validate="confirm" maxlength="128" required>
+                        <input class="form-control" id="reg-confirm" name="confirmPassword" type="password" autocomplete="new-password" aria-describedby="reg-confirm-error" data-validate="confirm" maxlength="128" data-required="true">
                         <div class="field-error" id="reg-confirm-error"></div>
                     </div>
                     <button class="btn btn-primary btn-lg w-100" type="submit">Create account</button>

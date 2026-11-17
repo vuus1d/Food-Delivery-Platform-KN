@@ -138,18 +138,18 @@
                 <div class="row g-3">
                     <div class="col-12 col-md-6">
                         <label class="form-label fw-semibold" for="customer-name">Full name</label>
-                        <input class="form-control" id="customer-name" name="name" type="text" autocomplete="name" minlength="2" required data-validate="name" maxlength="80">
+                        <input class="form-control" id="customer-name" name="name" type="text" autocomplete="name" data-required="true" data-validate="name" maxlength="80">
                     </div>
                     <div class="col-12 col-md-6">
                         <label class="form-label fw-semibold" for="customer-phone">Phone number</label>
                         <div class="input-group has-validation">
                             <span class="input-group-text">+7</span>
-                            <input class="form-control" id="customer-phone" name="phone" type="text" autocomplete="tel-national" inputmode="tel" placeholder="700 000 00 00" required data-validate="phone" maxlength="24">
+                            <input class="form-control" id="customer-phone" name="phone" type="text" autocomplete="tel-national" inputmode="tel" placeholder="700 000 00 00" data-required="true" data-validate="phone" maxlength="24">
                         </div>
                     </div>
                     <div class="col-12">
                         <label class="form-label fw-semibold" for="customer-address">Delivery address</label>
-                        <input class="form-control" id="customer-address" name="address" type="text" autocomplete="address-line1" minlength="5" placeholder="Street, building, apartment" required data-validate="address" maxlength="200">
+                        <input class="form-control" id="customer-address" name="address" type="text" autocomplete="address-line1" placeholder="Street, building, apartment" data-required="true" data-validate="address" maxlength="200">
                     </div>
                 </div>
                 </section>
@@ -160,7 +160,7 @@
                         <fieldset>
                             <legend class="form-label fw-semibold fs-6">Payment method</legend>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment" id="pay-kaspi" value="kaspi" required checked>
+                                <input class="form-check-input" type="radio" name="payment" id="pay-kaspi" value="kaspi" data-required="true" checked>
                                 <label class="form-check-label" for="pay-kaspi">Kaspi Pay</label>
                             </div>
                             <div class="form-check">
@@ -175,7 +175,7 @@
                     </div>
                     <div class="col-12 col-md-6">
                         <label class="form-label fw-semibold" for="delivery-time">Delivery time</label>
-                        <select class="form-select" id="delivery-time" name="deliveryTime" required>
+                        <select class="form-select" id="delivery-time" name="deliveryTime" data-required="true">
                             <option value="asap">As soon as possible</option>
                             <option value="evening">Today, 18:00–21:00</option>
                             <option value="tomorrow">Tomorrow, 10:00–13:00</option>
@@ -193,7 +193,7 @@
                 <div class="row g-3">
                     <div class="col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="checkout-terms" name="terms" required>
+                            <input class="form-check-input" type="checkbox" id="checkout-terms" name="terms" data-required="true">
                             <label class="form-check-label" for="checkout-terms">I understand this is a demo order and no payment is taken.</label>
                         </div>
                     </div>

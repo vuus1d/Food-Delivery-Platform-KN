@@ -459,13 +459,13 @@
                     <div class="row g-3">
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-semibold" for="feedback-name">Name</label>
-                            <input class="form-control" id="feedback-name" name="name" type="text" autocomplete="name" required data-validate="name" maxlength="80">
+                            <input class="form-control" id="feedback-name" name="name" type="text" autocomplete="name" data-required="true" data-validate="name" maxlength="80">
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-semibold" for="feedback-email">Email</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text" aria-hidden="true">@</span>
-                                <input class="form-control" id="feedback-email" name="email" type="email" autocomplete="email" required data-validate="email" maxlength="254">
+                                <input class="form-control" id="feedback-email" name="email" type="text" inputmode="email" autocomplete="email" data-required="true" data-validate="email" maxlength="254">
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
@@ -478,7 +478,7 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-semibold" for="feedback-topic">What is this about?</label>
-                            <select class="form-select" id="feedback-topic" name="topic" required>
+                            <select class="form-select" id="feedback-topic" name="topic" data-required="true">
                                 <option value="">Choose a topic</option>
                                 <option>Delivery problem</option>
                                 <option>Store suggestion</option>
@@ -488,11 +488,11 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold" for="feedback-message">Message</label>
-                            <textarea class="form-control" id="feedback-message" name="message" rows="4" required data-validate="message" maxlength="2000"></textarea>
+                            <textarea class="form-control" id="feedback-message" name="message" rows="4" data-required="true" data-validate="message" maxlength="2000"></textarea>
                         </div>
                         <div class="col-12">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="feedback-consent" name="consent" required>
+                                <input class="form-check-input" type="checkbox" id="feedback-consent" name="consent" data-required="true">
                                 <label class="form-check-label" for="feedback-consent">I understand this is a demo and my message will not be sent.</label>
                             </div>
                         </div>
@@ -537,12 +537,12 @@
         <form id="subscribe-form" novalidate>
             <div class="mb-2">
                 <label class="form-label fw-semibold" for="subscribe-name">Name</label>
-                <input class="form-control" id="subscribe-name" name="name" type="text" autocomplete="name" aria-describedby="subscribe-name-error" data-validate="name" maxlength="80" required>
+                <input class="form-control" id="subscribe-name" name="name" type="text" autocomplete="name" aria-describedby="subscribe-name-error" data-validate="name" maxlength="80" data-required="true">
                 <div class="field-error" id="subscribe-name-error"></div>
             </div>
             <div class="mb-3">
                 <label class="form-label fw-semibold" for="subscribe-email">Email</label>
-                <input class="form-control" id="subscribe-email" name="email" type="email" autocomplete="email" aria-describedby="subscribe-email-error" data-validate="email" maxlength="254" required>
+                <input class="form-control" id="subscribe-email" name="email" type="text" inputmode="email" autocomplete="email" aria-describedby="subscribe-email-error" data-validate="email" maxlength="254" data-required="true">
                 <div class="field-error" id="subscribe-email-error"></div>
             </div>
             <button class="btn btn-primary w-100" type="submit">Subscribe</button>
