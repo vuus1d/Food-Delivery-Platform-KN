@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Log in to your Foodly browser-only demo account.">
+    <title>Log In | Foodly</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🥬%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="vendor/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css?v=final-20261117">
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+</head>
+<body class="d-flex flex-column min-vh-100 bg-body-tertiary">
+<a class="visually-hidden-focusable position-absolute top-0 start-0 z-3 m-2 px-3 py-2 rounded-3 bg-dark text-white" href="#main-content">Skip to content</a>
+<header class="foodly-site-header"><nav class="foodly-navbar" aria-label="Main navigation">
+    <a class="foodly-brand" href="index.html"><span aria-hidden="true">🥬</span> Foodly</a>
+    <button class="foodly-menu-toggle" type="button" aria-controls="mainNav" aria-expanded="false" aria-label="Open navigation menu"><span aria-hidden="true">☰</span></button>
+    <div class="foodly-nav-menu" id="mainNav" hidden><ul>
+        <li><a href="index.html">Home</a></li><li><a href="stores.html">Stores</a></li><li><a href="compare.html">Compare</a></li><li><a href="responsive.html">Responsive</a></li><li><a href="signin.html" aria-current="page">Account</a></li><li><a href="cart.html">Cart <span id="cart-count" class="foodly-cart-count" aria-live="polite">0</span><span class="visually-hidden"> items in cart</span></a></li>
+    </ul></div>
+</nav><div class="foodly-toolbar"><p><span aria-hidden="true">🕒</span> <time id="current-datetime"></time></p><div class="foodly-controls"><button id="bg-color-btn" type="button" aria-pressed="false">Night theme</button><button id="sound-toggle" type="button" aria-pressed="false">Sound: off</button><button id="sound-test" type="button" disabled>Test sound</button><span id="sound-status" class="visually-hidden" role="status"></span></div></div></header>
+<main class="container flex-grow-1 px-3 py-4 py-md-5" id="main-content" tabindex="-1"><div class="row justify-content-center"><div class="col-12 col-md-9 col-lg-7 col-xl-6">
+    <section class="card border-0 rounded-4 shadow-foodly p-3 p-sm-4 p-lg-5" aria-labelledby="signin-heading">
+        <p class="eyebrow text-uppercase fw-bold small text-success-emphasis mb-1">Welcome back</p><h1 id="signin-heading" class="h2 fw-bold mb-2">Log in to Foodly</h1>
+        <p class="text-body-secondary mb-4">Use the email and password from your demo registration. Demo credentials live in this browser's localStorage and are not secure. Never use a real password.</p>
+        <form id="signin-form" novalidate>
+            <div class="mb-3"><label class="form-label fw-semibold" for="signin-email">Email</label><input class="form-control" id="signin-email" name="email" type="text" inputmode="email" autocomplete="email" aria-describedby="signin-email-error" data-validate="email" data-required="true" data-maxlength="254"><div class="field-error" id="signin-email-error"></div></div>
+            <div class="mb-3"><label class="form-label fw-semibold" for="signin-password">Password</label><input class="form-control" id="signin-password" name="password" type="password" autocomplete="current-password" aria-describedby="signin-password-error" data-required="true"><div class="field-error" id="signin-password-error"></div></div>
+            <button class="btn btn-primary btn-lg w-100" type="submit">Log in</button><p id="signin-status" class="alert alert-danger mt-3 mb-0" role="status" hidden></p>
+        </form><p class="mt-3 mb-0">New to Foodly? <a href="login.html">Create a demo account</a></p>
+    </section>
+</div></div></main>
+<footer class="bg-dark text-white"><div class="container py-4 text-center"><p class="mb-2">Foodly &copy; 2026 · Team KN · Created by <strong>Kakhar Nassyrkhan</strong> &amp; <strong>Nurasyl Raiskaliev</strong></p><nav aria-label="Footer navigation"><ul class="nav justify-content-center"><li class="nav-item"><a class="nav-link link-light px-2 py-1" href="index.html">Home</a></li><li class="nav-item"><a class="nav-link link-light px-2 py-1" href="stores.html">Stores</a></li><li class="nav-item"><a class="nav-link link-light px-2 py-1" href="compare.html">Compare</a></li><li class="nav-item"><a class="nav-link link-light px-2 py-1" href="cart.html">Cart</a></li><li class="nav-item"><a class="nav-link link-light px-2 py-1" href="login.html">Sign Up</a></li></ul></nav></div></footer>
+<script src="vendor/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script><script src="js/app.js?v=final-20261117" defer></script>
+</body></html>

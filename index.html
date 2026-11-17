@@ -24,7 +24,7 @@
                 <li><a href="stores.html">Stores</a></li>
                 <li><a href="compare.html">Compare</a></li>
                 <li><a href="responsive.html">Responsive</a></li>
-                <li><a href="login.html">Sign Up</a></li>
+                <li><a href="signin.html">Account</a></li>
                 <li><a href="cart.html">Cart <span id="cart-count" class="foodly-cart-count" aria-live="polite">0</span><span class="visually-hidden"> items in cart</span></a></li>
             </ul>
         </div>
@@ -126,6 +126,21 @@
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <section id="delivery-weather" class="card border-0 rounded-4 shadow-foodly p-4 p-md-5 mb-5" aria-labelledby="weather-heading" aria-live="polite">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                    <div><p class="eyebrow text-uppercase fw-bold small text-success-emphasis mb-1">Astana right now</p><h2 id="weather-heading" class="h3 mb-2">Delivery Weather</h2><p class="text-body-secondary mb-3">Weather can affect travel conditions for grocery delivery. Check the current conditions while planning your order; this is not an arrival-time estimate.</p></div>
+                    <button id="weather-retry" class="btn btn-outline-primary" type="button">Refresh weather</button>
+                </div>
+                <p id="weather-status" class="mb-2" role="status">Loading current weather…</p>
+                <div id="weather-data" class="row row-cols-2 row-cols-md-4 g-3" hidden>
+                    <div class="col"><div class="p-3 h-100 rounded-3 bg-body-secondary"><div class="small text-body-secondary">Temperature</div><strong id="weather-temperature"></strong></div></div>
+                    <div class="col"><div class="p-3 h-100 rounded-3 bg-body-secondary"><div class="small text-body-secondary">Conditions</div><strong id="weather-condition"></strong></div></div>
+                    <div class="col"><div class="p-3 h-100 rounded-3 bg-body-secondary"><div class="small text-body-secondary">Wind</div><strong id="weather-wind"></strong></div></div>
+                    <div class="col"><div class="p-3 h-100 rounded-3 bg-body-secondary"><div class="small text-body-secondary">Updated</div><strong id="weather-updated"></strong></div></div>
+                </div>
+                <p class="small text-body-secondary mt-3 mb-0">Weather data: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> · Forecast API</p>
             </section>
 
             <!-- Task 3 + Task 8: three-column store cards -->
@@ -459,20 +474,20 @@
                     <div class="row g-3">
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-semibold" for="feedback-name">Name</label>
-                            <input class="form-control" id="feedback-name" name="name" type="text" autocomplete="name" data-required="true" data-validate="name" maxlength="80">
+                            <input class="form-control" id="feedback-name" name="name" type="text" autocomplete="name" data-required="true" data-validate="name" data-maxlength="80">
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-semibold" for="feedback-email">Email</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text" aria-hidden="true">@</span>
-                                <input class="form-control" id="feedback-email" name="email" type="text" inputmode="email" autocomplete="email" data-required="true" data-validate="email" maxlength="254">
+                                <input class="form-control" id="feedback-email" name="email" type="text" inputmode="email" autocomplete="email" data-required="true" data-validate="email" data-maxlength="254">
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-semibold" for="feedback-phone">Phone <span class="fw-normal text-body-secondary">(optional)</span></label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text">+7</span>
-                                <input class="form-control" id="feedback-phone" name="phone" type="text" autocomplete="tel-national" inputmode="tel" placeholder="700 000 00 00" aria-describedby="feedback-phone-help" data-validate="phone" maxlength="24">
+                                <input class="form-control" id="feedback-phone" name="phone" type="text" autocomplete="tel-national" inputmode="tel" placeholder="700 000 00 00" aria-describedby="feedback-phone-help" data-validate="phone" data-maxlength="24">
                             </div>
                             <div id="feedback-phone-help" class="form-text">Optional. Enter 10 digits after +7. This demo does not call or save your number.</div>
                         </div>
@@ -488,7 +503,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold" for="feedback-message">Message</label>
-                            <textarea class="form-control" id="feedback-message" name="message" rows="4" data-required="true" data-validate="message" maxlength="2000"></textarea>
+                            <textarea class="form-control" id="feedback-message" name="message" rows="4" data-required="true" data-validate="message" data-maxlength="2000"></textarea>
                         </div>
                         <div class="col-12">
                             <div class="form-check">
@@ -537,12 +552,12 @@
         <form id="subscribe-form" novalidate>
             <div class="mb-2">
                 <label class="form-label fw-semibold" for="subscribe-name">Name</label>
-                <input class="form-control" id="subscribe-name" name="name" type="text" autocomplete="name" aria-describedby="subscribe-name-error" data-validate="name" maxlength="80" data-required="true">
+                <input class="form-control" id="subscribe-name" name="name" type="text" autocomplete="name" aria-describedby="subscribe-name-error" data-validate="name" data-maxlength="80" data-required="true">
                 <div class="field-error" id="subscribe-name-error"></div>
             </div>
             <div class="mb-3">
                 <label class="form-label fw-semibold" for="subscribe-email">Email</label>
-                <input class="form-control" id="subscribe-email" name="email" type="text" inputmode="email" autocomplete="email" aria-describedby="subscribe-email-error" data-validate="email" maxlength="254" data-required="true">
+                <input class="form-control" id="subscribe-email" name="email" type="text" inputmode="email" autocomplete="email" aria-describedby="subscribe-email-error" data-validate="email" data-maxlength="254" data-required="true">
                 <div class="field-error" id="subscribe-email-error"></div>
             </div>
             <button class="btn btn-primary w-100" type="submit">Subscribe</button>

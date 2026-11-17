@@ -564,7 +564,9 @@ function checkLazyImages() {
         if (!$img.is(":visible")) return; // e.g. a filtered-out product card
         const top = $img.offset().top;
         const bottom = top + $img.outerHeight();
-        if (top < viewBottom + LAZY_MARGIN && bottom > viewTop - LAZY_MARGIN) loadLazyImage($img);
+        // Also load images above the viewport when a user jumps down the page (anchor or fast scroll),
+        // so skipped sections do not stay blank when they return to them.
+        if (top < viewBottom + LAZY_MARGIN) loadLazyImage($img);
     });
 }
 
@@ -880,8 +882,12 @@ const FoodlyValidation = (() => {
             return local.length <= 64 && labels.every(label => label.length <= 63)
                 ? "" : "Please enter a valid email address.";
         },
-        phone: value => /^[0-9 ()-]+$/.test(value.trim()) && value.replace(/\D/g, "").length === 10
-            ? "" : "Enter exactly 10 digits after +7, for example 700 000 00 00.",
+        phone: value => {
+            const input = value.trim();
+            const national = input.replace(/^\+7\s*/, "");
+            return /^[0-9 ()-]+$/.test(national) && national.replace(/\D/g, "").length === 10
+                ? "" : "Enter exactly 10 digits after +7, for example 700 000 00 00.";
+        },
         password: value => value.trim().length > 0 && value.length >= 8 && /\p{Lu}/u.test(value) &&
             /\p{Ll}/u.test(value) && /\p{N}/u.test(value) && /[^\p{L}\p{M}\p{N}\s]/u.test(value)
             ? "" : "Password must be at least 8 characters and contain uppercase, lowercase, number and special character.",
@@ -926,8 +932,9 @@ const FoodlyValidation = (() => {
             } else if (value.trim() || required) {
                 message = rules[field.dataset.validate]?.(value, field) || "";
             }
-            if (!message && field.maxLength > 0 && value.length > field.maxLength) {
-                message = `Use no more than ${field.maxLength} characters.`;
+            const maxLength = Number(field.dataset.maxlength);
+            if (!message && Number.isFinite(maxLength) && maxLength > 0 && value.length > maxLength) {
+                message = `Use no more than ${maxLength} characters.`;
             }
             if (!message && !field.validity.valid) message = "Please choose or enter a valid value.";
             field.setCustomValidity(message);
@@ -977,8 +984,7 @@ const FoodlyValidation = (() => {
             event.preventDefault();
             if (!validate()) return;
             const values = Object.fromEntries(new FormData(form));
-            form.reset();
-            onSuccess(values);
+            if (onSuccess(values) !== false) form.reset();
         });
         return { validate, clear };
     }
@@ -998,29 +1004,101 @@ document.addEventListener("DOMContentLoaded", () => {
             const status = document.getElementById(statusId);
             const text = message(values);
             if (form.id === "register-form") {
+                const email = values.email.trim().toLowerCase();
+                let savedAccount = null;
+                try { savedAccount = JSON.parse(localStorage.getItem("foodly-demo-account") || "null"); }
+                catch { savedAccount = null; }
+                if (savedAccount?.email?.trim().toLowerCase() === email) {
+                    const field = document.getElementById("reg-email");
+                    const error = document.getElementById("reg-email-error");
+                    error.textContent = "An account with this email already exists. Log in instead.";
+                    field.classList.add("is-invalid");
+                    field.setAttribute("aria-invalid", "true");
+                    field.focus();
+                    return false;
+                }
                 try {
                     localStorage.setItem("foodly-demo-account", JSON.stringify({
                         name: values.name.trim(),
-                        email: values.email.trim().toLowerCase(),
-                        createdAt: new Date().toISOString()
-                    }));
-                    sessionStorage.setItem("foodly-demo-session", JSON.stringify({
-                        email: values.email.trim().toLowerCase(),
+                        email,
+                        phone: values.phone.trim() ? values.phone.trim().replace(/^\+7\s*/, "").replace(/\D/g, "") : "",
+                        password: values.password,
                         createdAt: new Date().toISOString()
                     }));
                 } catch {
                     status.textContent = "Your details passed validation, but this browser could not save the demo account.";
                     status.hidden = false;
-                    return;
+                    return false;
                 }
+                status.textContent = `${text} `;
+                const loginLink = document.createElement("a");
+                loginLink.href = "signin.html";
+                loginLink.textContent = "Log in";
+                status.append(loginLink, " to view your profile.");
             }
             // Assignment 6, Task 6: validation passed, so the button shows a spinner while a
             // server call is simulated (js/script.js). The success message and toast come after it.
             simulateServerRequest(form.querySelector('[type="submit"]'), () => {
-                status.textContent = text;
+                if (form.id !== "register-form") status.textContent = text;
                 status.hidden = false;
                 showToast(toastText, "success");
             });
+        });
+    }
+    const signInForm = document.getElementById("signin-form");
+    if (signInForm) {
+        const signInStatus = document.getElementById("signin-status");
+        FoodlyValidation.attach(signInForm, values => {
+            const email = values.email.trim().toLowerCase();
+            let account = null;
+            try { account = JSON.parse(localStorage.getItem("foodly-demo-account") || "null"); } catch { account = null; }
+            if (!account || account.email?.trim().toLowerCase() !== email || account.password !== values.password) {
+                signInStatus.textContent = "Email or password is incorrect, or no account exists yet.";
+                signInStatus.hidden = false;
+                document.getElementById("signin-email").focus();
+                return false;
+            }
+            try {
+                sessionStorage.setItem("foodly-demo-session", JSON.stringify({ email, createdAt: new Date().toISOString() }));
+            } catch {
+                signInStatus.textContent = "This browser could not create a demo session. Enable browser storage and try again.";
+                signInStatus.hidden = false;
+                return false;
+            }
+            window.location.href = "profile.html";
+            return true;
+        });
+        signInForm.addEventListener("input", () => { signInStatus.hidden = true; });
+    }
+
+    if (document.getElementById("profile-card")) {
+        let account = null;
+        let session = null;
+        try {
+            account = JSON.parse(localStorage.getItem("foodly-demo-account") || "null");
+            session = JSON.parse(sessionStorage.getItem("foodly-demo-session") || "null");
+        } catch { account = null; session = null; }
+        const authorized = Boolean(account && session && session.email === account.email);
+        document.getElementById("profile-card").hidden = !authorized;
+        document.getElementById("profile-unauthorized").hidden = authorized;
+        if (authorized) {
+            document.getElementById("profile-name").textContent = account.name;
+            document.getElementById("profile-email").textContent = account.email;
+            const phone = document.getElementById("profile-phone");
+            const phoneLabel = document.getElementById("profile-phone-label");
+            if (account.phone) {
+                phone.textContent = `+7 ${account.phone}`;
+                phone.hidden = false;
+                phoneLabel.hidden = false;
+            }
+        }
+        document.getElementById("logout-button")?.addEventListener("click", () => {
+            sessionStorage.removeItem("foodly-demo-session");
+            document.getElementById("profile-card").hidden = true;
+            document.getElementById("profile-unauthorized").hidden = false;
+            const logoutStatus = document.getElementById("logout-status");
+            logoutStatus.textContent = "You have logged out.";
+            logoutStatus.hidden = false;
         });
     }
 });
@@ -1407,4 +1485,60 @@ document.addEventListener("DOMContentLoaded", () => {
     menu.addEventListener("click", event => { if (event.target.closest("a")) closeMenu(); });
     document.addEventListener("keydown", event => { if (event.key === "Escape" && !menu.hidden) { closeMenu(); toggle.focus(); } });
     document.addEventListener("click", event => { if (!event.target.closest(".foodly-navbar") && !menu.hidden && matchMedia("(max-width: 767px)").matches) closeMenu(); });
+});
+
+/* Current conditions are fetched from Open-Meteo; the widget never estimates delivery time. */
+document.addEventListener("DOMContentLoaded", () => {
+    const status = document.getElementById("weather-status");
+    const retry = document.getElementById("weather-retry");
+    if (!status || !retry) return;
+    const endpoint = "https://api.open-meteo.com/v1/forecast?latitude=51.1694&longitude=71.4491&current=temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&timezone=Asia%2FAlmaty";
+    const conditions = new Map([
+        [0, "Clear sky"], [1, "Mainly clear"], [2, "Partly cloudy"], [3, "Overcast"],
+        [45, "Fog"], [48, "Depositing rime fog"], [51, "Light drizzle"], [53, "Moderate drizzle"], [55, "Dense drizzle"],
+        [56, "Light freezing drizzle"], [57, "Dense freezing drizzle"], [61, "Light rain"], [63, "Moderate rain"], [65, "Heavy rain"],
+        [66, "Light freezing rain"], [67, "Heavy freezing rain"], [71, "Light snow"], [73, "Moderate snow"], [75, "Heavy snow"],
+        [77, "Snow grains"], [80, "Light rain showers"], [81, "Moderate rain showers"], [82, "Violent rain showers"],
+        [85, "Light snow showers"], [86, "Heavy snow showers"], [95, "Thunderstorm"], [96, "Thunderstorm with light hail"], [99, "Thunderstorm with heavy hail"]
+    ]);
+    let activeRequest;
+    async function loadWeather() {
+        activeRequest?.abort();
+        const request = new AbortController();
+        activeRequest = request;
+        retry.disabled = true;
+        status.textContent = "Loading current weather…";
+        status.className = "mb-2";
+        try {
+            const response = await fetch(endpoint, { signal: request.signal, headers: { Accept: "application/json" } });
+            if (!response.ok) throw new Error(`Weather service returned HTTP ${response.status}.`);
+            const payload = await response.json();
+            const current = payload?.current;
+            const temperature = current?.temperature_2m;
+            const wind = current?.wind_speed_10m;
+            const code = current?.weather_code;
+            const updated = current?.time;
+            if (!Number.isFinite(temperature) || !Number.isFinite(wind) || !Number.isInteger(code) || typeof updated !== "string" || !conditions.has(code)) {
+                throw new Error("Weather service returned incomplete data.");
+            }
+            document.getElementById("weather-temperature").textContent = `${Math.round(temperature)} °C`;
+            document.getElementById("weather-condition").textContent = conditions.get(code);
+            document.getElementById("weather-wind").textContent = `${Math.round(wind)} km/h`;
+            const parsed = new Date(updated);
+            document.getElementById("weather-updated").textContent = Number.isNaN(parsed.getTime())
+                ? updated : new Intl.DateTimeFormat("en", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Almaty" }).format(parsed);
+            document.getElementById("weather-data").hidden = false;
+            status.textContent = "Current conditions loaded for Astana.";
+            status.className = "mb-2 text-success-emphasis";
+        } catch (error) {
+            if (error.name === "AbortError") return;
+            document.getElementById("weather-data").hidden = true;
+            status.textContent = "Current weather is temporarily unavailable. Check your connection and retry.";
+            status.className = "mb-2 text-danger";
+        } finally {
+            if (activeRequest === request) retry.disabled = false;
+        }
+    }
+    retry.addEventListener("click", loadWeather);
+    loadWeather();
 });

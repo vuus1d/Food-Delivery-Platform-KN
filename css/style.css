@@ -238,6 +238,7 @@ body.popup-open { overflow: hidden; }
     --bs-primary-border-subtle: #427b58;
     --bs-success-border-subtle: #427b58;
     --bs-link-color: #a4e1ba;
+    --bs-link-color-rgb: 164, 225, 186;
 }
 [data-bs-theme="dark"] .bg-white, [data-bs-theme="dark"] .popup-window { background-color: #212529 !important; }
 [data-bs-theme="dark"] .foodly-toolbar {

@@ -20,6 +20,14 @@
     "violations": []
   },
   {
+    "file": "signin.html",
+    "violations": []
+  },
+  {
+    "file": "profile.html",
+    "violations": []
+  },
+  {
     "file": "responsive.html",
     "violations": []
   }

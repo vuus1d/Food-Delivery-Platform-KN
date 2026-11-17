@@ -24,7 +24,7 @@
                 <li><a href="stores.html">Stores</a></li>
                 <li><a href="compare.html">Compare</a></li>
                 <li><a href="responsive.html">Responsive</a></li>
-                <li><a href="login.html" aria-current="page">Sign Up</a></li>
+                <li><a href="signin.html">Account</a></li>
                 <li><a href="cart.html">Cart <span id="cart-count" class="foodly-cart-count" aria-live="polite">0</span><span class="visually-hidden"> items in cart</span></a></li>
             </ul>
         </div>
@@ -47,34 +47,41 @@
             <section class="card border-0 rounded-4 shadow-foodly p-3 p-sm-4 p-lg-5" aria-labelledby="register-heading">
                 <p class="eyebrow text-uppercase fw-bold small text-success-emphasis mb-1">Join Foodly</p>
                 <h1 id="register-heading" class="h2 fw-bold mb-2">Create your account</h1>
-                <p class="text-body-secondary mb-4">Create a browser-only demo account. Only your name and email are stored locally; your password is never saved or sent.</p>
+                <p class="text-body-secondary mb-4">Create an educational demo account for this browser. Do not use a real password: demo credentials are stored in localStorage and are not secure.</p>
 
                 <!-- novalidate turns off the browser's own checks so our JavaScript does the validation -->
                 <form id="register-form" novalidate>
                     <div class="mb-2">
-                        <label class="form-label fw-semibold" for="reg-name">Name</label>
-                        <input class="form-control" id="reg-name" name="name" type="text" autocomplete="name" aria-describedby="reg-name-error" data-validate="name" maxlength="80" data-required="true">
+                        <label class="form-label fw-semibold" for="reg-name">Full Name</label>
+                        <input class="form-control" id="reg-name" name="name" type="text" autocomplete="name" aria-describedby="reg-name-error" data-validate="name" data-maxlength="80" data-required="true">
                         <div class="field-error" id="reg-name-error"></div>
                     </div>
                     <div class="mb-2">
                         <label class="form-label fw-semibold" for="reg-email">Email</label>
-                        <input class="form-control" id="reg-email" name="email" type="text" inputmode="email" autocomplete="email" placeholder="name@mail.kz" aria-describedby="reg-email-error" data-validate="email" maxlength="254" data-required="true">
+                        <input class="form-control" id="reg-email" name="email" type="text" inputmode="email" autocomplete="email" placeholder="name@mail.kz" aria-describedby="reg-email-error" data-validate="email" data-maxlength="254" data-required="true">
                         <div class="field-error" id="reg-email-error"></div>
                     </div>
                     <div class="mb-2">
                         <label class="form-label fw-semibold" for="reg-password">Password</label>
-                        <input class="form-control" id="reg-password" name="password" type="password" autocomplete="new-password" aria-describedby="reg-password-help reg-password-error" data-validate="password" maxlength="128" data-required="true">
-                        <div id="reg-password-help" class="form-text">At least 8 characters with uppercase and lowercase letters, a number and a special character. Passwords are never saved.</div>
+                        <input class="form-control" id="reg-password" name="password" type="password" autocomplete="new-password" aria-describedby="reg-password-help reg-password-error" data-validate="password" data-maxlength="128" data-required="true">
+                        <div id="reg-password-help" class="form-text">At least 8 characters with uppercase and lowercase letters, a number and a special character. Never reuse a real password for this demo.</div>
                         <div class="field-error" id="reg-password-error"></div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold" for="reg-confirm">Confirm Password</label>
-                        <input class="form-control" id="reg-confirm" name="confirmPassword" type="password" autocomplete="new-password" aria-describedby="reg-confirm-error" data-validate="confirm" maxlength="128" data-required="true">
+                        <input class="form-control" id="reg-confirm" name="confirmPassword" type="password" autocomplete="new-password" aria-describedby="reg-confirm-error" data-validate="confirm" data-maxlength="128" data-required="true">
                         <div class="field-error" id="reg-confirm-error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" for="reg-phone">Phone Number <span class="fw-normal text-body-secondary">(optional)</span></label>
+                        <div class="input-group"><span class="input-group-text">+7</span><input class="form-control" id="reg-phone" name="phone" type="text" autocomplete="tel-national" inputmode="tel" placeholder="700 000 00 00" aria-describedby="reg-phone-help reg-phone-error" data-validate="phone" data-maxlength="24"></div>
+                        <div id="reg-phone-help" class="form-text">Optional. Enter ten digits after +7.</div>
+                        <div class="field-error" id="reg-phone-error"></div>
                     </div>
                     <button class="btn btn-primary btn-lg w-100" type="submit">Create account</button>
                     <p id="register-success" class="alert alert-success mt-3 mb-0" role="status" hidden></p>
                 </form>
+                <p class="mt-3 mb-0">Already registered? <a href="signin.html">Log in</a></p>
             </section>
         </div>
     </div>

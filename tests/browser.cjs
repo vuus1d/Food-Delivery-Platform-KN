@@ -9,7 +9,7 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8765';
 const root = path.resolve(__dirname, '..');
 const shots = path.join(root, 'docs/screenshots');
 fs.mkdirSync(shots, { recursive: true });
-const PAGES = ['index.html', 'stores.html', 'compare.html', 'cart.html', 'login.html', 'responsive.html'];
+const PAGES = ['index.html', 'stores.html', 'compare.html', 'cart.html', 'login.html', 'signin.html', 'profile.html', 'responsive.html'];
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21aa'];
 let checks = 0;
 const passed = [];
@@ -20,14 +20,30 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: base });
     const errors = [];
     const readyLogs = [];
+    let expectedWeatherHttpErrors = 0;
+    let expectedWeatherConsoleErrors = 0;
+    const expectedWeatherErrors = [];
+    let liveWeather = 'not tested';
     // Every page of every context reports runtime errors, console errors and failed requests.
     const watch = page => {
         page.on('pageerror', error => errors.push(`${page.url()}: ${error.message}`));
         page.on('console', message => {
-            if (message.type() === 'error') errors.push(`${page.url()}: ${message.text()}`);
+            if (message.type() === 'error') {
+                if (expectedWeatherConsoleErrors > 0 && /503|ERR_FAILED/.test(message.text())) {
+                    expectedWeatherConsoleErrors--;
+                    expectedWeatherErrors.push(`${page.url()}: ${message.text()}`);
+                } else errors.push(`${page.url()}: ${message.text()}`);
+            }
             if (message.text() === 'jQuery is ready!') readyLogs.push(page.url());
         });
-        page.on('response', response => { if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`); });
+        page.on('response', response => {
+            if (response.status() < 400) return;
+            if (response.url().includes('api.open-meteo.com/') && expectedWeatherHttpErrors > 0) {
+                expectedWeatherHttpErrors--;
+                return; // This exact HTTP error is deliberately injected by the API fallback test below.
+            }
+            errors.push(`${response.status()} ${response.url()}`);
+        });
         return page;
     };
     const page = watch(await context.newPage());
@@ -55,8 +71,24 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
         check(setup.version === '4.0.0', `${file}: jQuery 4.0.0 is loaded`);
         check(setup.scripts[0] === 'https://code.jquery.com/jquery-4.0.0.min.js' && await page.locator('script[src^="js/app.js"]').count() === 1 && await page.locator('script[src^="js/"]').count() === 1, `${file}: jQuery CDN + exactly one custom js/app.js bundle`);
         check(readyLogs.some(url => url.includes(file)), `${file}: console shows "jQuery is ready!"`);
+        const localHtmlTargets = await page.locator('a[href]').evaluateAll(anchors => {
+            const targets = anchors.map(anchor => {
+                const target = new URL(anchor.href, location.href);
+                return target.origin === location.origin && /\.html$/.test(target.pathname) ? `${target.pathname}${target.search}` : null;
+            });
+            return [...new Set(targets.filter(Boolean))];
+        });
+        const brokenTargets = [];
+        for (const target of localHtmlTargets) {
+            const response = await page.request.get(`${base}${target}`);
+            if (!response.ok()) brokenTargets.push(`${target} (${response.status()})`);
+        }
+        check(brokenTargets.length === 0, `${file}: local HTML links resolve${brokenTargets.length ? `: ${brokenTargets.join(', ')}` : ''}`);
         if (file === 'index.html') {
             check(await page.locator('#current-datetime').evaluate(time => Math.abs(Date.now() - Date.parse(time.dateTime)) < 3000), 'Clock: current time comes from Date and carries a current machine-readable datetime');
+            await page.waitForFunction(() => /Current conditions loaded for Astana|Current weather is temporarily unavailable/.test(document.querySelector('#weather-status')?.textContent || ''), null, { timeout: 20000 });
+            liveWeather = (await page.textContent('#weather-status')).includes('Current conditions loaded') ? 'success' : 'fallback';
+            check(liveWeather === 'success' || liveWeather === 'fallback', 'Live API request reaches a stable success or documented fallback state');
         }
     }
 
@@ -195,7 +227,8 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     }
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await page.waitForTimeout(400);
-    check(await page.locator('img[data-src]').count() === 0 && await page.evaluate(() => lazyHandlerBound === false), 'Task 9: all images loaded and the scroll handler removed');
+    const lazyState = await page.evaluate(() => ({ pending: [...document.querySelectorAll('img[data-src]')].map(image => ({ source: image.dataset.src, alt: image.alt, slide: image.closest('.carousel-item')?.className, top: Math.round(image.getBoundingClientRect().top + scrollY) })), handlerBound: lazyHandlerBound }));
+    check(lazyState.pending.length === 0 && !lazyState.handlerBound, `Task 9: all images loaded and the scroll handler removed (${JSON.stringify(lazyState)})`);
 
     // Task 8: Copy button (Clipboard API), checkmark, tooltip, toast and reset after 2 s.
     await go('index.html');
@@ -271,7 +304,7 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     check(await page.locator('#register-form .is-invalid').count() === 4, 'Registration: four required-field errors');
     check(await isFocused(page.locator('#reg-name')), 'Registration focuses first error');
     check(await page.evaluate(() => localStorage.getItem('foodly-demo-account') === null && sessionStorage.getItem('foodly-demo-session') === null), 'Registration: invalid submit creates no account or session');
-    check(await page.locator('#reg-email').getAttribute('type') === 'text' && await page.locator('#register-form [required], #register-form [type=email], #register-form [pattern], #register-form [minlength]').count() === 0, 'Registration uses JavaScript validation without native email/required constraints');
+    check(await page.locator('#reg-email').getAttribute('type') === 'text' && await page.locator('#register-form [required], #register-form [type=email], #register-form [pattern], #register-form [minlength], #register-form [maxlength], #register-form [min], #register-form [max]').count() === 0, 'Registration uses JavaScript validation without native validation attributes');
     const invalidEmails = ['/ @mail.dfdf', '/@mail.dfdf', '?@mail.sdad', '@gmail.com', 'test@', 'testgmail.com', 'test@@gmail.com', 'test..name@gmail.com', '.test@gmail.com', 'test.@gmail.com', 'test@gmail', 'test@gmail..com', 'test@-gmail.com', 'test@gmail-.com', 'test name@gmail.com', 'test!@gmail.com', '        '];
     for (const email of invalidEmails) {
         await page.fill('#reg-email', email);
@@ -292,6 +325,15 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
         await page.fill('#reg-name', name);
         check(await page.locator('#reg-name').getAttribute('aria-invalid') === 'false', `Registration accepts valid name: ${name}`);
     }
+    await page.fill('#reg-name', 'A'.repeat(81));
+    check(await page.locator('#reg-name').getAttribute('aria-invalid') === 'true' && (await page.textContent('#reg-name-error')).includes('80 characters'), 'JavaScript enforces the name length limit without a native maxlength attribute');
+    for (const phone of ['700 000 00 00', '(700) 000-00-00', '+7 700 000 00 00']) {
+        await page.fill('#reg-phone', phone);
+        check(await page.locator('#reg-phone').getAttribute('aria-invalid') === 'false', `Registration accepts Kazakhstan phone formatting: ${phone}`);
+    }
+    await page.fill('#reg-phone', '700-12');
+    check(await page.locator('#reg-phone').getAttribute('aria-invalid') === 'true', 'Registration rejects incomplete phone number');
+    await page.fill('#reg-phone', '');
     await page.fill('#reg-name', 'Айдана Омар');
     await page.fill('#reg-email', 'name..test@mail.kz');
     await page.fill('#reg-password', '        ');
@@ -320,11 +362,92 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     check(await page.evaluate(() => {
         const account = JSON.parse(localStorage.getItem('foodly-demo-account'));
         const session = JSON.parse(sessionStorage.getItem('foodly-demo-session'));
-        return account?.name === 'Айдана Омар' && account?.email === 'student+demo@mail.kz' && session?.email === account.email && !JSON.stringify(account).includes('Foodly456');
-    }), 'Valid Enter submit saves name/email demo account and session, never the password');
+        return account?.name === 'Айдана Омар' && account?.email === 'student+demo@mail.kz' && account?.password === 'Foodly456!' && !session;
+    }), 'Valid Enter submit saves normalized demo account credentials locally without creating a login session');
     await shot('validation-success', '#register-form');
+    const accountBeforeDuplicate = await page.evaluate(() => localStorage.getItem('foodly-demo-account'));
+    await page.fill('#reg-name', 'Another Person');
+    await page.fill('#reg-email', ' STUDENT+DEMO@MAIL.KZ ');
+    await page.fill('#reg-password', 'Foodly456!');
+    await page.fill('#reg-confirm', 'Foodly456!');
+    await page.locator('#register-form button[type=submit]').click();
+    check(await page.locator('#reg-email').getAttribute('aria-invalid') === 'true' && (await page.textContent('#reg-email-error')).includes('already exists'), 'Registration rejects duplicate email case-insensitively');
+    check(await page.evaluate(() => localStorage.getItem('foodly-demo-account')) === accountBeforeDuplicate, 'Duplicate registration leaves the saved account unchanged');
     await page.fill('#reg-name', 'New Name');
     check(await page.locator('#register-success').isHidden(), 'Editing hides stale success');
+
+    await page.evaluate(() => sessionStorage.removeItem('foodly-demo-session'));
+    await go('profile.html');
+    check(await page.locator('#profile-unauthorized').isVisible() && await page.locator('#profile-card').isHidden(), 'Profile hides private details without a demo login');
+    await go('signin.html');
+    await page.fill('#signin-email', 'unknown@mail.kz');
+    await page.fill('#signin-password', 'NotKnown123!');
+    await page.locator('#signin-form button[type=submit]').click();
+    check(await page.locator('#signin-status').isVisible(), 'Log in rejects an unknown account');
+    await page.fill('#signin-email', 'STUDENT+DEMO@MAIL.KZ');
+    await page.fill('#signin-password', 'WrongPass123!');
+    await page.locator('#signin-form button[type=submit]').click();
+    check(await page.locator('#signin-status').isVisible() && await page.evaluate(() => !sessionStorage.getItem('foodly-demo-session')), 'Log in rejects wrong password without creating a session');
+    await page.fill('#signin-email', 'student+demo@mail.kz');
+    await page.fill('#signin-password', 'Foodly456!');
+    await page.locator('#signin-form button[type=submit]').click();
+    await page.waitForURL('**/profile.html');
+    check(await page.locator('#profile-card').isVisible() && await page.textContent('#profile-name') === 'Айдана Омар' && await page.textContent('#profile-email') === 'student+demo@mail.kz', 'Valid log in opens profile with the saved user identity');
+    await shot('profile-demo', '#profile-card');
+    check(await page.locator('#profile-card').innerText().then(text => !text.includes('Foodly456!')), 'Profile never displays the password');
+    await page.reload({ waitUntil: 'networkidle' });
+    check(await page.locator('#profile-card').isVisible(), 'Profile session survives page reload');
+    await page.click('#logout-button');
+    check(await page.locator('#profile-unauthorized').isVisible() && await page.locator('#logout-status').isVisible() && await page.evaluate(() => !sessionStorage.getItem('foodly-demo-session')), 'Logout ends the session, hides profile details and confirms logout');
+    await page.goto(`${base}/signin.html`);
+    await page.fill('#signin-email', 'student+demo@mail.kz');
+    await page.fill('#signin-password', 'Foodly456!');
+    await page.locator('#signin-form button[type=submit]').click();
+    await page.waitForURL('**/profile.html');
+    check(await page.locator('#profile-card').isVisible(), 'User can log in again after logout');
+
+    // Public API behavior is deterministic in E2E; the live endpoint is separately documented.
+    let weatherCalls = 0;
+    await page.route('https://api.open-meteo.com/**', async route => {
+        weatherCalls++;
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ current: { time: '2026-11-17T12:00', temperature_2m: -4.2, apparent_temperature: -8, precipitation: 0, weather_code: 3, wind_speed_10m: 14 } }) });
+    });
+    await go('index.html');
+    await page.locator('#weather-temperature').waitFor({ state: 'visible' });
+    check(await page.textContent('#weather-temperature') === '-4 °C' && await page.textContent('#weather-condition') === 'Overcast' && await page.textContent('#weather-wind') === '14 km/h', 'Open-Meteo widget renders mocked live weather fields accurately');
+    await shot('weather-widget', '#delivery-weather');
+    check(weatherCalls === 1, 'Weather widget calls the public Open-Meteo forecast endpoint');
+    await page.unroute('https://api.open-meteo.com/**');
+    let failOnce = true;
+    expectedWeatherHttpErrors++;
+    expectedWeatherConsoleErrors++;
+    await page.route('https://api.open-meteo.com/**', async route => {
+        if (failOnce) { failOnce = false; await route.fulfill({ status: 503, body: 'Unavailable' }); }
+        else await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ current: { time: '2026-11-17T12:00', temperature_2m: 1, apparent_temperature: -2, precipitation: 0, weather_code: 1, wind_speed_10m: 5 } }) });
+    });
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('#weather-retry').waitFor({ state: 'visible' });
+    await page.getByText('Current weather is temporarily unavailable. Check your connection and retry.').waitFor({ state: 'visible' });
+    await page.click('#weather-retry');
+    await page.getByText('Current conditions loaded for Astana.').waitFor({ state: 'visible' });
+    check(await page.textContent('#weather-temperature') === '1 °C', 'Weather API error shows fallback and retry recovers');
+    await page.unroute('https://api.open-meteo.com/**');
+    await page.route('https://api.open-meteo.com/**', route => route.fulfill({ status: 200, contentType: 'application/json', body: '{invalid json' }));
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.getByText('Current weather is temporarily unavailable. Check your connection and retry.').waitFor({ state: 'visible' });
+    check(await page.locator('#weather-data').isHidden(), 'Weather widget handles malformed JSON without rendering stale values');
+    await page.unroute('https://api.open-meteo.com/**');
+    await page.route('https://api.open-meteo.com/**', route => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ current: { time: '2026-11-17T12:00', temperature_2m: 'cold', weather_code: 999, wind_speed_10m: null } }) }));
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.getByText('Current weather is temporarily unavailable. Check your connection and retry.').waitFor({ state: 'visible' });
+    check(await page.locator('#weather-data').isHidden(), 'Weather widget rejects invalid API values and never shows stale readings');
+    await page.unroute('https://api.open-meteo.com/**');
+    expectedWeatherConsoleErrors++;
+    await page.route('https://api.open-meteo.com/**', route => route.abort());
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.getByText('Current weather is temporarily unavailable. Check your connection and retry.').waitFor({ state: 'visible' });
+    check(await page.locator('#weather-retry').isEnabled(), 'Network failure leaves weather retry available');
+    await page.unroute('https://api.open-meteo.com/**');
 
     await go('index.html');
     await shot('home-day');
@@ -578,7 +701,7 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
             await Promise.all(images.map(image => image.decode().catch(() => {})));
             return images.every(image => image.complete && image.naturalWidth > 1);
         }), `${file}: all images load`);
-        for (const width of [320, 360, 390, 768, 992, 1024, 1440]) {
+        for (const width of [320, 360, 390, 430, 768, 992, 1024, 1280, 1440]) {
             await page.setViewportSize({ width, height: 900 });
             for (const theme of ['light', 'dark']) {
                 await page.evaluate(theme => { document.documentElement.dataset.bsTheme = theme; }, theme);
@@ -634,6 +757,10 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     check(await page.locator('#mainNav').isVisible() && await page.locator('.foodly-menu-toggle').getAttribute('aria-expanded') === 'true', 'Mobile navigation expands with accessible state');
     await shot('mobile-home');
     await page.keyboard.press('Escape');
+    await page.locator('.foodly-menu-toggle').click();
+    check(await page.locator('.foodly-menu-toggle').getAttribute('aria-expanded') === 'true' && await page.locator('#mainNav').isVisible(), 'Mobile navigation opens and updates aria-expanded');
+    await page.keyboard.press('Escape');
+    check(await page.locator('.foodly-menu-toggle').getAttribute('aria-expanded') === 'false' && await page.locator('#mainNav').isHidden() && await isFocused(page.locator('.foodly-menu-toggle')), 'Mobile navigation closes on Escape and restores focus');
     check(await page.locator('#mainNav').isHidden() && await page.locator('.foodly-menu-toggle').getAttribute('aria-expanded') === 'false', 'Escape closes mobile navigation and restores collapsed state');
     await page.click('#bg-color-btn');
     await page.locator('#faq-search').fill('order');
@@ -663,8 +790,12 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
 
     check(errors.length === 0, `No console, runtime or failed-resource errors: ${errors.join('; ')}`);
     const violations = [...axeStates.flatMap(state => state.violations), ...audits.flatMap(entry => entry.violations)];
-    fs.writeFileSync(path.join(root, 'docs/test-results.json'), JSON.stringify({ date: new Date().toISOString(), checks, passed, errors, accessibilityViolations: violations.length, axeStates: axeStates.map(state => ({ state: state.state, violations: state.violations.length })), audio, browser: browser.version() }, null, 2));
-    console.log(JSON.stringify({ checks, errors, accessibilityViolations: violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length })), browser: browser.version() }, null, 2));
+    const accessibilityDetails = [
+        ...axeStates.map(state => ({ state: state.state, violations: state.violations })),
+        ...audits.map(state => ({ state: state.file, violations: state.violations }))
+    ];
+    fs.writeFileSync(path.join(root, 'docs/test-results.json'), JSON.stringify({ date: new Date().toISOString(), checks, passed, errors, expectedWeatherErrors, liveWeather, accessibilityViolations: violations.length, accessibilityDetails, axeStates: axeStates.map(state => ({ state: state.state, violations: state.violations.length })), audio, browser: browser.version() }, null, 2));
+    console.log(JSON.stringify({ checks, errors, expectedWeatherErrors, liveWeather, accessibilityViolations: violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length })), browser: browser.version() }, null, 2));
     await browser.close();
     assert.equal(violations.length, 0, 'Accessibility audits must pass');
 })().catch(error => { console.error(error); process.exit(1); });

@@ -24,7 +24,7 @@
                 <li><a href="stores.html">Stores</a></li>
                 <li><a href="compare.html">Compare</a></li>
                 <li><a href="responsive.html">Responsive</a></li>
-                <li><a href="login.html">Sign Up</a></li>
+                <li><a href="signin.html">Account</a></li>
                 <li><a href="cart.html" aria-current="page">Cart <span id="cart-count" class="foodly-cart-count" aria-live="polite">0</span><span class="visually-hidden"> items in cart</span></a></li>
             </ul>
         </div>
@@ -138,18 +138,18 @@
                 <div class="row g-3">
                     <div class="col-12 col-md-6">
                         <label class="form-label fw-semibold" for="customer-name">Full name</label>
-                        <input class="form-control" id="customer-name" name="name" type="text" autocomplete="name" data-required="true" data-validate="name" maxlength="80">
+                        <input class="form-control" id="customer-name" name="name" type="text" autocomplete="name" data-required="true" data-validate="name" data-maxlength="80">
                     </div>
                     <div class="col-12 col-md-6">
                         <label class="form-label fw-semibold" for="customer-phone">Phone number</label>
                         <div class="input-group has-validation">
                             <span class="input-group-text">+7</span>
-                            <input class="form-control" id="customer-phone" name="phone" type="text" autocomplete="tel-national" inputmode="tel" placeholder="700 000 00 00" data-required="true" data-validate="phone" maxlength="24">
+                            <input class="form-control" id="customer-phone" name="phone" type="text" autocomplete="tel-national" inputmode="tel" placeholder="700 000 00 00" data-required="true" data-validate="phone" data-maxlength="24">
                         </div>
                     </div>
                     <div class="col-12">
                         <label class="form-label fw-semibold" for="customer-address">Delivery address</label>
-                        <input class="form-control" id="customer-address" name="address" type="text" autocomplete="address-line1" placeholder="Street, building, apartment" data-required="true" data-validate="address" maxlength="200">
+                        <input class="form-control" id="customer-address" name="address" type="text" autocomplete="address-line1" placeholder="Street, building, apartment" data-required="true" data-validate="address" data-maxlength="200">
                     </div>
                 </div>
                 </section>
@@ -183,7 +183,7 @@
                     </div>
                     <div class="col-12">
                         <label class="form-label fw-semibold" for="order-note">Courier note <span class="fw-normal text-body-secondary">(optional)</span></label>
-                        <textarea class="form-control" id="order-note" name="note" rows="3" maxlength="200" placeholder="Entrance, floor, door code..."></textarea>
+                        <textarea class="form-control" id="order-note" name="note" rows="3" data-maxlength="200" placeholder="Entrance, floor, door code..."></textarea>
                     </div>
                 </div>
                 </section>
