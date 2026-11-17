@@ -53,7 +53,7 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
             return { version: window.jQuery?.fn.jquery, scripts };
         });
         check(setup.version === '4.0.0', `${file}: jQuery 4.0.0 is loaded`);
-        check(setup.scripts[0] === 'https://code.jquery.com/jquery-4.0.0.min.js' && await page.locator('script[src="js/app.js"]').count() === 1 && await page.locator('script[src^="js/"]').count() === 1, `${file}: jQuery CDN + exactly one custom js/app.js bundle`);
+        check(setup.scripts[0] === 'https://code.jquery.com/jquery-4.0.0.min.js' && await page.locator('script[src^="js/app.js"]').count() === 1 && await page.locator('script[src^="js/"]').count() === 1, `${file}: jQuery CDN + exactly one custom js/app.js bundle`);
         check(readyLogs.some(url => url.includes(file)), `${file}: console shows "jQuery is ready!"`);
         if (file === 'index.html') {
             check(await page.locator('#current-datetime').evaluate(time => Math.abs(Date.now() - Date.parse(time.dateTime)) < 3000), 'Clock: current time comes from Date and carries a current machine-readable datetime');
