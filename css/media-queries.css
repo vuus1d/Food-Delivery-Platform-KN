@@ -333,6 +333,10 @@ body { transition: background-color 300ms ease, color 300ms ease; }
 .foodly-controls button:hover:not(:disabled), .foodly-controls button:focus-visible { background: #e9f6ee; border-color: #16834b; }
 .foodly-controls button:disabled { opacity: .55; cursor: not-allowed; }
 .foodly-site-header :focus-visible { outline: 3px solid #ffcf4a; outline-offset: 2px; }
+[data-bs-theme="dark"] .foodly-toolbar { color: #d5e1d9; background: #1d2721; border-bottom-color: #3a4a40; transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease; }
+[data-bs-theme="dark"] .foodly-toolbar p { color: #c0cdc5; }
+[data-bs-theme="dark"] .foodly-controls button { color: #d5e1d9; background: #25322a; border-color: #809187; transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease; }
+[data-bs-theme="dark"] .foodly-controls button:hover:not(:disabled), [data-bs-theme="dark"] .foodly-controls button:focus-visible { color: #fff; background: #34473a; border-color: #a4e1ba; }
 [hidden] { display: none !important; }
 @media (max-width: 991px) {
   .foodly-navbar { min-height: 60px; flex-wrap: wrap; justify-content: space-between; gap: 8px; }

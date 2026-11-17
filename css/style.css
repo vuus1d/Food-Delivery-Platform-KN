@@ -240,6 +240,37 @@ body.popup-open { overflow: hidden; }
     --bs-link-color: #a4e1ba;
 }
 [data-bs-theme="dark"] .bg-white, [data-bs-theme="dark"] .popup-window { background-color: #212529 !important; }
+[data-bs-theme="dark"] .foodly-toolbar {
+    color: #d5e1d9;
+    background: #1d2721;
+    border-bottom-color: #3a4a40;
+    transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+}
+[data-bs-theme="dark"] .foodly-toolbar p { color: #c0cdc5; }
+[data-bs-theme="dark"] .foodly-controls button {
+    color: #d5e1d9;
+    background: #25322a;
+    border-color: #809187;
+    transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+}
+[data-bs-theme="dark"] .foodly-controls button:hover:not(:disabled),
+[data-bs-theme="dark"] .foodly-controls button:focus-visible {
+    color: #fff;
+    background: #34473a;
+    border-color: #a4e1ba;
+}
+[data-bs-theme="dark"] .table-light {
+    --bs-table-color: #e6ece8;
+    --bs-table-bg: #222d26;
+    --bs-table-border-color: #47544c;
+    --bs-table-striped-bg: #27342b;
+    --bs-table-striped-color: #e6ece8;
+    --bs-table-active-bg: #314237;
+    --bs-table-active-color: #fff;
+    --bs-table-hover-bg: #2a382f;
+    --bs-table-hover-color: #fff;
+    transition: background-color 300ms ease, color 300ms ease;
+}
 [data-bs-theme="dark"] .hero-foodly { background: linear-gradient(90deg, #173526f5, #173526da), url("../images/fruits.jpg") center / cover; }
 [data-bs-theme="dark"] .field-error { color: #ffb3bd; }
 [data-bs-theme="dark"] .btn-outline-primary, [data-bs-theme="dark"] .btn-outline-success { --bs-btn-color: #a4e1ba; --bs-btn-border-color: #71bb8c; }

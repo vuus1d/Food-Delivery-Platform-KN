@@ -6,12 +6,12 @@
 
 - HTML: html-validate — PASS, все 6 страниц.
 - JavaScript: node --check для js/app.js и tests/browser.cjs — PASS.
-- Playwright E2E: 296 assertions — PASS.
+- Playwright E2E: 309 assertions — PASS.
 - Ошибки runtime, console и ответов HTTP 4xx/5xx — 0.
 - npm audit: 0 уязвимостей после обновления html-validate; production audit также 0.
 - Axe WCAG 2 A/AA и WCAG 2.1 AA: 0 нарушений в базовых состояниях шести страниц и проверенных интерактивных состояниях.
 - Горизонтальное переполнение: PASS для каждой страницы в светлой и тёмной темах на 360, 390, 768, 992, 1024 и 1440 px. Также проверены 320 px для Responsive CSS Grid.
-- Шапка и её размеры: сравниваются между всеми страницами на каждом тестовом размере.
+- Шапка и её размеры: сравниваются между всеми страницами на каждом тестовом размере. Панель часов и кнопок, а также заголовок таблицы Compare проверяются в тёмной теме.
 - Assignment 6: jQuery 4.0.0 загружена на всех страницах; каждая содержит ровно один собственный JS bundle js/app.js.
 - Проверены каталог, поиск, сортировка, категории, autocomplete, FAQ-подсветка, тосты, clipboard, lazy loading, счётчики, анимация submit, формы, валидация, checkout, popup, корзина, localStorage, тема, звук, клавиатурная навигация и Responsive CSS Grid.
 

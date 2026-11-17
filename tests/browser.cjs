@@ -547,6 +547,17 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
             await page.setViewportSize({ width, height: 900 });
             for (const theme of ['light', 'dark']) {
                 await page.evaluate(theme => { document.documentElement.dataset.bsTheme = theme; }, theme);
+                if (width === 360 && theme === 'dark') {
+                    await page.waitForTimeout(350);
+                    const toolbarBackground = await page.locator('.foodly-toolbar').evaluate(element => getComputedStyle(element).backgroundColor);
+                    const controlBackground = await page.locator('.foodly-controls button').first().evaluate(element => getComputedStyle(element).backgroundColor);
+                    check(toolbarBackground === 'rgb(29, 39, 33)', `${file}: shared toolbar switches to dark colors`);
+                    check(controlBackground === 'rgb(37, 50, 42)', `${file}: shared controls switch to dark colors`);
+                    if (file === 'compare.html') {
+                        const tableHeader = await page.locator('.table-light th').first().evaluate(element => getComputedStyle(element).backgroundColor);
+                        check(tableHeader === 'rgb(34, 45, 38)', 'compare.html: table header switches to dark colors');
+                    }
+                }
                 check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${file}: no page overflow at ${width}px in ${theme} theme`);
                 const geometry = await page.locator('.foodly-site-header').evaluate(element => { const rect = element.getBoundingClientRect(); return [Math.round(rect.height), Math.round(rect.width)]; });
                 if (file === 'index.html' && theme === 'light') headerGeometry.push({ width, geometry });
