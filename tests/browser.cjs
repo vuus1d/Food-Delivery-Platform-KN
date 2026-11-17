@@ -45,7 +45,7 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
 
     /* ===================== Part A: Assignment 6 ===================== */
 
-    // Task 0: jQuery 4.0.0 from the CDN in <head>, then js/script.js, on all six pages.
+    // Task 0: jQuery 4.0.0 remains separate; one custom bundle owns all application JS.
     for (const file of PAGES) {
         await go(file);
         const setup = await page.evaluate(() => {
@@ -53,7 +53,7 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
             return { version: window.jQuery?.fn.jquery, scripts };
         });
         check(setup.version === '4.0.0', `${file}: jQuery 4.0.0 is loaded`);
-        check(setup.scripts[0] === 'https://code.jquery.com/jquery-4.0.0.min.js' && setup.scripts[1] === 'js/script.js', `${file}: CDN jQuery then js/script.js in <head>`);
+        check(setup.scripts[0] === 'https://code.jquery.com/jquery-4.0.0.min.js' && await page.locator('script[src="js/app.js"]').count() === 1 && await page.locator('script[src^="js/"]').count() === 1, `${file}: jQuery CDN + exactly one custom js/app.js bundle`);
         check(readyLogs.some(url => url.includes(file)), `${file}: console shows "jQuery is ready!"`);
         if (file === 'index.html') {
             check(await page.locator('#current-datetime').evaluate(time => Math.abs(Date.now() - Date.parse(time.dateTime)) < 3000), 'Clock: current time comes from Date and carries a current machine-readable datetime');
@@ -523,6 +523,7 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
 
     // Accessibility (default state of every page + Assignment 6 states), loaded images, overflow.
     const audits = [];
+    const headerGeometry = [];
     for (const file of PAGES) {
         await page.setViewportSize({ width: 1440, height: 1000 });
         await go(file);
@@ -542,9 +543,15 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
             await Promise.all(images.map(image => image.decode().catch(() => {})));
             return images.every(image => image.complete && image.naturalWidth > 1);
         }), `${file}: all images load`);
-        for (const width of [320, 375, 390, 768, 1024, 1440]) {
+        for (const width of [320, 360, 390, 768, 992, 1024, 1440]) {
             await page.setViewportSize({ width, height: 900 });
-            check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${file}: no page overflow at ${width}px`);
+            for (const theme of ['light', 'dark']) {
+                await page.evaluate(theme => { document.documentElement.dataset.bsTheme = theme; }, theme);
+                check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${file}: no page overflow at ${width}px in ${theme} theme`);
+                const geometry = await page.locator('.foodly-site-header').evaluate(element => { const rect = element.getBoundingClientRect(); return [Math.round(rect.height), Math.round(rect.width)]; });
+                if (file === 'index.html' && theme === 'light') headerGeometry.push({ width, geometry });
+                else if (theme === 'light') check(JSON.stringify(geometry) === JSON.stringify(headerGeometry.find(item => item.width === width)?.geometry), `${file}: shared header matches Home at ${width}px`);
+            }
             if (file === 'responsive.html' && width === 320) {
                 check((await page.evaluate(() => getComputedStyle(document.body).gridTemplateAreas)).includes('"sidebar"'), 'responsive.html: CSS Grid sidebar stacks on mobile');
                 check(await page.locator('.image-gallery').evaluate(grid => getComputedStyle(grid).gridTemplateColumns.split(' ').length) === 1, 'responsive.html: gallery uses one column on mobile');
@@ -577,10 +584,11 @@ function check(condition, message) { assert.ok(condition, message); checks++; pa
     // Mobile (375 px): navigation, catalog search, toast and checkout in night theme.
     await page.setViewportSize({ width: 375, height: 812 });
     await go('index.html');
-    await page.click('.navbar-toggler');
-    check(await page.locator('#mainNav').isVisible(), 'Mobile navigation expands');
+    await page.click('.foodly-menu-toggle');
+    check(await page.locator('#mainNav').isVisible() && await page.locator('.foodly-menu-toggle').getAttribute('aria-expanded') === 'true', 'Mobile navigation expands with accessible state');
     await shot('mobile-home');
-    await page.click('.navbar-toggler');
+    await page.keyboard.press('Escape');
+    check(await page.locator('#mainNav').isHidden() && await page.locator('.foodly-menu-toggle').getAttribute('aria-expanded') === 'false', 'Escape closes mobile navigation and restores collapsed state');
     await page.click('#bg-color-btn');
     await page.locator('#faq-search').fill('order');
     check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Mobile night theme: FAQ search fits at 375px');

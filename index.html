@@ -8,46 +8,34 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🥬%3C/text%3E%3C/svg%3E">
     <link rel="stylesheet" href="vendor/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
-    <!-- Assignment 6, Task 0: jQuery 4.0.0 from the official CDN, then our jQuery code (js/script.js) -->
+    <!-- Assignment 6, Task 0: jQuery 4.0.0 from the official CDN, then our jQuery code (js/app.js) -->
     <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
-    <script src="js/script.js"></script>
 </head>
 <body class="d-flex flex-column min-vh-100 bg-body-tertiary">
 <a class="visually-hidden-focusable position-absolute top-0 start-0 z-3 m-2 px-3 py-2 rounded-3 bg-dark text-white" href="#main-content">Skip to content</a>
 
-<header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success navbar-foodly shadow-sm" aria-label="Main navigation">
-        <div class="container-fluid px-3 px-lg-4">
-            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-4" href="index.html"><span aria-hidden="true">🥬</span> Foodly</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainNav">
-                <ul class="navbar-nav ms-auto gap-1 py-2 py-lg-0">
-                    <li class="nav-item"><a class="nav-link active rounded-2 px-3" aria-current="page" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link rounded-2 px-3" href="stores.html">Stores</a></li>
-                    <li class="nav-item"><a class="nav-link rounded-2 px-3" href="compare.html">Compare</a></li>
-                    <li class="nav-item"><a class="nav-link rounded-2 px-3" href="responsive.html">Responsive</a></li>
-                    <li class="nav-item"><a class="nav-link rounded-2 px-3" href="login.html">Sign Up</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center gap-2 rounded-2 px-3" href="cart.html">
-                            Cart <span id="cart-count" class="badge rounded-pill text-bg-light" aria-live="polite">0</span><span class="visually-hidden">items in cart</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+<header class="foodly-site-header">
+    <nav class="foodly-navbar" aria-label="Main navigation">
+        <a class="foodly-brand" href="index.html"><span aria-hidden="true">🥬</span> Foodly</a>
+        <button class="foodly-menu-toggle" type="button" aria-controls="mainNav" aria-expanded="false" aria-label="Open navigation menu"><span aria-hidden="true">☰</span></button>
+        <div class="foodly-nav-menu" id="mainNav" hidden>
+            <ul>
+                                <li><a href="index.html" aria-current="page">Home</a></li>
+                <li><a href="stores.html">Stores</a></li>
+                <li><a href="compare.html">Compare</a></li>
+                <li><a href="responsive.html">Responsive</a></li>
+                <li><a href="login.html">Sign Up</a></li>
+                <li><a href="cart.html">Cart <span id="cart-count" class="foodly-cart-count" aria-live="polite">0</span><span class="visually-hidden"> items in cart</span></a></li>
+            </ul>
         </div>
     </nav>
-    <!-- Shared live clock, day/night theme and optional sound controls. -->
-    <div class="bg-white border-bottom">
-        <div class="container-fluid px-3 px-lg-4 py-2 d-flex flex-wrap align-items-center justify-content-between gap-2">
-            <p class="small text-body-secondary mb-0"><span aria-hidden="true">🕒</span> <time id="current-datetime"></time></p>
-            <div class="d-flex flex-wrap align-items-center gap-2">
-                <button id="bg-color-btn" class="btn btn-sm btn-outline-primary" type="button" aria-pressed="false">Night theme</button>
-                <button id="sound-toggle" class="btn btn-sm btn-outline-secondary" type="button" aria-pressed="false">Sound: off</button>
-                <button id="sound-test" class="btn btn-sm btn-outline-secondary" type="button" disabled>Test sound</button>
-                <span id="sound-status" class="visually-hidden" role="status"></span>
-            </div>
+    <div class="foodly-toolbar">
+        <p><span aria-hidden="true">🕒</span> <time id="current-datetime"></time></p>
+        <div class="foodly-controls">
+            <button id="bg-color-btn" type="button" aria-pressed="false">Night theme</button>
+            <button id="sound-toggle" type="button" aria-pressed="false">Sound: off</button>
+            <button id="sound-test" type="button" disabled>Test sound</button>
+            <span id="sound-status" class="visually-hidden" role="status"></span>
         </div>
     </div>
 </header>
@@ -83,7 +71,7 @@
                         <div class="d-flex flex-wrap align-items-center gap-2 gap-sm-3">
                             <a class="btn btn-primary btn-lg" href="stores.html">Explore stores <span aria-hidden="true">→</span></a>
                             <a class="btn btn-outline-primary btn-lg" href="compare.html">Compare prices</a>
-                            <!-- Assignment 4, Task 3: opens the custom popup (js/popup.js) -->
+                            <!-- Assignment 4, Task 3: opens the custom popup (js/app.js) -->
                             <button class="btn btn-success btn-lg" type="button" data-open-popup><span aria-hidden="true">📬</span> Subscribe</button>
                         </div>
                         <p class="small text-body-secondary mt-4 mb-0">Local favorites. Everyday essentials. One simple basket.</p>
@@ -104,7 +92,7 @@
                 </div>
             </section>
 
-            <!-- Assignment 6, Task 5: animated number counters (js/script.js, initCounters) -->
+            <!-- Assignment 6, Task 5: animated number counters (js/app.js, initCounters) -->
             <section id="stats" class="mb-5" aria-labelledby="stats-heading">
                 <h2 id="stats-heading" class="h3 mb-2">Foodly in numbers</h2>
                 <p class="text-body-secondary mb-4">Sample figures taken from this demo's own data: partner stores, catalog items, delivery time and the free-delivery threshold.</p>
@@ -219,7 +207,7 @@
                 </div>
             </section>
 
-            <!-- Assignment 6, Task 8: copy-to-clipboard snippets (js/script.js, initCopyButtons) -->
+            <!-- Assignment 6, Task 8: copy-to-clipboard snippets (js/app.js, initCopyButtons) -->
             <section id="promo-codes" class="mb-5" aria-labelledby="promo-heading">
                 <h2 id="promo-heading" class="h3 mb-2">Weekly promo codes</h2>
                 <p class="text-body-secondary mb-4">Demo codes for practising the Copy button. They are not real offers, and the demo checkout does not apply discounts.</p>
@@ -385,7 +373,7 @@
             <section id="faq" class="mb-5" aria-labelledby="faq-heading">
                 <h2 id="faq-heading" class="h3 mb-2">Frequently Asked Questions</h2>
                 <p class="text-body-secondary mb-4">Quick answers about delivery, payment, and orders. Click a question to see the answer.</p>
-                <!-- Assignment 6, Task 3: search highlighting (js/script.js, initFaqSearch) -->
+                <!-- Assignment 6, Task 3: search highlighting (js/app.js, initFaqSearch) -->
                 <div class="mb-3">
                     <label class="form-label fw-semibold" for="faq-search">Search the FAQ</label>
                     <div class="input-group">
@@ -539,7 +527,7 @@
     </div>
 </footer>
 
-<!-- Assignment 4, Task 3: custom popup (not a Bootstrap modal), controlled by js/popup.js -->
+<!-- Assignment 4, Task 3: custom popup (not a Bootstrap modal), controlled by js/app.js -->
 <div class="popup-overlay" id="subscribe-popup" hidden>
     <div class="popup-window p-4 p-sm-5" role="dialog" aria-modal="true" aria-labelledby="subscribe-title">
         <button class="popup-close" type="button" aria-label="Close subscription form">&times;</button>
@@ -564,12 +552,6 @@
 </div>
 
 <script src="vendor/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script src="js/validation.js" defer></script>
 <script src="js/app.js" defer></script>
-<script src="js/theme.js" defer></script>
-<script src="js/datetime.js" defer></script>
-<script src="js/accordion.js" defer></script>
-<script src="js/popup.js" defer></script>
-<script src="js/interactions.js" defer></script>
 </body>
 </html>
